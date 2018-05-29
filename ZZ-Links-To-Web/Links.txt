@@ -4,6 +4,9 @@ These include
 2.) Version Control Repositories
 3.) Books
 
+Quizlet
+	https://quizlet.com/AlexLundin
+
 Testing
 	Installers
 	Eclipse Java EE
