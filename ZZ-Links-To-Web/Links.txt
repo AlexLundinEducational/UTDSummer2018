@@ -1,0 +1,42 @@
+Links To Webpages
+These include
+1.) Installers
+2.) Version Control Repositories
+3.) Books
+
+Testing
+	Installers
+	Eclipse Java EE
+	https://www.eclipse.org/downloads/packages/eclipse-ide-java-ee-developers/keplersr2
+
+	Book
+	Introduction to Software Testing
+	https://utdallas-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=UTD_ALMA51176419120001421&context=L&vid=UTDALMA&lang=en_US&search_scope=EVERYTHING&adaptor=Local%20Search%20Engine&tab=everything&query=any,contains,Introduction%20to%20Software%20Testing&sortby=rank&offset=0
+
+	Test Driven
+	https://www.safaribooksonline.com/library/view/test-driven-practical/9781932394856/kindle_split_000.html
+
+Machine Learning
+	Installers
+	R for Windows
+	R-3.5.0
+	RStudiohttps://cran.rstudio.com/
+
+	RStudio
+	RStudio 1.1.453 - Windows Vista/7/8/10
+	https://www.rstudio.com/products/rstudio/download/#download
+
+	Version Control
+	https://github.com/kjmazidi/Learning_from_Data
+	
+	Piazza
+	https://piazza.com/utdallas/summer2018/cs4375mazidi/home
+	
+Networks
+
+	Book
+	https://ebookcentral.proquest.com/lib/utd/detail.action?docID=802536#
+	
+	
+PM
+
