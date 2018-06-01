@@ -1,21 +1,46 @@
----
-title: "R Notebook"
-output: html_notebook
----
+Name: Alex Lundin
+Assignment: HW1
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
-
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
-```{r}
-plot(cars)
-```
-
+#1
+The Boston data set contains values about residents from the suburb of Boston. The whole frame contains 506 rows and 14 columns. Some interesting metrics are medv which is the median value of owner-occupied homes and tax, with is the full values property tax.
 ```{r}
 if(!require('MASS')){
   library('MASS')
 }
+data(Boston)
+str(Boston)
 ```
+
+#2
+```{r}
+
+```
+
+#3
+```{r}
+
+```
+
+#4
+```{r}
+
+```
+
+#5
+```{r}
+
+```
+
+#6
+```{r}
+
+```
+
+#7
+```{r}
+
+```
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
