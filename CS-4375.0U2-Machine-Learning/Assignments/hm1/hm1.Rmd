@@ -1,8 +1,8 @@
 Name: Alex Lundin
 Assignment: HW1
 
-#1
-The Boston data set contains values about residents from the suburb of Boston. The whole frame contains 506 rows and 14 columns. Some interesting metrics are medv which is the median value of owner-occupied homes and tax, with is the full values property tax.
+# 1
+# The Boston data set contains values about residents from the suburb of Boston. The whole frame contains 506 rows and 14 columns. Some interesting metrics are medv which is the median value of owner-occupied homes and tax, with is the full values property tax.
 ```{r}
 if(!require('MASS')){
   library('MASS')
@@ -11,36 +11,92 @@ data(Boston)
 str(Boston)
 ```
 
-#2
+# 2
+```{r}
+head(Boston, n=10)
+tail(Boston, n=2)
+dataFrameBoston<-Boston
+dataFrameBoston[5,]
+head(1:5, n=10)
+```
+
+# 3
+```{r}
+# Store Boston into a dataframe
+# Store entire first column of data frame into crimeColumnAsVector
+dataFrameBoston<-Boston
+crimeColumnAsVector <- dataFrameBoston[,1]
+
+# Find Mean.
+result.mean <- mean(crimeColumnAsVector)
+print(result.mean)
+
+# Find Median.
+result.median <- median(crimeColumnAsVector)
+print(result.median)
+
+# Find Range.
+result.range <- range(crimeColumnAsVector)
+print(result.range)
+```
+# 4
+# This histogram represents the frequency of crime rates in each of the 506 towns of Boston. The most common crime rates have the largest bars. The most common crime rate is between 0 and 10
+
+```{r}
+hist(crimeColumnAsVector)
+print(crimeColumnAsVector)
+```
+
+# 5
+# This correlation of -0.3 is a weak negative linear relationship.
+```{r}
+# Store entire 14th column of data frame into medvColumnAsVector
+medvColumnAsVector <- dataFrameBoston[,14]
+cor(crimeColumnAsVector, medvColumnAsVector)
+```
+
+# 6
+```{r}
+# Store entire 6th column of data frame into roomColumnAsVector
+roomColumnAsVector <- dataFrameBoston[,6]
+```
+
+# 7
+```{r}
+# Store entire fourth column of data frame into chasColumnAsVector
+chasColumnAsVector <- dataFrameBoston[,4]
+```
+
+# 8
+```{r}
+# Store entire 9th column of data frame into radColumnAsVector
+radColumnAsVector <- dataFrameBoston[,9]
+```
+
+# 9
 ```{r}
 
 ```
 
-#3
+# 10
 ```{r}
+# Store entire 13th column of data frame into lstatColumnAsVector
+lstatColumnAsVector <- dataFrameBoston[,13]
+
+# create new data frame from 4 vectors
+dataFrameSummary <- c(crimeColumnAsVector)
+dataFrameSummary <- c(roomColumnAsVector)
+dataFrameSummary <- c(lstatColumnAsVector)
+dataFrameSummary <- c(medvColumnAsVector)
+print(dataFrameSummary)
+
+# find neighborhood with highest median value
+frameIndex <- which.max(medvColumnAsVector)
+print(frameIndex)
+
+dataFrameSummary[162,]
 
 ```
-
-#4
-```{r}
-
-```
-
-#5
-```{r}
-
-```
-
-#6
-```{r}
-
-```
-
-#7
-```{r}
-
-```
-
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
