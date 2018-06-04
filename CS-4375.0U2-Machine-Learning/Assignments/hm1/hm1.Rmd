@@ -49,36 +49,106 @@ print(crimeColumnAsVector)
 
 # 5
 # This correlation of -0.3 is a weak negative linear relationship.
+# This means crime is loosely correlated to home value, for these particular cities.
 ```{r}
 # Store entire 14th column of data frame into medvColumnAsVector
 medvColumnAsVector <- dataFrameBoston[,14]
 cor(crimeColumnAsVector, medvColumnAsVector)
+
 ```
 
 # 6
+# The correlation of .6953 shows a medium strength positive correlation between number of rooms and median house values.
+# This means that more rooms, means most cost, for the most part. There are outliers and the graphs shows that.
 ```{r}
 # Store entire 6th column of data frame into roomColumnAsVector
 roomColumnAsVector <- dataFrameBoston[,6]
+
+# store custom vectors to new dataFrame
+dataFrameCustom <- data.frame(x=medvColumnAsVector, y=roomColumnAsVector)
+
+par()              # view current settings
+opar <- par()      # make a copy of current settings
+par(col.lab="red") # red x and y labels 
+plot(dataFrameCustom, xlab="Median Value", ylab="Number of Rooms")
+
+par(opar)          # restore original settings
+cor(roomColumnAsVector, medvColumnAsVector)
+
 ```
 
 # 7
+# The proximity to the Charles River (chas) does affect median house value.
+# Yes chas is a factor in home price.
 ```{r}
 # Store entire fourth column of data frame into chasColumnAsVector
 chasColumnAsVector <- dataFrameBoston[,4]
+
+# store custom vectors to new dataFrame
+dataFrameCustom2 <- data.frame(x=chasColumnAsVector, y=medvColumnAsVector)
+
+par()              # view current settings
+opar <- par()      # make a copy of current settings
+par(col.lab="red") # red x and y labels 
+plot(dataFrameCustom2, xlab="Chas", ylab="Median Value")
+
+# make chas a factor and plot again
+chasColumnAsFactor <- factor(chasColumnAsVector)
+dataFrameCustom3 <- data.frame(x=chasColumnAsFactor, y=medvColumnAsVector)
+
+plot(dataFrameCustom3, xlab="Chas Factor", ylab="Median Value")
+
+par(opar)          # restore original settings
+
 ```
 
 # 8
+# Rad is a integer number representing proximty to radial highways.
+# Summary gives the min, 1 Quarter, median, mean , 3 quarter and max
+# unique displays the unique (no repeated) entries
+# 
 ```{r}
 # Store entire 9th column of data frame into radColumnAsVector
 radColumnAsVector <- dataFrameBoston[,9]
+summary(radColumnAsVector)
+unique(radColumnAsVector)
+sum(radColumnAsVector = 24)
 ```
 
 # 9
 ```{r}
+far <- factor
+
+func1 <- function(radColumnAsVector){
+  # loop to traverse vector
+  radColumnAsVector + seq_along(radColumnAsVector)
+  
+  # if structure to determine what to store in factor array
+  if( radColumnAsVector[seq_along] != 24)(
+     far <- TRUE
+  )else(
+     far <- FALSE
+    )
+  
+
+}
+
+# store custom vectors to new dataFrame
+#dataFrameCustom4 <- data.frame(x=far, y=medvColumnAsVector)
+
+#par()              # view current settings
+#opar <- par()      # make a copy of current settings
+#par(col.lab="red") # red x and y labels 
+#plot(dataFrameCustom4, xlab="Far", ylab="Median Value")
+
+#par(opar)          # restore original settings    
+
+
 
 ```
 
 # 10
+# This city has a crime value within the normal distribution, and other values to match in terms of house cost.
 ```{r}
 # Store entire 13th column of data frame into lstatColumnAsVector
 lstatColumnAsVector <- dataFrameBoston[,13]
@@ -88,18 +158,16 @@ dataFrameSummary <- c(crimeColumnAsVector)
 dataFrameSummary <- c(roomColumnAsVector)
 dataFrameSummary <- c(lstatColumnAsVector)
 dataFrameSummary <- c(medvColumnAsVector)
-print(dataFrameSummary)
 
 # find neighborhood with highest median value
 frameIndex <- which.max(medvColumnAsVector)
 print(frameIndex)
 
-dataFrameSummary[162,]
+rows <- 1
+rows <- 6
+rows <- 13
+rows <- 14
+
+Boston[c(frameIndex), ]
 
 ```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
