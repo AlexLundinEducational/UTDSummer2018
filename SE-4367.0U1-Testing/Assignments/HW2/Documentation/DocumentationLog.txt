@@ -1,0 +1,27 @@
+Documentation Log
+
+JavaServlet
+	refactored hard coded strings into their own file
+	this makes the files easier to maintain
+
+StringConstants.java
+	this is a refactoring of the strings used in the JavaServlet file
+
+MVCWrapper
+	Holds the main routine
+	Creates the Jframe GUI
+	DOES NOT instantiate as an objects
+	This allows MVCWrapper to implement (abstractly extend) the ActionListener interface 
+	This concept is the key to the whole design pattern
+	MVCWrapper's main purpose is to listen to the user clicks
+	
+Controller
+	Commuicates between the model and view
+
+Model
+	Holds data
+
+View
+	Displays data in the Jframe GUI
+	This class requests data from the Controller
+	The Conroller phyiscally controlls the data flow between componenets
