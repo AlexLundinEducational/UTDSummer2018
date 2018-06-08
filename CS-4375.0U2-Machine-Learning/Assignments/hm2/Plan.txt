@@ -1,0 +1,60 @@
+hm2 overview and knowledge areas
+
+	1.)
+	Learn how to divide data into sets:
+		Train
+		Test
+		
+	2.)
+	Learn how to do linear regression with:
+		Response
+		Predictor
+		
+	3.)
+	Learn how to calculate MSE
+	
+	3.)
+	Learn what 
+		Model equations area
+		Relationships between response and predictors area
+		Correlations, positive and negative
+	
+	4.)	
+	Learn about plots
+		With abline
+		Fit evaluation
+		Prediction values from fit lines
+	
+	5.)	
+	Learn about predict function
+		snytax
+		how to get correlation
+		what the results of correlations are
+		calculate MSE from here
+		How MSE and training data relate
+		
+	6.)
+	Learn more about plots
+		2x2 array
+		what are residuals
+		
+	7.)
+	Learn about
+		R squared
+		Logs
+		
+	8.)
+	Learn how
+		to compare fit lines and data
+		
+	9.)
+	Learn how to
+		predict with lm2
+		find correlations of predictions and log of test data
+		compare correlations of different sets of the same data
+		compare MSE of different sets of the same data
+		
+	10.)
+	Learn how to 
+		compare 2x2 plots
+	
