@@ -81,17 +81,18 @@ print(linearMod)
 # create summary
 summary(linearMod)  # model summary
 
+# calculate p value
+#modelSummary <- summary(linearMod)  # capture model summary as an object
+#modelCoeffs <- modelSummary$coefficients  # model coefficients
 
-modelSummary <- summary(linearMod)  # capture model summary as an object
-modelCoeffs <- modelSummary$coefficients  # model coefficients
+#beta.estimate <- modelCoeffs["horsepower", "Estimate"]  # get beta estimate for speed
+#std.error <- modelCoeffs["horsepower", "Std. Error"]  # get std.error for speed
+#t_value <- beta.estimate/std.error  # calc t statistic
+#p_value <- 2*pt(-abs(t_value), df=nrow(Auto)-ncol(Auto))  # calc p Value
+#f_statistic <- linearMod$fstatistic[1]  # fstatistic
+#f <- summary(linearMod)$fstatistic  # parameters for model p-value calc
+#model_p <- pf(f[1], f[2], f[3], lower=FALSE)
 
-beta.estimate <- modelCoeffs["horsepower", "Estimate"]  # get beta estimate for speed
-std.error <- modelCoeffs["horsepower", "Std. Error"]  # get std.error for speed
-t_value <- beta.estimate/std.error  # calc t statistic
-p_value <- 2*pt(-abs(t_value), df=nrow(Auto)-ncol(Auto))  # calc p Value
-f_statistic <- linearMod$fstatistic[1]  # fstatistic
-f <- summary(linearMod)$fstatistic  # parameters for model p-value calc
-model_p <- pf(f[1], f[2], f[3], lower=FALSE)
 
 
 #Step 1: Create the training (development) and test (validation) data samples from original data.
