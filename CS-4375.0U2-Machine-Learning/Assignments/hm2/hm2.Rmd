@@ -42,6 +42,13 @@ test <- shuffled_dataFrame1[test_indices, ]
 
 #2.	Use the lm() function to perform simple linear regression on the train data with mpg as the response and horsepower as the predictor. Use the summary() function to evaluate the results. Calculate the MSE.
 
+```{r}
+# data analysis for understanding
+xPredictor <- train$horsepower
+yResponse <- train$mpg
+scatter.smooth(x=xPredictor, yResponse, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
+# http://r-statistics.co/Linear-Regression.html
+```
 
 
 #3.	(No code) Write in the white text area: 
