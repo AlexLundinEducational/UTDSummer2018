@@ -23,7 +23,7 @@ Machine Learning
 	Installers
 	R for Windows
 	R-3.5.0
-	RStudiohttps://cran.rstudio.com/
+	https://cran.rstudio.com/
 
 	RStudio
 	RStudio 1.1.453 - Windows Vista/7/8/10

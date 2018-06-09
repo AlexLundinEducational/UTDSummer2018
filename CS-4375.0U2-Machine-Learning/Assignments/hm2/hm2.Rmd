@@ -2,13 +2,14 @@ Name: Alex Lundin
 Assignment: HW2
 
 # Linear Regression
-#1.	Load library ISLR. Use the names() function and the summary() function to learn more about the Auto data set. Divide the data randomly into train and test sets, with 75% train. Use seed 1234 for reproducibility.
+#1.	Load library ISLR. Use the names() function and the summary() function to learn more about the Auto dataFrame1 set. Divide the dataFrame1 randomly into train and test sets, with 75% train. Use seed 1234 for reproducibility.
 ```{r}
-# install data if needed
-# install.packages('ISLR')
 
-# load data
+
+# load dataFrame1
 if(!require('ISLR')){
+# install dataFrame1 if needed
+  install.packages('ISLR')  
   library('ISLR')
 }
 
@@ -17,22 +18,22 @@ names(Auto)
 summary(Auto)
 
 
-# store Auto into data
-data(Auto)
-n <- nrow(data)
+# store Auto into dataFrame1
+dataFrame1 <- (Auto)
+numberOfRows <- nrow(dataFrame1)
 
 # Set random seed to ensure reproducability of the shuffle.
 set.seed(1234)
 
-# shuffle the data and store into a new data frame
-shuffled_data <- data[sample(n), ]
+# shuffle the dataFrame1 and store into a new dataFrame1 frame
+shuffled_dataFrame1 <- dataFrame1[sample(numberOfRows), ]
 
-# set train data with the train indices
-train_indices <- 1:round(0.75 * n)
-train <- shuffled_data[train_indices, ]
-# set test data with the test indices
-test_indices <- (round(0.75 * n) + 1):n
-test <- shuffled_data[test_indices, ]
+# set train dataFrame1 with the train indices
+train_indices <- 1:round(0.75 * numberOfRows)
+train <- shuffled_dataFrame1[train_indices, ]
+# set test dataFrame1 with the test indices
+test_indices <- (round(0.75 * numberOfRows) + 1):numberOfRows
+test <- shuffled_dataFrame1[test_indices, ]
 
 ```
 
