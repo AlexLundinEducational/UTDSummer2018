@@ -9,7 +9,7 @@ Assignment: HW2
 # load dataFrame1
 if(!require('ISLR')){
 # install dataFrame1 if needed
-  install.packages('ISLR')  
+  #install.packages('ISLR')  
   library('ISLR')
 }
 
@@ -44,10 +44,76 @@ test <- shuffled_dataFrame1[test_indices, ]
 
 ```{r}
 # data analysis for understanding
+# http://r-statistics.co/Linear-Regression.html
+
+# scatterplot for data view
 xPredictor <- train$horsepower
 yResponse <- train$mpg
 scatter.smooth(x=xPredictor, yResponse, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
-# http://r-statistics.co/Linear-Regression.html
+
+
+# box plot for outliers, anything between 25% and 75% percentiles
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+boxplot(xPredictor, main="horsepower", sub=paste("Outlier rows: ", boxplot.stats(xPredictor)$out))  # box plot for 'speed'
+boxplot(yResponse, main="MPG", sub=paste("Outlier rows: ", boxplot.stats(yResponse)$out))  # box plot for 'distance'
+
+
+if(!require("e107")){
+# install dataFrame1 if needed
+  #install.packages("e1071", dep = TRUE)
+  library(e1071)
+}
+
+# Density plot
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+plot(density(xPredictor), main="Density Plot: Speed", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(xPredictor), 2)))  # density plot for 'speed'
+polygon(density(xPredictor), col="red")
+plot(density(yResponse), main="Density Plot: Distance", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(yResponse), 2)))  # density plot for 'dist'
+polygon(density(yResponse), col="red")
+
+
+# correlation
+cor(xPredictor, yResponse)  # calculate correlation between speed and distance 
+
+# create linear model
+linearMod <- lm(horsepower ~ mpg, data=Auto)  # build linear regression model on full data
+print(linearMod)
+# create summary
+summary(linearMod)  # model summary
+
+
+modelSummary <- summary(linearMod)  # capture model summary as an object
+modelCoeffs <- modelSummary$coefficients  # model coefficients
+
+beta.estimate <- modelCoeffs["horsepower", "Estimate"]  # get beta estimate for speed
+std.error <- modelCoeffs["horsepower", "Std. Error"]  # get std.error for speed
+t_value <- beta.estimate/std.error  # calc t statistic
+p_value <- 2*pt(-abs(t_value), df=nrow(Auto)-ncol(Auto))  # calc p Value
+f_statistic <- linearMod$fstatistic[1]  # fstatistic
+f <- summary(linearMod)$fstatistic  # parameters for model p-value calc
+model_p <- pf(f[1], f[2], f[3], lower=FALSE)
+
+
+#Step 1: Create the training (development) and test (validation) data samples from original data.
+# Create Training and Test data -
+set.seed(100)  # setting seed to reproduce results of random sampling
+trainingRowIndex <- sample(1:nrow(Auto), 0.8*nrow(Auto))  # row indices for training data
+trainingData <- Auto[trainingRowIndex, ]  # model training data
+testData  <- Auto[-trainingRowIndex, ]   # test data
+
+#Step 2: Develop the model on the training data and use it to predict the distance on test data
+# Build the model on training data -
+lmMod <- lm(mpg ~ horsepower, data=trainingData)  # build the model
+distPred <- predict(lmMod, testData)  # predict distance
+
+
+# Step 3: Review diagnostic measures.
+summary (lmMod)  # model summary
+
+AIC (lmMod)  # Calculate akaike information criterion
+
+
+
 ```
 
 
