@@ -2,13 +2,13 @@ Name: Alex Lundin
 Assignment: HW2
 
 # Linear Regression
-#1.	Load library ISLR. Use the names() function and the summary() function to learn more about the Auto dataFrame1 set. Divide the dataFrame1 randomly into train and test sets, with 75% train. Use seed 1234 for reproducibility.
+#1.	Load library ISLR. Use the names() function and the summary() function to learn more about the Auto auto.dataFrame set. Divide the auto.dataFrame randomly into train.data and test.data sets, with 75% train.data. Use seed 1234 for reproducibility.
 ```{r}
 
 
-# load dataFrame1
+# load auto.dataFrame
 if(!require('ISLR')){
-# install dataFrame1 if needed
+# install auto.dataFrame if needed
   #install.packages('ISLR')  
   library('ISLR')
 }
@@ -18,120 +18,153 @@ names(Auto)
 summary(Auto)
 
 
-# store Auto into dataFrame1
-dataFrame1 <- (Auto)
-numberOfRows <- nrow(dataFrame1)
+# store Auto into auto.dataFrame
+auto.dataFrame <- (Auto)
+auto.numberOfRows <- nrow(auto.dataFrame)
 
 # Set random seed to ensure reproducability of the shuffle.
 set.seed(1234)
 
-# shuffle the dataFrame1 and store into a new dataFrame1 frame
-shuffled_dataFrame1 <- dataFrame1[sample(numberOfRows), ]
+# shuffle the auto.dataFrame and store into a new auto.dataFrame frame
+shuffled_auto.dataFrame <- auto.dataFrame[sample(auto.numberOfRows), ]
 
-# set train dataFrame1 with the train indices
-train_indices <- 1:round(0.75 * numberOfRows)
-train <- shuffled_dataFrame1[train_indices, ]
-# set test dataFrame1 with the test indices
-test_indices <- (round(0.75 * numberOfRows) + 1):numberOfRows
-test <- shuffled_dataFrame1[test_indices, ]
+# set train.data auto.dataFrame with the train.data indices
+train.data.indices <- 1:round(0.75 * auto.numberOfRows)
+train.data <- shuffled_auto.dataFrame[train.data.indices, ]
+# set test.data auto.dataFrame with the test.data indices
+test.data.indices <- (round(0.75 * auto.numberOfRows) + 1):auto.numberOfRows
+test.data <- shuffled_auto.dataFrame[test.data.indices, ]
 
 ```
 
 
 
 
-#2.	Use the lm() function to perform simple linear regression on the train data with mpg as the response and horsepower as the predictor. Use the summary() function to evaluate the results. Calculate the MSE.
+#2.	Use the lm() function to perform simple linear regression on the train.data data with mpg as the response and horsepower as the predictor. Use the summary() function to evaluate the results. Calculate the MSE.
+```{r}
+# create linear model on train.data
+train.linearModel <- lm(xPredictor ~ yResponse, data=train.data)
+print(train.linearModel)
+plot(train.linearModel)
+```
 
 ```{r}
-# data analysis for understanding
-# http://r-statistics.co/Linear-Regression.html
+# summarize the model
+train.linearModel.Summary <- summary (train.linearModel)
+print(train.linearModel.Summary)
+```
 
-# scatterplot for data view
-xPredictor <- train$horsepower
-yResponse <- train$mpg
-scatter.smooth(x=xPredictor, yResponse, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
-
-
-# box plot for outliers, anything between 25% and 75% percentiles
-par(mfrow=c(1, 2))  # divide graph area in 2 columns
-boxplot(xPredictor, main="horsepower", sub=paste("Outlier rows: ", boxplot.stats(xPredictor)$out))  # box plot for 'speed'
-boxplot(yResponse, main="MPG", sub=paste("Outlier rows: ", boxplot.stats(yResponse)$out))  # box plot for 'distance'
-
-
-if(!require("e107")){
-# install dataFrame1 if needed
-  #install.packages("e1071", dep = TRUE)
-  library(e1071)
-}
-
-# Density plot
-par(mfrow=c(1, 2))  # divide graph area in 2 columns
-plot(density(xPredictor), main="Density Plot: Speed", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(xPredictor), 2)))  # density plot for 'speed'
-polygon(density(xPredictor), col="red")
-plot(density(yResponse), main="Density Plot: Distance", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(yResponse), 2)))  # density plot for 'dist'
-polygon(density(yResponse), col="red")
-
-
-# correlation
-cor(xPredictor, yResponse)  # calculate correlation between speed and distance 
-
-# create linear model
-linearMod <- lm(horsepower ~ mpg, data=Auto)  # build linear regression model on full data
-print(linearMod)
-# create summary
-summary(linearMod)  # model summary
-
-# calculate p value
-#modelSummary <- summary(linearMod)  # capture model summary as an object
-#modelCoeffs <- modelSummary$coefficients  # model coefficients
-
-#beta.estimate <- modelCoeffs["horsepower", "Estimate"]  # get beta estimate for speed
-#std.error <- modelCoeffs["horsepower", "Std. Error"]  # get std.error for speed
-#t_value <- beta.estimate/std.error  # calc t statistic
-#p_value <- 2*pt(-abs(t_value), df=nrow(Auto)-ncol(Auto))  # calc p Value
-#f_statistic <- linearMod$fstatistic[1]  # fstatistic
-#f <- summary(linearMod)$fstatistic  # parameters for model p-value calc
-#model_p <- pf(f[1], f[2], f[3], lower=FALSE)
-
-
-
-#Step 1: Create the training (development) and test (validation) data samples from original data.
-# Create Training and Test data -
-set.seed(100)  # setting seed to reproduce results of random sampling
-trainingRowIndex <- sample(1:nrow(Auto), 0.8*nrow(Auto))  # row indices for training data
-trainingData <- Auto[trainingRowIndex, ]  # model training data
-testData  <- Auto[-trainingRowIndex, ]   # test data
-
-#Step 2: Develop the model on the training data and use it to predict the distance on test data
-# Build the model on training data -
-lmMod <- lm(mpg ~ horsepower, data=trainingData)  # build the model
-distPred <- predict(lmMod, testData)  # predict distance
-
-
-# Step 3: Review diagnostic measures.
-summary (lmMod)  # model summary
-
-AIC (lmMod)  # Calculate akaike information criterion
-
-
+```{r}
+# calculate MSE
+train.Redisuals <- train.linearModel.Summary$residuals
+train.Model.MSE <- mean(train.Redisuals^2)
+print(train.Model.MSE)
 
 ```
 
 
+```{r}
+# evaluate relationship
+cor(xPredictor, yResponse)  # calculate correlation between horsepower and MPG
+```
+
 #3.	(No code) Write in the white text area: 
+
 #a.	Write the equation from the model  
+
+# Equation:
+# yi = 194.2123 - 3.8688xi + N(0, (25.12)squared)
+
+# Notes:
+# yi=B0+B1*xi+ei
+# where e-N(0, (o)squared)
+# B0 is the Estimate value in the (Intercept) row (specifically, 194.2123)
+# B1 is the Estimate value in the x row (specifically, -3.8688)
+# o is the Residual standard error (specifically, 25.12)
+
+
 #b.	Is there a strong relationship between horsepower and mpg? 
+
+# The correlation between horsepower and mpg is -0.7690193, this shows a strong negative relationship
+# Meaning as horsepower becomes greater, the mpg drops lower
+
 #c.	Is it a positive or negative correlation? 
-#d.	Comment on the RSE, R^2, and F-statistic 
+
+# This is a negative correlation.
+
+#d.	Comment on the RSE, Rsquared, and F-statistic 
+
 #e.	Comment on the MSE
 
+# The MSE quanitifies the amount of error in the model.
+# The MSE is calculated from squaring the mean of the residuals.
+# This MSE is 626.6729, and we will use this value later to compare the models
 
 
-#4.	Plot train$mpg~train$horsepower and draw a blue abline(). Comment on how well the data fits the line. Predict mpg for horsepower of 98. Comment on the predicted value given the graph you created.
+
+```{r}
+
+# data analysis for understanding and different types of plots
+# http://r-statistics.co/Linear-Regression.html
+
+# # scatterplot for data view
+# xPredictor <- train.data$horsepower
+# yResponse <- train.data$mpg
+# scatter.smooth(x=xPredictor, yResponse, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
+# 
+# 
+# # box plot for outliers, anything between 25% and 75% percentiles
+# par(mfrow=c(1, 2))  # divide graph area in 2 columns
+# boxplot(xPredictor, main="horsepower", sub=paste("Outlier rows: ", boxplot.stats(xPredictor)$out))  # box plot for 'speed'
+# boxplot(yResponse, main="MPG", sub=paste("Outlier rows: ", boxplot.stats(yResponse)$out))  # box plot for 'distance'
+# 
+# 
+# if(!require("e107")){
+# # install auto.dataFrame if needed
+#   #install.packages("e1071", dep = TRUE)
+#   library(e1071)
+# }
+# 
+# # Density plot
+# par(mfrow=c(1, 2))  # divide graph area in 2 columns
+# plot(density(xPredictor), main="Density Plot: Speed", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(xPredictor), 2)))  # density plot for 'speed'
+# polygon(density(xPredictor), col="red")
+# plot(density(yResponse), main="Density Plot: Distance", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(yResponse), 2)))  # density plot for 'dist'
+# polygon(density(yResponse), col="red")
+# 
+# 
+# # correlation
+# cor(xPredictor, yResponse)  # calculate correlation between speed and distance 
+# 
+# # create linear model on train.data
+# train.linearModel <- lm(xPredictor ~ yResponse, data=train.data)
+# print(train.linearModel)
+# plot(train.linearModel)
+# # create summary
+# summary(train.linearModel)
+# 
+# 
+# #Step 2: Develop the model on the train.dataing data and use it to predict the distance on test.data data
+# # Predict from the linearModel of the train.dataing and the train.dataing data
+# train.LinearModel.prediction <- predict(train.linearModel, train.data)  # predict distance
+# 
+# 
+# AIC (train.linearModel)  # Calculate akaike information criterion
+# 
+# 
+# # calculate MSE
+# #https://stats.stackexchange.com/questions/107643/how-to-get-the-value-of-mean-squared-error-in-a-linear-regression-in-r
+# train.Model.MSE <- mean(train.linearModel$residuals^2)
+# print(train.Model.MSE)
+```
 
 
 
-#5.	Test on the test data using the predict function. Find the correlation between the predicted values and the mpg values in the test data. Comment on the results. Calculate the mse on the test results. Compare this to the mse for the training data. 
+#4.	Plot train.data$mpg~train.data$horsepower and draw a blue abline(). Comment on how well the data fits the line. Predict mpg for horsepower of 98. Comment on the predicted value given the graph you created.
+
+
+
+#5.	test.data on the test.data data using the predict function. Find the correlation between the predicted values and the mpg values in the test.data data. Comment on the results. Calculate the mse on the test.data results. Compare this to the mse for the train.dataing data. 
 
 
 
@@ -147,7 +180,7 @@ AIC (lmMod)  # Calculate akaike information criterion
 
 
 
-#9.	Predict on the test data using lm2. Find the correlation of the predictions and log() of test mpg. Compare this correlation with the correlation you got for lm1. Calculate the MSE for the test data on lm2 and compare to lm1.
+#9.	Predict on the test.data data using lm2. Find the correlation of the predictions and log() of test.data mpg. Compare this correlation with the correlation you got for lm1. Calculate the MSE for the test.data data on lm2 and compare to lm1.
 
 
 
