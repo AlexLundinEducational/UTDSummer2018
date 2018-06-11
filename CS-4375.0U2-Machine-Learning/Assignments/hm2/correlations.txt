@@ -1,0 +1,6 @@
+mpg / displacement / horsepower / weight /
+displacement / horsepower
+horsepower / weight
+horsepower / acceleration
+weight / displacement / horsepower
+acceleration / horsepower

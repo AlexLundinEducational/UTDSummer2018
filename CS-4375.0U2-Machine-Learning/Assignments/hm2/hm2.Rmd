@@ -9,14 +9,14 @@ Assignment: HW2
 # load auto_dataFrame
 if(!require('ISLR')){
 # install auto_dataFrame if needed
-  #install.packages('ISLR')  
+  install.packages('ISLR')  
   library('ISLR')
 }
 
 # learn about Auto
 names(Auto)
 summary(Auto)
-
+auto_linearModel = lm(horsepower~mpg, data=Auto)
 
 # store Auto into auto_dataFrame
 auto_dataFrame <- (Auto)
@@ -34,7 +34,6 @@ train_data <- shuffled_auto_dataFrame[train_data_indices, ]
 # set test_data auto_dataFrame with the test_data indices
 test_data_indices <- (round(0.75 * auto_numberOfRows) + 1):auto_numberOfRows
 test_data <- shuffled_auto_dataFrame[test_data_indices, ]
-
 ```
 
 
@@ -42,10 +41,10 @@ test_data <- shuffled_auto_dataFrame[test_data_indices, ]
 
 #2.	Use the lm() function to perform simple linear regression on the train_data data with mpg as the response and horsepower as the predictor. Use the summary() function to evaluate the results. Calculate the MSE.
 ```{r}
-xPredictor_hp <- train_data$horsepower
-yResponse_mpg <- train_data$mpg
+# train_xPredictor_hp <- train_data$horsepower
+# train_yResponse_mpg <- train_data$mpg
 # create linear model on train_data
-train_linearModel <- lm(xPredictor_hp ~ yResponse_mpg, data=train_data)
+train_linearModel <- lm(horsepower ~ mpg, data = train_data)
 print(train_linearModel)
 plot(train_linearModel)
 ```
@@ -67,7 +66,8 @@ print(train_Model_MSE)
 
 ```{r}
 # evaluate relationship
-cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between horsepower and MPG
+#cor(train_xPredictor_hp, train_yResponse_mpg)  # calculate correlation between horsepower and MPG
+cor(train_data$horsepower, train_data$mpg)  # calculate correlation between horsepower and MPG
 ```
 
 #3.	(No code) Write in the white text area: 
@@ -120,15 +120,15 @@ cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between horsepower an
 # http://r-statistics.co/Linear-Regression.html
 
 # # scatterplot for data view
-# xPredictor_hp <- train_data$horsepower
-# yResponse_mpg <- train_data$mpg
-# scatter.smooth(x=xPredictor_hp, yResponse_mpg, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
+# train_xPredictor_hp <- train_data$horsepower
+# train_yResponse_mpg <- train_data$mpg
+# scatter.smooth(x=train_xPredictor_hp, train_yResponse_mpg, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
 # 
 # 
 # # box plot for outliers, anything between 25% and 75% percentiles
 # par(mfrow=c(1, 2))  # divide graph area in 2 columns
-# boxplot(xPredictor_hp, main="horsepower", sub=paste("Outlier rows: ", boxplot.stats(xPredictor_hp)$out))  # box plot for 'speed'
-# boxplot(yResponse_mpg, main="MPG", sub=paste("Outlier rows: ", boxplot.stats(yResponse_mpg)$out))  # box plot for 'distance'
+# boxplot(train_xPredictor_hp, main="horsepower", sub=paste("Outlier rows: ", boxplot.stats(train_xPredictor_hp)$out))  # box plot for 'speed'
+# boxplot(train_yResponse_mpg, main="MPG", sub=paste("Outlier rows: ", boxplot.stats(train_yResponse_mpg)$out))  # box plot for 'distance'
 # 
 # 
 # if(!require("e107")){
@@ -139,17 +139,17 @@ cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between horsepower an
 # 
 # # Density plot
 # par(mfrow=c(1, 2))  # divide graph area in 2 columns
-# plot(density(xPredictor_hp), main="Density Plot: Speed", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(xPredictor_hp), 2)))  # density plot for 'speed'
-# polygon(density(xPredictor_hp), col="red")
-# plot(density(yResponse_mpg), main="Density Plot: Distance", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(yResponse_mpg), 2)))  # density plot for 'dist'
-# polygon(density(yResponse_mpg), col="red")
+# plot(density(train_xPredictor_hp), main="Density Plot: Speed", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(train_xPredictor_hp), 2)))  # density plot for 'speed'
+# polygon(density(train_xPredictor_hp), col="red")
+# plot(density(train_yResponse_mpg), main="Density Plot: Distance", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(train_yResponse_mpg), 2)))  # density plot for 'dist'
+# polygon(density(train_yResponse_mpg), col="red")
 # 
 # 
 # # correlation
-# cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between speed and distance 
+# cor(train_xPredictor_hp, train_yResponse_mpg)  # calculate correlation between speed and distance 
 # 
 # # create linear model on train_data
-# train_linearModel <- lm(xPredictor_hp ~ yResponse_mpg, data=train_data)
+# train_linearModel <- lm(train_xPredictor_hp ~ train_yResponse_mpg, data=train_data)
 # print(train_linearModel)
 # plot(train_linearModel)
 # # create summary
@@ -174,65 +174,176 @@ cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between horsepower an
 
 #4.	Plot train_data$mpg~train_data$horsepower and draw a blue abline(). Comment on how well the data fits the line. Predict mpg for horsepower of 98. Comment on the predicted value given the graph you created.
 
-# The blue line is a vertical representation of a x value, and it does not fit the data because it's purpose is not to fit the data.
+# The blue fis the data fairly well because it uses the linearmodel generated from the data.
 
-# The predicted mpg for 98 horsepower is...
+# The predicted mpg for 98 horsepower is -184.5295
 ```{r}
 plot(train_data$mpg~train_data$horsepower)
-# draws line at v =  some x value on the current plot
-abline(v = mean(train_data$horsepower), col="blue", lwd=3, lty=2)
+# draws line the fits the linear model of the plot data
+abline(lm(train_data$mpg~train_data$horsepower), col="blue")
 
-# Predict from the linearModel of the train_data and the train_data data
-mpgList <- list(rep(98,294))
-new.df <- data.frame(horsepower=c(mpgList))
+# Predict from the linearModel using the coefficients from the model and then the predict function
 
-myPrediction <- predict(train_linearModel, data.frame(horsepower=c(98)))
+# save coefficients
+print("This is a manual prediction using coefficient extraction:")
+train_linearModel_coefficients = coefficients(train_linearModel)
+xvalue = 98
+manual_test_prediction = train_linearModel_coefficients[2] * xvalue + train_linearModel_coefficients[1]
+print(manual_test_prediction)
 
-#train_linearModel_prediction <- predict(train_linearModel, new.df)  # predict distance
-plot(myPrediction)
+print("This is prediction using prediction function and 98 mpg dummy data:")
+# hallucinate test data
+# Copy and edit a row of Auto
+dummy_Data <- train_data[c(1),]
+# new hp values
+dummy_Data[1, 4] <- 98
+
+train_Prediction <- predict(train_linearModel, newdata=dummy_Data) 
+train_Prediction
 ```
 
 
-#5.	test_data on the test_data data using the predict function. Find the correlation between the predicted values and the mpg values in the test_data data_ Comment on the results. Calculate the mse on the test_data results. Compare this to the mse for the train_data data_ 
 
+#5.	test on the test data using the predict function. 
+#Find the correlation between the predicted values and the mpg values in the test data Comment on the results. 
+#Calculate the mse on the test_data results. Compare this to the mse for the train_data data
+
+There is a -1 correlation between the predicted values and the mpg values
+
+The mse for the train data was: 626.6729
+The mse for the test data was: 7695
+The test data had alot more error inside it's model than the train data did
+
+```{r}
+
+print("This is prediction function on test data:")
+test_Prediction <- predict(train_linearModel, newdata=test_data) 
+test_Prediction
+```
+#Evaluate Results
+```{r}
+correlation <- cor(test_Prediction, test_data$mpg)
+print(paste("correlation: ", correlation))
+mse <- mean((test_Prediction - test_data$mpg)^2)
+print(paste("mse: ", mse))
+rmse <- sqrt(mse)
+print(paste("rmse: ", rmse))
+```
 
 
 #6.	Plot the linear model in a 2x2 arrangement. Do you see evidence of non-linearity from the residuals?
 
+Yes, there are non-linearity in the results demonstrated by the mid range values.
+The residuals, errors, show a curve in the middle.
+
+```{r}
+par(mfrow=c(2,2)) # Change the panel layout to 2 x 2
+plot(train_linearModel)
+```
 
 
 #7.	Create a second linear model with log(mpg) predicted by horsepower. Compare the summary statistic R^2 of the two models. 
+
+The r squared value was .59 for the training model vs .67 for this model, so they are close.
+
+```{r}
+# create linear model, using log of mpg this time
+lm2 <- lm(horsepower ~ log(mpg), data = train_data)
+summary(lm2)
+```
 
 
 
 #8.	Plot the function with an abline(). Comment on how well the line fits the data_
 
+The line fits the data very closely.
 
+```{r}
+plot(train_data$horsepower ~ log(train_data$mpg))
+# draws line the fits the linear model of the plot data
+abline(lm(horsepower ~ log(mpg), data = train_data), col="blue")
+```
 
-#9.	Predict on the test_data data using lm2. Find the correlation of the predictions and log() of test_data mpg. Compare this correlation with the correlation you got for lm1. Calculate the MSE for the test_data data on lm2 and compare to lm1.
+#9.	Predict on the test_data data using lm2. Find the correlation of the predictions and log() of test_data mpg. Compare this correlation with the correlation you got for lm1. Calculate the MSE for the test_data data on lm2 and compare to lm1
+
+The correlation for the log model is slightly less, but still strongly low at -0.98.
+The MSE is 7556 which slightly more than the first model.
+
+```{r}
+print("This is prediction function on test data with log model:")
+test_Prediction2 <- predict(lm2, newdata=test_data) 
+test_Prediction2
+
+correlation <- cor(test_Prediction2, test_data$mpg)
+print(paste("correlation: ", correlation))
+mse <- mean((test_Prediction2 - test_data$mpg)^2)
+print(paste("mse: ", mse))
+rmse <- sqrt(mse)
+print(paste("rmse: ", rmse))
+```
 
 
 
 #10.	Plot the second linear model in a 2x2 arrangement. How does it compare to the first set of graphs?
 
+```{r}
+par(mfrow=c(2,2)) # Change the panel layout to 2 x 2
+plot(lm2)
+```
 
 
 
 # Multiple Linear Regression
-#1.	Produce a scatterplot matrix which includes all the variables in the data set using the command "pairs(Auto)". List any possible correlations that you observe, listing positive and negative correlations separately, with at least 3 in each category.
+#1.	Produce a scatterplot matrix which includes all the variables in the data set using the command "pairs(Auto)". 
+#List any possible correlations that you observe, listing positive and negative correlations separately, with at least 3 in each category.
+
+Positive:
+Displacement and weight
+Horsepower and weight
+Horsepower and acceleration
+
+Negative
+mpg and horsepower
+mpg and weight
+mpg and displacement
+
+```{r}
+pairs(Auto)
+```
 
 
 
 #2.	Compute the matrix of correlations between the variables using function cor(). You should exclude the "name" variable since is it qualitative. Write the two strongest positive correlations and their values in the text area. Write the two strongest negative correlations and their values in the text area.
 
+```{r}
+# load auto_dataFrame
+if(!require('Hmisc')){
+# install auto_dataFrame if needed
+  install.packages('Hmisc')  
+  library('Hmisc')
+}
+
+rcorr(x, type="pearson") # type can be pearson or spearman
+d <- data.frame(Auto)
+rcor(as.matrix(Auto))
+```
 
 
-#3.	Convert the origin variable to a factor. Use the lm() function to perform multiple linear regression with mpg as the response and all other variables except name as predictors. Use the summary() function to print the results. Which predictors appear to have a statistically significant relationship to the response?
+#3.	
+# Convert the origin variable to a factor. 
+# Use the lm() function to perform multiple linear regression with mpg as the response and all other variables except name as predictors. 
+# Use the summary() function to print the results. 
+# Which predictors appear to have a statistically significant relationship to the response?
 
 
 
-#4.	Use the plot() function to produce diagnostic plots of the linear regression fit. Comment on any problems you see with the fit. Are there any leverage points? Display a row from the data set that seems to be a leverage point. 
+#4.	
+# Use the plot() function to produce diagnostic plots of the linear regression fit. 
+# Comment on any problems you see with the fit. Are there any leverage points? 
+# Display a row from the data set that seems to be a leverage point. 
 
 
 
-#5.	Use the * and + symbols to fit linear regression models with interaction effects, choosing whatever variables you think might get better results than your model in step 3 above. Compare the summaries of the two models, particularly R^2. Run anova() on the two models to see if your second model outperformed the previous one. 
+#5.	
+# Use the * and + symbols to fit linear regression models with interaction effects, choosing whatever variables you think might get better results than your model in step 3 above. 
+#Compare the summaries of the two models, particularly R^2. Run anova() on the two models to see if your second model outperformed the previous one. 
