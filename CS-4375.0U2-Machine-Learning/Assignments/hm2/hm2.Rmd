@@ -114,69 +114,12 @@ cor(train_data$horsepower, train_data$mpg)  # calculate correlation between hors
 
 
 
-```{r}
-
-# data analysis for understanding and different types of plots
-# http://r-statistics.co/Linear-Regression.html
-
-# # scatterplot for data view
-# train_xPredictor_hp <- train_data$horsepower
-# train_yResponse_mpg <- train_data$mpg
-# scatter.smooth(x=train_xPredictor_hp, train_yResponse_mpg, main="MPG ~ Horsepower", xlab="Horsepower", ylab="Mpg")  # scatterplot
-# 
-# 
-# # box plot for outliers, anything between 25% and 75% percentiles
-# par(mfrow=c(1, 2))  # divide graph area in 2 columns
-# boxplot(train_xPredictor_hp, main="horsepower", sub=paste("Outlier rows: ", boxplot.stats(train_xPredictor_hp)$out))  # box plot for 'speed'
-# boxplot(train_yResponse_mpg, main="MPG", sub=paste("Outlier rows: ", boxplot.stats(train_yResponse_mpg)$out))  # box plot for 'distance'
-# 
-# 
-# if(!require("e107")){
-# # install auto_dataFrame if needed
-#   #install.packages("e1071", dep = TRUE)
-#   library(e1071)
-# }
-# 
-# # Density plot
-# par(mfrow=c(1, 2))  # divide graph area in 2 columns
-# plot(density(train_xPredictor_hp), main="Density Plot: Speed", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(train_xPredictor_hp), 2)))  # density plot for 'speed'
-# polygon(density(train_xPredictor_hp), col="red")
-# plot(density(train_yResponse_mpg), main="Density Plot: Distance", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(train_yResponse_mpg), 2)))  # density plot for 'dist'
-# polygon(density(train_yResponse_mpg), col="red")
-# 
-# 
-# # correlation
-# cor(train_xPredictor_hp, train_yResponse_mpg)  # calculate correlation between speed and distance 
-# 
-# # create linear model on train_data
-# train_linearModel <- lm(train_xPredictor_hp ~ train_yResponse_mpg, data=train_data)
-# print(train_linearModel)
-# plot(train_linearModel)
-# # create summary
-# summary(train_linearModel)
-# 
-# 
-# #Step 2: Develop the model on the train_data data and use it to predict the distance on test_data data
-# # Predict from the linearModel of the train_data and the train_data data
-# train_linearModel_prediction <- predict(train_linearModel, train_data)  # predict distance
-# 
-# 
-# AIC (train_linearModel)  # Calculate akaike information criterion
-# 
-# 
-# # calculate MSE
-# #https://stats.stackexchange.com/questions/107643/how-to-get-the-value-of-mean-squared-error-in-a-linear-regression-in-r
-# train_Model_MSE <- mean(train_linearModel$residuals^2)
-# print(train_Model_MSE)
-```
-
-
 
 #4.	Plot train_data$mpg~train_data$horsepower and draw a blue abline(). Comment on how well the data fits the line. Predict mpg for horsepower of 98. Comment on the predicted value given the graph you created.
 
-# The blue fis the data fairly well because it uses the linearmodel generated from the data.
+#The blue fits the data fairly well because it uses the linearmodel generated from the data.
+#The predicted mpg for 98 horsepower is -184.5295
 
-# The predicted mpg for 98 horsepower is -184.5295
 ```{r}
 plot(train_data$mpg~train_data$horsepower)
 # draws line the fits the linear model of the plot data
@@ -313,19 +256,100 @@ pairs(Auto)
 
 
 
-#2.	Compute the matrix of correlations between the variables using function cor(). You should exclude the "name" variable since is it qualitative. Write the two strongest positive correlations and their values in the text area. Write the two strongest negative correlations and their values in the text area.
+#2.	Compute the matrix of correlations between the variables using function cor(). 
+# You should exclude the "name" variable since is it qualitative. 
+# Write the two strongest positive correlations and their values in the text area. 
+# Write the two strongest negative correlations and their values in the text area.
+
+Positive:
+[2,2], mpg~cylinders,  .95
+[2,3], mpg~ displacement, .95
+
+
+Negative:
+[5,7] weight~acceleration, -.83
+[4,1] horsepower~mpg, -.83
+
 
 ```{r}
-# load auto_dataFrame
-if(!require('Hmisc')){
-# install auto_dataFrame if needed
-  install.packages('Hmisc')  
-  library('Hmisc')
-}
+mpgVScyl <- cor(Auto$mpg,Auto$cylinder)
+mpgVSdis <- cor(Auto$mpg,Auto$displacement)
+mpgVShp <- cor(Auto$mpg,Auto$horsepower)
+mpgVSweight <- cor(Auto$mpg,Auto$weight)
+mpgVSacc <- cor(Auto$mpg,Auto$acceleration)
+mpgVSyr <- cor(Auto$mpg,Auto$year)
+mpgVSorigin <- cor(Auto$mpg,Auto$origin)
 
-rcorr(x, type="pearson") # type can be pearson or spearman
-d <- data.frame(Auto)
-rcor(as.matrix(Auto))
+cylVSmpg <- cor(Auto$cylinder,Auto$mpg)
+cylVSdis <- cor(Auto$cylinder,Auto$displacement)
+cylVShp <- cor(Auto$cylinder,Auto$horsepower)
+cylVSweight <- cor(Auto$cylinder,Auto$weight)
+cylVSacc <- cor(Auto$cylinder,Auto$acceleration)
+cylVSyr <- cor(Auto$cylinder,Auto$year)
+cylVSorigin <- cor(Auto$cylinder,Auto$origin)
+
+disVSmpg <- cor(Auto$displacement,Auto$mpg)
+disVScyl <- cor(Auto$displacement,Auto$cylinder)
+disVShp <- cor(Auto$displacement,Auto$horsepower)
+disVSweight <- cor(Auto$displacement,Auto$weight)
+disVSacc <- cor(Auto$displacement,Auto$acceleration)
+disVSyr <- cor(Auto$displacement,Auto$year)
+disVSorigin <- cor(Auto$displacement,Auto$origin)
+
+hpVSmpg <- cor(Auto$horsepower,Auto$mpg)
+hpVScyl <- cor(Auto$horsepower,Auto$cylinder)
+hpVSdis <- cor(Auto$horsepower,Auto$displacement)
+hpVSweight <- cor(Auto$horsepower,Auto$weight)
+hpVSacc <- cor(Auto$horsepower,Auto$acceleration)
+hpVSyr <- cor(Auto$horsepower,Auto$year)
+hpVSorigin <- cor(Auto$horsepower,Auto$origin)
+
+wtVSmpg <- cor(Auto$weight,Auto$mpg)
+wtVScyl <- cor(Auto$weight,Auto$cylinder)
+wtVSdis <- cor(Auto$weight,Auto$displacement)
+wtVShp <- cor(Auto$weight,Auto$horsepower)
+wtVSacc <- cor(Auto$weight,Auto$acceleration)
+wtVSyr <- cor(Auto$weight,Auto$year)
+wtVSorigin <- cor(Auto$weight,Auto$origin)
+
+accVSmpg <- cor(Auto$acceleration,Auto$mpg)
+accVScyl <- cor(Auto$acceleration,Auto$cylinder)
+accVSdis <- cor(Auto$acceleration,Auto$displacement)
+accVShp <- cor(Auto$acceleration,Auto$horsepower)
+accVSwt <- cor(Auto$acceleration,Auto$weight)
+accVSyr <- cor(Auto$acceleration,Auto$year)
+accVSorigin <- cor(Auto$acceleration,Auto$origin)
+
+yrVSmpg <- cor(Auto$year,Auto$mpg)
+yrVScyl <- cor(Auto$year,Auto$cylinder)
+yrVSdis <- cor(Auto$year,Auto$displacement)
+yrVShp <- cor(Auto$year,Auto$horsepower)
+yrVSwt <- cor(Auto$year,Auto$weight)
+yrVSacc <- cor(Auto$year,Auto$acceleration)
+yrVSorigin <- cor(Auto$year,Auto$origin)
+
+originVSmpg <- cor(Auto$origin,Auto$mpg)
+originVScyl <- cor(Auto$origin,Auto$cylinder)
+originVSdis <- cor(Auto$origin,Auto$displacement)
+originVShp <- cor(Auto$origin,Auto$horsepower)
+originVSwt <- cor(Auto$origin,Auto$weight)
+originVSacc <- cor(Auto$origin,Auto$acceleration)
+originVSyr <- cor(Auto$origin,Auto$year)
+
+correlation_Matrix = matrix( 
+  c(mpgVScyl, mpgVSdis, mpgVShp, mpgVSweight, mpgVSacc, mpgVSyr, mpgVSorigin,
+   cylVSmpg, cylVSdis, cylVShp, cylVSweight, cylVSacc, cylVSyr, cylVSorigin,
+   disVSmpg, disVScyl, disVShp, disVSweight, disVSacc, disVSyr, disVSorigin,
+   hpVSmpg, hpVScyl, hpVSdis, hpVSweight, hpVSacc, hpVSyr, hpVSorigin,
+   wtVSmpg, wtVScyl, wtVSdis, wtVShp, wtVSacc, wtVSyr, wtVSorigin,
+   accVSmpg, accVScyl, accVSdis, accVShp, accVSwt, accVSyr, accVSorigin,
+   yrVSmpg, yrVScyl, yrVSdis, yrVShp, yrVSwt, yrVSacc, yrVSorigin,
+   originVSmpg, originVScyl, originVSdis, originVShp, originVSwt, originVSacc, originVSyr
+    ), 
+  nrow=7, 
+  ncol=7)
+
+print(correlation_Matrix) 
 ```
 
 
@@ -335,6 +359,14 @@ rcor(as.matrix(Auto))
 # Use the summary() function to print the results. 
 # Which predictors appear to have a statistically significant relationship to the response?
 
+cylinders and displacement
+
+```{r}
+
+fit <- lm(Auto$mpg ~ Auto$cylinder + Auto$displacement + Auto$horsepower + Auto$weight + Auto$acceleration + Auto$year + Auto$origin, data=Auto)
+summary(fit) # show results
+
+```
 
 
 #4.	
@@ -342,8 +374,19 @@ rcor(as.matrix(Auto))
 # Comment on any problems you see with the fit. Are there any leverage points? 
 # Display a row from the data set that seems to be a leverage point. 
 
+There are leverage points causing issues with the plot
+
+```{r}
+par(mfrow=c(2,2)) # Change the panel layout to 2 x 2
+plot(fit)
+```
 
 
 #5.	
 # Use the * and + symbols to fit linear regression models with interaction effects, choosing whatever variables you think might get better results than your model in step 3 above. 
 #Compare the summaries of the two models, particularly R^2. Run anova() on the two models to see if your second model outperformed the previous one. 
+
+```{r}
+
+```
+
