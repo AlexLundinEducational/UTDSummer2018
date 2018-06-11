@@ -156,8 +156,8 @@ cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between horsepower an
 # summary(train_linearModel)
 # 
 # 
-# #Step 2: Develop the model on the train_dataing data and use it to predict the distance on test_data data
-# # Predict from the linearModel of the train_dataing and the train_dataing data
+# #Step 2: Develop the model on the train_data data and use it to predict the distance on test_data data
+# # Predict from the linearModel of the train_data and the train_data data
 # train_linearModel_prediction <- predict(train_linearModel, train_data)  # predict distance
 # 
 # 
@@ -174,9 +174,26 @@ cor(xPredictor_hp, yResponse_mpg)  # calculate correlation between horsepower an
 
 #4.	Plot train_data$mpg~train_data$horsepower and draw a blue abline(). Comment on how well the data fits the line. Predict mpg for horsepower of 98. Comment on the predicted value given the graph you created.
 
+# The blue line is a vertical representation of a x value, and it does not fit the data because it's purpose is not to fit the data.
+
+# The predicted mpg for 98 horsepower is...
+```{r}
+plot(train_data$mpg~train_data$horsepower)
+# draws line at v =  some x value on the current plot
+abline(v = mean(train_data$horsepower), col="blue", lwd=3, lty=2)
+
+# Predict from the linearModel of the train_data and the train_data data
+mpgList <- list(rep(98,294))
+new.df <- data.frame(horsepower=c(mpgList))
+
+myPrediction <- predict(train_linearModel, data.frame(horsepower=c(98)))
+
+#train_linearModel_prediction <- predict(train_linearModel, new.df)  # predict distance
+plot(myPrediction)
+```
 
 
-#5.	test_data on the test_data data using the predict function. Find the correlation between the predicted values and the mpg values in the test_data data_ Comment on the results. Calculate the mse on the test_data results. Compare this to the mse for the train_dataing data_ 
+#5.	test_data on the test_data data using the predict function. Find the correlation between the predicted values and the mpg values in the test_data data_ Comment on the results. Calculate the mse on the test_data results. Compare this to the mse for the train_data data_ 
 
 
 
