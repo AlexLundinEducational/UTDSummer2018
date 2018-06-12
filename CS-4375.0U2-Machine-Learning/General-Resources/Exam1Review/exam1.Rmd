@@ -9,14 +9,22 @@ wine <- read.csv("wine_all.csv", header=TRUE)
 str(wine)
 ```
 
+
+
 Which columns are quantitative?
+All variables except type. These variables are useful for Linear regression.
 Which columns are qualitative?
+Type. This data is useful for Logistic regression.
 What is a factor?
+R convention, internally stored as integer but they display as a label.
 Divide data into train and test
 Why do we set a seed?
+To ensure data is exactly reproducible during randomization.
 What does sample do?
+Randomly extract data from a frame
 How did we subset the data?
 Why do we divide into train and test sets?
+Because some algorithms attempt to memorize the data. So having separate sets will allow use to evaluate the model while still using the same data
 
 ```{r}
 set.seed(1234)
@@ -32,14 +40,18 @@ We will try to predict quality from all other factors.
 Explain the lm() function
 Explain the output of summary including:
 What is the formula?
+Quality = .007efixed.end + -1.4 . +.09
 Is the intercept considered a "predictor"? Why or why not?
 What are residuals?
 Which predictors seem good, and why?
+Low p value, the p value rejects the null hypothesis
 What is RSE?
+RSE is in units of y
 What is R-squared?
 What is the F-statistic?
 Are these metrics for the train or test set?
 What is a dummy variable? Do you see one below?
+
 
 ```{r}
 lm1 <- lm(quality~., data=train)
