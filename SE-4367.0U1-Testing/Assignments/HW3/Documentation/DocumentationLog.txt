@@ -1,0 +1,21 @@
+Documentation Log
+
+Refactors
+	StringConstants.java
+		pulled all string paths into this file
+		
+Modifications
+	Fact.java
+		value constructor and toString methods
+	JavaServlet.java
+		Added fields into web page table 
+			quote, author and type
+		Added button into web page table
+			New Fact
+		Added section to doGet which checks fields for new fact data
+		Creates fact from web page, with addFact method, to send to XMLwriter
+Additions
+	XMLwriter.java
+		Program takes the fields defined in facts.java file (text,author,type) and writes it to an XML file
+
+Reductions

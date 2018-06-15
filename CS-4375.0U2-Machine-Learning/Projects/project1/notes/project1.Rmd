@@ -1,0 +1,35 @@
+Name: Alex Lundin
+Assignment: Project 1
+
+# Linear Regression
+#1.	Load library ISLR. Use the names() function and the summary() function to learn more about the Auto auto_dataFrame set. Divide the auto_dataFrame randomly into train_data and test_data sets, with 75% train_data_ Use seed 1234 for reproducibility.
+
+```{r}
+
+df <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/processed.hungarian.data")
+
+df <- read.table("C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.hungarian.data")
+summary(df)
+
+# Inspect the result
+df
+```
+
+
+
+
+
+```{r}
+
+df <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/hungarian.data", 
+                 header = FALSE)
+# load auto_dataFrame
+if(!require('ISLR')){
+# install auto_dataFrame if needed
+  #install.packages('ISLR')  
+  library('ISLR')
+}
+
+# learn about Auto
+names(Auto)
+summary(Auto)

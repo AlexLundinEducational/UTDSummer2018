@@ -1,0 +1,63 @@
+Phase 1 Development
+
+	06-09-2018
+		Initial Webex Meeting
+		https://www.tutorialspoint.com/java_xml/java_sax_modify_document.htm
+		
+	06-08-2018
+		Alex
+		GUI Started
+		
+Phase 2 Development
+	06-10-2018
+		Ali
+		Working on the XML writer to write directly to fact.xml. Currently have code writting to new XML file.
+	
+	06-11-2018
+		Alex
+		Posted functional GUI, data ready for XMLwritter
+		https://autode.sk/2l1kJV2
+		
+Phase 3 Development
+	06-11-2018
+		Alex
+		Fixed Ali's buggy XMLwriter (45 minutes)
+			Had to re-do each function he wrote
+			His function calls were mispelled and un-commented
+			Had to re-code loop iterations inside functions because they used the wrong data type
+			Had to rename methods that used wrong data types
+			
+		Added comments to Ali's XMLwriter, there were none
+		
+		Meshed my GUI to use my reworked version of whatever Ali posted (5 mins)
+		https://autode.sk/2t0NCo2
+
+	06-12-2018
+		Ali
+		wrote a new class for writing xml file xmlWritterJDOM.java 
+		
+		Alex
+		Documented install steps for Ali's code, JDOM
+		Wrote comments for method Ali can use to send factList to xmlWritterJDOM.
+		Tested and verified webpage still runs with Ali's new method		
+
+		https://autode.sk/2t3ii8g
+		
+	06-12-2018
+		Alex
+		We are Back to square one, Ali not building before posting
+		Incorrect method calls
+		I even left design notes inside his xmlWritterJDOM.java for how to mesh
+		https://autode.sk/2l7H5o0
+		
+	06-13-2018
+		Stayed up until 1AM to go back to the first design
+		JDOM does not function correctly with tomcat, suprise
+		
+	
+HW3 Proof of Functional Build
+	06-13-2018
+		Completed at 6AM...
+		https://autode.sk/2l4AXg9
+
+		
