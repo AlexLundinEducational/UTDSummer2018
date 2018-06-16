@@ -121,7 +121,28 @@ cor(xPredictor, yTarget)
 
 
 # create first model for heart disease
+# This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
+The model has:
+Rsquared = .38
+low pvalues for the predictor and target
+low pvalue for the f-stastic
 ```{r}
+xPredictor <- as.numeric(train_data$exang)
+yTarget <- as.numeric(train_data$num)
+# create linear model on train_data
+train_lm1 <- lm(xPredictor ~ yTarget, data=train_data)
+print(train_lm1 )
+plot(train_lm1)
 
+lm1_sm <- summary(train_lm1)
+print(lm1_sm)
 ```
 
+```{r}
+xPredictor_hp <- train_data$horsepower
+yResponse_mpg <- train_data$mpg
+# create linear model on train_data
+train_linearModel <- lm(xPredictor_hp ~ yResponse_mpg, data=train_data)
+print(train_linearModel)
+plot(train_linearModel)
+```
