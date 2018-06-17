@@ -10,28 +10,29 @@ This study pulls various pieces of data from subjects to learn about factors rel
 
 14 attributes of the original 76 attributes were used in the processed data sets.
 
-Complete attribute documentation: 
-3 age: age in years 
-4 sex: sex (1 = male; 0 = female) 
-9 cp: chest pain type 
+Complete attribute documentation:
+(These are renumbered from the original website to match the trimed data)
+1 age: age in years 
+2 sex: sex (1 = male; 0 = female) 
+3 cp: chest pain type 
 -- Value 1: typical angina 
 -- Value 2: atypical angina 
 -- Value 3: non-anginal pain 
 -- Value 4: asymptomatic 
-10 trestbps: resting blood pressure (in mm Hg on admission to the hospital) 
-12 chol: serum cholestoral in mg/dl 
-16 fbs: (fasting blood sugar > 120 mg/dl) (1 = true; 0 = false) 
-19 restecg: resting electrocardiographic results 
-32 thalach: maximum heart rate achieved 
-38 exang: exercise induced angina (1 = yes; 0 = no) 
-40 oldpeak = ST depression induced by exercise relative to rest 
-41 slope: the slope of the peak exercise ST segment 
+4 trestbps: resting blood pressure (in mm Hg on admission to the hospital) 
+5 chol: serum cholestoral in mg/dl 
+6 fbs: (fasting blood sugar > 120 mg/dl) (1 = true; 0 = false) 
+7 restecg: resting electrocardiographic results 
+8 thalach: maximum heart rate achieved 
+9 exang: exercise induced angina (1 = yes; 0 = no) 
+10 oldpeak = ST depression induced by exercise relative to rest 
+11 slope: the slope of the peak exercise ST segment 
 -- Value 1: upsloping 
 -- Value 2: flat 
 -- Value 3: downsloping 
-44 ca: number of major vessels (0-3) colored by flourosopy 
-51 thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
-58 num: diagnosis of heart disease (angiographic disease status) 
+12 ca: number of major vessels (0-3) colored by flourosopy 
+13 thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
+14 num: diagnosis of heart disease (angiographic disease status) 
 -- Value 0: < 50% diameter narrowing 
 -- Value 1: > 50% diameter narrowing 
 (in any major vessel: attributes 59 through 68 are vessels) 
@@ -90,9 +91,10 @@ head(df_hd)
 ```
 
 The 4 main columns that correlate highly with a diagonois of heart disease are:
-9, 38, 40 and 41
-cp, exang, oldpeak and slope
-chest pain, exercise induced angina, ST depression induced by exercise relative to rest and slope of the peak exercise ST segment.
+3   // cp        // chest pain
+9   // exang     // exercise induced angina
+10  // oldpeak   // ST depression induced by exercise relative to rest 
+11  // slope     // slope of the peak exercise ST segment
 all four of these have a correlation above .5 with the diagnois of heart disease in patients.
 ```{r}
 # store a summary of the data frame
@@ -122,16 +124,26 @@ print("Correlation of -- Slope of ST depression during peak exercise and heart d
 cor(xPredictor, yTarget)
 ```
 
+# two informative graphs
+```{r}
+
+```
+
 
 # first model for heart disease
 # This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
 The model has:
-Rsquared = .38
+Rsquared = .39
 low pvalues for the predictor and target
 low pvalue for the f-stastic
 
-When checking how the model does predicting on the test data
-There is a .69 correlation between the predicted value on the test data and the training model
+The rsquared value should be closer to 100%, but this dataset is attempting to predict something with alot of factors.
+So the nature of this data explains why the rsquared value is low, it's complex.
+
+When checking how the model does predicting on the test data.
+There is a .69 correlation between the predicted value on the test data and the training model.
+This model is a good represenation, not super duper, but pretty good.
+I think this model performed well because the data set is suited for linear regression.
 ```{r}
 # create linear model on train_data
 train_lm1 <- lm(as.numeric(exang)~as.numeric(num), data=train_data)
@@ -144,14 +156,16 @@ print(lm1_sm)
 
 # attempt to predict the target y value of the test data with the train linear model
 pred <- predict(train_lm1, newdata=test_data)
-print("Correlation of -- Prediction of test data using training model and heart disease in test data:")
+print("Correlation of -- Prediction of heart disease using training model with test data:")
 cor(pred, as.numeric(test_data$exang))
 ```
 
-# first model for heart disease
+# second model for heart disease
 # this model uses knn clustering with columns 9 and 10
-# exang and oldpeak to attempt to predict heart disease diagnosis
+# exang and oldpeak to attempt to predict heart disease diagnosis based on those two predictors
 correlation value of predictions vs actual: .66
+this model was slightly less accurate than the regression model.
+This data set is more suitable towards linear regression models, so I think that's why this model is less accurate since it uses classification when all of this data set is numeric type.
 ```{r}
 # load auto_dataFrame
 if(!require('caret')){
@@ -163,16 +177,20 @@ if(!require('DMwR')){
   library('DMwR')
 }
 
+# create the second linear model for heart disease data
+train_lm2 <- knnreg(train_data[,9:10], train_data[,14], cl, k=3)
 
-fit <- knnreg(train_data[,9:10], train_data[,14], cl, k=3)
-
-predictions <- predict(fit, test_data[,9:10])
+# store a summary of the model created from the train data and print it
+lm2_sm <- summary(train_lm2)
+print(lm2_sm)
 
 # correlate how well the model did
 # do this by comparing the performace of the model using test data for columns 9 and 10
 # which are exang and oldpeak
 # the model used those to predict heart disease based on those factors
+predictions <- predict(fit, test_data[,9:10])
 # now correlate the predictions against the actual values in the test data
+print("Correlation of -- Prediction of heart disease using training model with test data:")
 cor(predictions, test_data$num)
 
 ```
