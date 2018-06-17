@@ -47,15 +47,18 @@ dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSu
 dataPathSchoolComputer <- "H:\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.hungarian.data"
 
 # create the dataframe for heart disease
-df_hd <- read.table(dataPathSchool)
+df_hd <- read.table(dataPathSchoolComputer)
 
 # sets the column names of the data frame with colnames function
 colnames(df_hd) <- c("age", "sex", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal", "num")
 
+
+
 # separate out the train and test dataframes following a similar naming convention of original frame
 
 # Set random seed to ensure reproducibility of the shuffle.
-set.seed(1234)
+set.seed(1958)
+
 
 # shuffle the df_hd and store into a new df_hd frame
 df_hd_numberOfRows <- nrow(df_hd)
@@ -120,29 +123,56 @@ cor(xPredictor, yTarget)
 ```
 
 
-# create first model for heart disease
+# first model for heart disease
 # This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
 The model has:
 Rsquared = .38
 low pvalues for the predictor and target
 low pvalue for the f-stastic
+
+When checking how the model does predicting on the test data
+There is a .69 correlation between the predicted value on the test data and the training model
 ```{r}
-xPredictor <- as.numeric(train_data$exang)
-yTarget <- as.numeric(train_data$num)
 # create linear model on train_data
-train_lm1 <- lm(xPredictor ~ yTarget, data=train_data)
+train_lm1 <- lm(as.numeric(exang)~as.numeric(num), data=train_data)
 print(train_lm1 )
 plot(train_lm1)
 
+# store a summary of the model created from the train data and print it
 lm1_sm <- summary(train_lm1)
 print(lm1_sm)
+
+# attempt to predict the target y value of the test data with the train linear model
+pred <- predict(train_lm1, newdata=test_data)
+print("Correlation of -- Prediction of test data using training model and heart disease in test data:")
+cor(pred, as.numeric(test_data$exang))
 ```
 
+# first model for heart disease
+# this model uses knn clustering with columns 9 and 10
+# exang and oldpeak to attempt to predict heart disease diagnosis
+correlation value of predictions vs actual: .66
 ```{r}
-xPredictor_hp <- train_data$horsepower
-yResponse_mpg <- train_data$mpg
-# create linear model on train_data
-train_linearModel <- lm(xPredictor_hp ~ yResponse_mpg, data=train_data)
-print(train_linearModel)
-plot(train_linearModel)
+# load auto_dataFrame
+if(!require('caret')){
+  install.packages('caret')  
+  library('caret')
+}
+if(!require('DMwR')){
+  install.packages('DMwR')  
+  library('DMwR')
+}
+
+
+fit <- knnreg(train_data[,9:10], train_data[,14], cl, k=3)
+
+predictions <- predict(fit, test_data[,9:10])
+
+# correlate how well the model did
+# do this by comparing the performace of the model using test data for columns 9 and 10
+# which are exang and oldpeak
+# the model used those to predict heart disease based on those factors
+# now correlate the predictions against the actual values in the test data
+cor(predictions, test_data$num)
+
 ```
