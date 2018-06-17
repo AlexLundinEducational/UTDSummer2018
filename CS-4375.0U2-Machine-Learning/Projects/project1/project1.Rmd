@@ -1,40 +1,46 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
 
 Name: Alex Lundin
 Assignment: Project 1
 # Header for project
 
-# Data set 1 - heart disease
-# Columns labeled on graph and in notes
-# 5 R functions (names, str,head, cor, summary)
-# 2 meaningful graphs 
-# --(Scatterplot Chest Pain ~ Heart Disease)
-# --(Densityplot Chest Pain Type)
-# Algorithims
-# --Linear Regression
-# -- knn clustering
-# Metrics
-# --r squared for Linear Regression
-# --predictions for knn clustering 
-# Analysis
-# --this dataset works well with regression since it assigns a numeric value of heart disease diagnosis
+Data set 1 - heart disease
+Columns labeled on graph and in notes
+5 R functions (names, str,head, cor, summary)
+2 meaningful graphs 
+--(Scatterplot Chest Pain ~ Heart Disease)
+--(Densityplot Chest Pain Type)
+Algorithims
+--Linear Regression
+-- knn clustering
+Metrics
+--r squared for Linear Regression
+--predictions for knn clustering 
+Analysis
+--this dataset works well with regression since it assigns a numeric value of heart disease diagnosis
 
-# Data set 2- Poker hand
-# Columns labeled on graph and in notes
-# 5 R functions (names, str,head, cor, summary)
-# 2 meaningful graphs 
-# -- (Scatterplot: Card 1 value ~ Hand Classfication)
-# -- (pairs plot: all predictors)
-# -- (Density Plot: Card 1 value)
-# -- (Density Plot: Card 1 suit)
-# Algorithims
-# --Linear Regression
-# --Logistic Regression
-# Metrics
-# --r squared for Linear Regression
-# --accuracy for Logistic Regression
-# Analysis
-# --this data set works better with classification because it assigns each hand a class.
-# --poker hands are still subject to alot of radomness that is not very predictable
+Data set 2- Poker hand
+Columns labeled on graph and in notes
+5 R functions (names, str,head, cor, summary)
+2 meaningful graphs 
+-- (Scatterplot: Card 1 value ~ Hand Classfication)
+-- (pairs plot: all predictors)
+-- (Density Plot: Card 1 value)
+-- (Density Plot: Card 1 suit)
+Algorithims
+--Linear Regression
+--Logistic Regression
+Metrics
+--r squared for Linear Regression
+--accuracy for Logistic Regression
+Analysis
+--this data set works better with classification because it assigns each hand a class.
+--poker hands are still subject to alot of radomness that is not very predictable
 
 # Heart disease
 
@@ -75,7 +81,11 @@ Complete attribute documentation:
 # load the project data for first set heart disease
 
 ```{r}
-
+# install and load packages
+if(!require('tinytex')){
+  install.packages('tinytex')  
+  library('tinytex')
+}
 
 # different file locations for the project
 dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.hungarian.data"
@@ -301,7 +311,7 @@ Ordinal (0-9)
 
 
 
-# load the project data for first set heart disease
+# load the project data for second set, poker hand
 
 ```{r}
 
@@ -411,8 +421,8 @@ polygon(density(df_ph$S1), col="red")
 ```
 
 
-# first model for heart disease
-# This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
+# first model for poker hand
+# This model uses card 1 value to attempt to predict classification of entire hand
 The model has:
 Rsquared = .000
 low pvalues for the predictor 
