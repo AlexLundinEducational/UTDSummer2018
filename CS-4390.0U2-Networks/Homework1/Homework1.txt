@@ -1,0 +1,92 @@
+Homework 1 - 4390 Summer 2018
+
+Please read ASAP and check for typos, omissions, etc.
+
+ALL WORK INDIVIDUAL.
+
+Question 1:
+=============
+
+a) Consider a network in which packets are delivered reliable across each link. That is, for each pair of adjacent nodes A - B, the datalink layer has an ARQ protocol (such as stop-and-wait) that ensures packets sent by A do arrive at B. In this network, why do you think is necessary for the transport layer to also have its own ARQ protocol and do retransmissions of its packets?
+
+b) For each of the following, identify which OSI layer is responsible for performing the described action:
+
+i) Make sure that a packet is delivered reliably across a single physical link
+ii) Describes how a binary tree data structure is to be encoded inside the message
+iii) Makes sure that a message is delivered reliably from the source host to the destination host
+iv) Coordinates the transmission of multiple flows of data across multiple sources and multiple destinations (for example, a video conference)
+v) Defines how the bits are converted into voltages
+vi) Decides how a data packet is to be routed from one link to the next.
+
+
+Question 2 - 
+=============
+
+a) Assume you have a link that has 50ms of round-trip-time, the transmission rate is 3Mbits/sec, and each packet is 1Kbyte. If we are using the concurrent logical channels protocol, how many logical channels do we need to maintain 100% throughput (assuming no message loss)
+
+b) Assume three of the above (i.e. part (a)) logical channels have lost a message and are stuck waiting for the timeout to occur (assume the timeout value unnecessarily large, way too big). How much is the reduction in throughput?
+
+
+
+Question 3 
+===========
+Consider the following sequence of data bits
+
+10110100111010100011
+
+How would this be translated into physical bits if we use:
+
+a) NRZ
+b) NRZI (high value initially)
+c) Manchester
+d) 4B/5B
+
+
+Question 4: 
+===========
+
+a) Consider bit-stuffing (also known as bit-insertion) the way I present it in the slides, NOT the way it is presented in the book. Consider k = 2. If the data bits of the frame to be sent are 
+
+             1110011010110011101  
+
+what are the actual bits sent by the sender? Please include some idleness bits before and after the frame.
+
+b) Is it possible to have k=1? Why or why not?
+
+
+Question 5
+==========
+
+a) Consider the parity bit protocol with the p's, q's, and the additional r bit. What is the hamming distance of this protocol? Briefly explain why
+
+b) Assume we have a CRC protocol that satisfies all the desirable properties that we described in the slides. What is the hamming distance of this protocol? Briefly explain why.
+
+c) For both a) and b), can these protocols be used for error correction, and if so, how many bits can they correct? (i.e., can they perform x-bit correction, and if so, what is x?)
+
+
+
+Question 6
+==========
+
+a) Assume G = 100101, and M = 10110011. What check bits are sent by the sender?
+
+b) Argue that if G has at least three terms (e.g. G = 1011 or G = 1110 or G = 1001100), then it can catch all errors E of the form x^i + x^(i-1) (i.e., two consecutive bits).
+
+
+Question 7
+========
+a) Assume that packet size is 1KB, the round-trip-time is 25ms, and the bandwidth of the channel is 1200KB/s. What is the throughput of stop-and-wait?
+
+b) What is the minimum number of logical channels in the concurrent-logical channels protocol that are needed to ensure we maximize the throughput
+
+c) What if instead of using the number of logical channels you gave in b), we use twice that number. What will happen to the throughput? Briefly argue why.
+
+
+Question 8 
+=======
+Assume we have the cumulative acknowledgment protocol with unbounded sequence numbers. Assume the channel can lose and reorder messages (but not duplicate). Furthermore, assume that the SWS = 1, and that the timeout of the sender is accurate,. i.e., the last action of the sender is replaced by
+
+when timeout frame#ch.sender.receiver = 0 and ack#ch.receiver.sender = 0 and LAR < LFS then
+         send frame(LAR+1) to receiver.
+
+Under these conditions, is the sequence number in the acknowledgment really necessary? Briefly argue why yes or why no.
