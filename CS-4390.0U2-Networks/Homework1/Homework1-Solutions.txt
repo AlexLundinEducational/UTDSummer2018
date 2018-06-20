@@ -1,0 +1,205 @@
+Homework 1 Answers - 4390 Summer 2018
+
+
+Question 1:
+=============
+
+
+a)
+
+Although packets are delivered reliably across a link (i.e. the datalink layer) 
+it is still possible that along the path to the destination a link or a node 
+may die, which leads to the permanent loss of the message. Hence, the transport 
+layer needs to have its own retransmission of packets.
+
+b) 
+
+i) Data link layer 
+
+ii) Presentation layer 
+
+iii) Transport layer
+
+iv) Session layer
+
+v) Physical layer 
+
+vi) Network layer  
+
+
+Question 2 - 
+=============
+
+a) 
+
+The bandiwdth delay product(3.0 - 2.56)/3.0 =  is
+
+50 ms * 3Mbits *    1sec   * 1000 Kbit
+-------------------------------------- = 150 Kbits = 18.75 Kbytes
+	 sec   * 1000 msec * 1 Mbit
+
+Thus, we need at least 18 logical channels
+
+
+b) 
+
+Current throughput is 
+
+With only 16 logical channels, we send 16 packets in one RTT, so the new throughput is
+
+16 Kbytes * 8 bits * 1000 ms
+---------------------------- = 2560 Kbits/sec = 2.56 Mbits /sec
+50 ms     * 1 byte * 1 sec 
+
+reduction in throughput is 0.44 Mbits/sec i.e.  14.6 %
+
+
+
+Question 3 
+===========
+
+You could use H and L or use 1 and 0, both should be fine
+
+
+10110100111010100011
+
+How would this be translated into physical bits if we use:
+
+a) NRZ
+
+It is sent as is, i.e., a high for each 1 and a low for each 0
+
+
+b) NRZI (high value initially)
+
+data
+10110100111010100011
+
+NRZI: change on each data 1, stay same on data 0
+LLHLLHHHLHLLHHLLLLHL
+
+c) Manchester
+
+data(3.0 - 2.56)/3.0 = 
+1 0 1 1 0 1 0 0 1 1 1 0 1 0 1 0 0 0 1 1
+
+manchester
+HLLHHLHLLHHLLHLHHLHLHLLHHLLHHLLHLHLHHLHL
+
+You could have used 1 for H and 0 for L that is fine
+
+d) 4B/5B
+
+
+data
+1011 0100 1110 1010 0011
+
+4B/5B
+1011101010111001011010101
+
+
+Question 4: 
+===========
+
+a) 
+
+We insert a 0 after every data one (because k-1 = 1)
+
+1111111110101010001010010010100010101001001111111111111111111111111  
+
+b) Is it possible to have k=1? Why or why not?
+
+In this case k-1 = 0, i.e., inser a "0" after every zero ones, obviously does not make sense, so no.
+
+
+Question 5
+==========
+
+a) 
+
+Because it is capable of detecting all single, double, and triple-bit errors, that implies that the Hamming distance is at least four. Since we can come up with a scenario (discussed in class) where four bits cannot be detected, that implies the Hamming distance is no more than four. Hence, the hamming distance is exactly four.
+
+b) 
+
+Similar to the above, the Hamming Distance is at least four. However, we cannot claim it is exactly four unless we can come up with a 4-bit scenario that it cannot catch, and we cannot do this unless we have the specific value of G.
+
+c) 
+
+x-bit error correction requires a HD of at least 2x+1. For the above HD >= 4, hence, 1-bit correction is possible (2-bit requires a HD of at least 5)
+
+
+Question 6
+==========
+
+a) 
+
+
+100101|1011001100000
+       100101
+       ------
+         100111
+         100101
+         ------
+             100000
+             100101
+             ------
+                1010
+         
+remainder is 1010, checkbits must be five bits long, so we add one leading zero
+
+01010
+
+b) 
+
+E is of the form 1100...00. G is of the form 10*10*10* e.g. 11000100
+
+G does not divide E by an argument similar to the one we used in the detection of a single-bit error.
+
+I.e., note that at each division step the right most bit of G will always be matched against a zero, and hence, at every step we will get a non-zero remainder. 
+
+Question 7
+========
+a) 
+
+The question is a little ambigous (sorry) since I did not mention whether the round-trip time considers all factors (transmission time plus propagation delay plus processing delay) or just the propagation delay.
+
+Thus, we have two answers
+
+(i) 1KB/25ms
+
+i.e., one packet per round-trip-time
+
+(ii)
+
+if the 25ms do not include the transmission delay of the packet (putting the packet on the wire) then:
+
+Putting the packet on the channel takes 1KB/(1200KB/s) =  0.8 milliseconds
+
+25 ms later we get the ack (assuming ack's are very small so their transmission delay is negligible)
+
+So, throughput 1KB/(25.8 msec) 
+
+b) What is the minimum number of logical channels in the concurrent-logical channels protocol that are needed to ensure we maximize the throughput
+
+BDP = 1200 KB/s * 0.025 seconds = 30 KB 
+
+We need 30 logical channels
+
+c) What if instead of using the number of logical channels you gave in b), we use twice that number. What will happen to the throughput? Briefly argue why.
+
+Nothing, we cannot go beyond the physical speed of the channel. We will simply have in general 30 packets waiting in the queue of the sender.
+
+Question 8 timeout frame#ch.sender.receiver = 0 and ack#ch.receiver.sender = 0 and LAR < LFS then
+
+=======
+
+Another sorry, I used old notation on this one (my bad). It should have said:
+
+event: timeout frame#ch.sender.receiver = 0 and ack#ch.receiver.sender = 0 and LAR < LFS 
+resp:  send frame(LAR+1) to receiver.
+
+Because the SWS = 1, there can only be a single (or none) frame in the channel. Thus, similar to the case of the stop-and-wait, it is obvious that the ack being received is for the last message sent, so it is not necessary.
+
+Basically because SWS = 1 and the timeout thistimeout frame#ch.sender.receiver = 0 and ack#ch.receiver.sender = 0 and LAR < LFS then
+ boils down to stop-and-wait but with sequencetimeout frame#ch.sender.receiver = 0 and ack#ch.receiver.sender = 0 and LAR < LFS then
+ numbers larger than one bit 

@@ -1,0 +1,20 @@
+Phase 1 Development
+	06-18-2018
+		Ali
+		JUnit testing for facts
+			Wrote intro
+		JUnit test flaw
+			Evaluation of test class in part 2
+
+Phase 2 Development
+	06-19-2018
+		Alex
+		JUnit testing for facts
+			Wrote test cases for search
+			Answered questions on controllability and observability
+Phase 3 Development
+
+Proof of Functional Build
+
+
+		

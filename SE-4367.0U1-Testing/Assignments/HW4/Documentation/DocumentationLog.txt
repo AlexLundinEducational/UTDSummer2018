@@ -1,0 +1,12 @@
+Documentation Log
+
+Refactors
+
+		
+Modifications
+	testRemoveDuplicate()
+		-Modified the original source code and added toString() method to set an int value
+			of the array before and after removing all duplicates.
+Additions
+
+Reductions
