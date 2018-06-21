@@ -1,6 +1,8 @@
 ---
-title: "R Notebook"
-output: html_notebook
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
 ---
 
 Name: Alex Lundin
@@ -9,7 +11,7 @@ Assignment: HM3
 Step 1
 # Install the necessary package then load the library
 ```{r}
-
+library(knitr)
 # load library
 if(!require('mlbench')){
   install.packages('mlbench')  
@@ -42,7 +44,7 @@ if(!require('mlbench')){
 # d. There are 344778254649499 percent malignant observances
 
 
-Investigate the Data following homework instructions
+Step 1: Investigate the Data following homework instructions
 
 # Store BreastCancer data into a frame
 # The investigate the BreakCancer data frame df with:
@@ -53,7 +55,7 @@ df <- BreastCancer
 # required r functions per homework doc
 str(df)
 head(df)
-summary(df$class)
+summary(df$Class)
 
 # extra r functions to help me see the data
 names(df)
@@ -81,4 +83,29 @@ percentMalignant <- countMalignant / (countMalignant + countBenign)
 paste("The percent of malignant observations is: ", percentMalignant)
 
 ```
+ Step 2: Logistic Regression Model glm0
+ 
+# Result of google search of warning message:
+# https://stat.ethz.ch/pipermail/r-help/2008-March/156868.html
+# Result of google search to fix warning message:
+# https://stats.stackexchange.com/questions/11109/how-to-deal-with-perfect-separation-in-logistic-regression
+
+# My analysis:
+# From what I read, this message appears when the y responses are of the form 0 or 1 response
+# From what this data set contains, that is exactly what the target class stores.
+# A 0 for benign and a 1 for malignant
+# To fix this, the second webpage reccomends two solutions:
+# 1 use penalized logistic regression to remove bias
+# 2 use Bayesian analysis (bayesglm)
+```{r}
+set.seed(1234)
+i <- sample(1:nrow(df), 0.75*nrow(df))
+train <- df[i,]
+test <- df[-i,]
+glm0 <- glm(Class~Cell.size+Cell.shape, data=train, family=binomial)
+summary(glm0)
+```
+
+
+
  
