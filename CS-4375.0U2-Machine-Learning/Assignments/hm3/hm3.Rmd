@@ -1,0 +1,84 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Name: Alex Lundin
+Assignment: HM3
+
+Step 1
+# Install the necessary package then load the library
+```{r}
+
+# load library
+if(!require('mlbench')){
+  install.packages('mlbench')  
+  library('mlbench')
+}
+
+```
+
+
+
+# a. There are 699 instances
+
+# b. The target column is Class
+
+# c. There are 11 of predictors, here is all the information known:
+# --------------------------------------------------------------
+# Index  Name             Description                   Type
+#[,1]	   Id               Sample code number            ord
+#[,2]	   Cl.thickness     Clump Thickness               ord
+#[,3]	   Cell.size        Uniformity of Cell Size       ord
+#[,4]	   Cell.shape       Uniformity of Cell Shape      ord
+#[,5]	   Marg.adhesion	  Marginal Adhesion             ord
+#[,6]	   Epith.c.size	    Single Epithelial Cell Size   ord
+#[,7]	   Bare.nuclei	    Bare Nuclei                   fctr
+#[,8]	   Bl.cromatin	    Bland Chromatin               fctr
+#[,9]	   Normal.nucleoli	Normal Nucleoli               fctr
+#[,10]	 Mitoses	        Mitoses                       fctr
+#[,11]	 Class	          Class                         fctr
+
+# d. There are 344778254649499 percent malignant observances
+
+
+Investigate the Data following homework instructions
+
+# Store BreastCancer data into a frame
+# The investigate the BreakCancer data frame df with:
+# str, head and summary on the class column
+```{r}
+df <- BreastCancer
+
+# required r functions per homework doc
+str(df)
+head(df)
+summary(df$class)
+
+# extra r functions to help me see the data
+names(df)
+summary(df)
+```
+
+
+# Calculate percentages
+```{r}
+# extract class column
+classColumn <- df[,11]
+summary(classColumn)
+
+# create table from classColumn
+myTable <- table(classColumn)
+
+# extract counts from table
+countMalignant <- myTable[names(myTable) == "malignant"]
+countBenign <- myTable[names(myTable) == "benign"]
+
+#calculate percentage
+percentMalignant <- countMalignant / (countMalignant + countBenign)
+
+#print to screen
+paste("The percent of malignant observations is: ", percentMalignant)
+
+```
+ 
