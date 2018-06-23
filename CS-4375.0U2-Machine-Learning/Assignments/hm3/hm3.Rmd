@@ -41,7 +41,7 @@ if(!require('mlbench')){
 #[,10]	 Mitoses	        Mitoses                       fctr
 #[,11]	 Class	          Class                         fctr
 
-# d. There are 344778254649499 percent malignant observances
+# d. There is .344778254649499 percent malignant observances
 
 
 Step 1: Investigate the Data following homework instructions
@@ -106,6 +106,305 @@ glm0 <- glm(Class~Cell.size+Cell.shape, data=train, family=binomial)
 summary(glm0)
 ```
 
+Step 3: Add new columns with only 2 levels
+
+# I'm calling the new columns
+# df$Cell.small 
+# df$Cell.regular
+# I used summary all the orignal columns and the new columns like the homework instructions said.
+# I also used table because this gave me confirmation that there were infact, the same number of 1's in the new columns.
+# Summary did not give that confirmation of data presevation the same way table did.
+# I also included density plots for my own visualization.
+
+# Comment on the distribution of the new columns:
+# They are very nomally distrubuted, I verified this with my density plot.
+
+# I think adding the new columns is a good idea, because we are eliminating the noise in the data.
+# We can throw out all sizes and shapes that don't have any baring on what we want to measure by setting them to 0.
+# We now assume that any shape or size other than normal, is a bad sign, and we treat them all as equally bad.
+```{r}
+
+df$Cell.small <- ifelse(df$Cell.size == 1, 1, 0)
+df$Cell.regular <- ifelse(df$Cell.shape == 1, 1, 0)
+
+# Density plot to view distribution of new columns
+
+# divide graph area in 2 columns
+par(mfrow=c(1, 2))  
+
+plot(density(unlist(df$Cell.small)), main="Density Plot: Cell Size small", ylab="Frequency", xlab="Cell size of 1, all others 0")
+
+polygon(density(unlist(df$Cell.small)), col="red")
+
+plot(density(unlist(df$Cell.regular)), main="Density Plot: Cell Shape regular", ylab="Frequency", xlab="Cell shape of 1, all others 0")
+
+polygon(density(unlist(df$Cell.regular)), col="red")
 
 
- 
+print("Original columns:")
+
+summary(df$Cell.size)
+summary(df$Cell.shape)
+
+print("New Columns:")
+
+table(df$Cell.small)
+table(df$Cell.regular)
+
+# summary is not as useful here
+summary(df$Cell.small)
+summary(df$Cell.regular)
+
+```
+
+Step 4: Conditional Density Plots on Original Columns
+
+# Size malignant vs shape malignant:
+# I see the majority of malignant sizes are 1-3
+# I see the majorty of malignant shapes are 1-3 as well
+
+# Cutoff points:
+# I think the cuttof point of 1 is ok, but extending the cuttoff point to 3 would have been better for both metrics.
+
+```{r}
+attach(df)
+
+# divide graph area in 2 columns
+par(mfrow=c(1, 2))  
+
+# conditional density plots
+cdplot(Class~Cell.size)
+cdplot(Class~Cell.shape)
+
+
+
+```
+
+Step 5: Plot and Conditional Density Plots on New Columns
+
+# Computed Summary:
+# a.	The percent of small malignant observations is:  0.00572246065808298
+# b.	The percent of NOT small malignant observations is:  0.339055793991416
+# c.	The percent of regular malignant observations is:  0.00286123032904149
+# d.	The percent of NOt regular malignant observations is:  0.341917024320458
+
+# Comment on predictor quality based on results:
+# I think small and regular are good predictors.
+# I think this because any Non small or Non regular cells are above 30 percent common in malignant cells.
+
+# Plots
+```{r}
+
+# divide graph area in 2 columns
+par(mfrow=c(1, 2))  
+
+# conditional density plots
+plot(Class~Cell.small)
+plot(Class~Cell.regular)
+
+# conditional density plots
+cdplot(Class~Cell.small)
+cdplot(Class~Cell.regular)
+```
+
+# Computations
+```{r}
+
+# extract Class and Cell.small Cell.regular into a new dataFrame df2
+df2 <- df[,c(11,12,13)]
+
+numberOfObservances2 <- nrow(df2)
+
+paste("The total number of observations in df2 is: ", numberOfObservances2)
+
+# sets the column names of the data frame with colnames function
+colnames(df2) <- c("Class", "Cell.small", "Cell.regular")
+
+# remove all "benign" observances
+smallMalignant <- df2[(df2$Class=="malignant" & df2$Cell.small==1),]
+notSmallMalignant <-df2[(df2$Class=="malignant" & df2$Cell.small==0),]
+regularMalignant <-df2[(df2$Class=="malignant" & df2$Cell.regular==1),]
+notRegularMalignant <-df2[(df2$Class=="malignant" & df2$Cell.regular==0),]
+
+# count number of rows
+smallMalignantCount <- nrow(smallMalignant)
+notSmallMalignantCount <- nrow(notSmallMalignant)
+regularMalignantCount <- nrow(regularMalignant)
+notRegularMalignantCount <-nrow(notRegularMalignant)
+
+# total rows in original
+numberOfObservances <- nrow(df)
+
+#print to screen
+paste("The percent of small malignant observations is: ", smallMalignantCount/numberOfObservances)
+paste("The percent of NOT small malignant observations is: ", notSmallMalignantCount/numberOfObservances)
+paste("The percent of regular malignant observations is: ", regularMalignantCount/numberOfObservances)
+paste("The percent of NOt regular malignant observations is: ", notRegularMalignantCount/numberOfObservances)
+
+
+```
+
+Step 6: Divide Data
+
+# used see 1234 like homework stated with 80 20 split
+```{r}
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1234)
+
+# shuffle the df and store into a new df frame
+df_numberOfRows <- nrow(df)
+shuf_df <- df[sample(df_numberOfRows), ]
+
+# set train_data df with the train_data indices
+train_data_indices <- 1:round(0.8 * df_numberOfRows)
+train_data <- shuf_df[train_data_indices, ]
+# set test_data df with the test_data indices
+test_data_indices <- (round(0.8 * df_numberOfRows) + 1):df_numberOfRows
+test_data <- shuf_df[test_data_indices, ]
+
+```
+
+
+Step 7: Logistic Regression and Summary
+
+# a.	Cell.small and Cell.regular have low p values (***) so they are both good predictors
+# b.	Null deviance = 706.91
+#     This measures the lack of fit of the model, with respect to the intercept (response)
+#     Residual deviance = 259.47
+#     This measures the lack of fit of the entire model
+# c.	AIC score = 264.47
+#     This metric is most useful when comparing models, and it penalizes complex models
+
+# In summary:
+# Both predictors Cell.small and Cell.regular are good choices.
+# This model does not fit well when comparing the fit based on the response values.
+# This model fits better, when looking at the model as a whole.
+# The Akaike Information Criterion score is 264.47 and this value can be used later to compare this model against other models.
+
+```{r}
+glm1 <- glm(Class~Cell.small+Cell.regular, train_data, family="binomial")
+
+# store a summary of the model created from the train data and print it
+glm1_sm <- summary(glm1)
+print(glm1_sm)
+
+
+```
+
+Step 8: Accuracy
+
+# This model has an accuracy of 0 on the test data
+```{r}
+probs <- predict(glm1, newdata=test_data, type="response")
+pred <- ifelse(probs>0.5, 1, 0)
+acc <- mean(pred==test_data$Class)
+print(paste("accuracy = ", acc))
+table(pred, test_data$Class) 
+```
+
+
+Step 9: Coefficients
+
+#a.	The coefficient for Cell.small is -4.034159
+#b.	I interpret this coefficent as negativley correlated with the target, malignantcy.
+#c.	The first printed probabliy graph shows esitmated likelyhood of a small cell to be very close to 0
+#d.	The second Printed probablity graph (using a model from the entire data frame) also,
+#   shows esitmated likelyhood of a small cell to be very close to 0. 
+#   Both probablities are close because the coefficicents generated from the models are extremly close.
+
+# glm1
+# Coefficients
+# (Intercept)   Cell.small Cell.regular 
+#    1.386853    -4.034159    -3.842827
+    
+# glmAll
+# Coefficients
+# (Intercept)   Cell.small Cell.regular 
+#    1.408690    -4.040546    -3.983461
+
+```{r}
+
+
+# get coefficients from glm1
+coefficents <- glm1$coefficients[]
+print("glm1 coefficients:")
+print(coefficents)
+
+small <- glm1$coefficients[2]
+intercept <- glm1$coefficients[1]
+
+# make linear model of all data
+glmAll <- glm(Class~Cell.small+Cell.regular, df, family="binomial")
+coefficentsAll <- glmAll$coefficients[]
+print("glmAll coefficients:")
+print(coefficentsAll)
+
+# get coefficients from glmAll
+smallAll <- glmAll$coefficients[2]
+interceptAll <- glmAll$coefficients[1]
+
+# Change the panel layout to 2 x 2
+par(mfrow=c(2,2)) 
+
+log_odds <- function(x, small, intercept){
+  intercept + small * x
+}
+
+# probablity graph for glm1
+x <- seq(from=0, to=1.0, by=0.2)
+y <- log_odds(x, small, intercept)
+prob <- exp(y) / (1 + exp(y))
+plot(x, prob, main="probabilities from glm1", xlab="Cell.small", ylab="Malignency Probability")
+
+# probablity graph for glmAll
+x <- seq(from=0, to=1.0, by=0.2)
+y <- log_odds(x, smallAll, interceptAll)
+prob <- exp(y) / (1 + exp(y))
+plot(x, prob, main="probabilities from glmAll", xlab="Cell.small", ylab="Malignency Probability")
+
+```
+
+
+Step 10: Two more models
+# Anova
+# Residual Degrees of Freedom:
+# This measures number of degrees of freedom
+# 566: glm1
+# 577: glm_small
+# 577: glm_regular
+# So glm_regular has the lowest number of degrees of residual freedom, but all models were close
+
+# Residual Deviance:
+# This measures the lack of fit of the entire model
+# 259: glm1
+# 312: glm_small
+# 348: glm_regular
+# So glm_regular had the best overall fit
+
+
+#AIC Scores:
+# 264: glm1
+# 316: glm_small
+# 352: glm_regular
+# This metric penalizes complex models (models with more predictors).
+# So based on that fact, the model with the most predictors should do the worst. 
+# In this case that was glm1 had the most predictors, but it had the lowest AIC score. 
+#So it did better than the other two, despite the penalization. So glm1 is the best in terms of AIC Score.
+
+```{r}
+glm_small <- glm(Class~Cell.small, train_data, family="binomial")
+glm_regular <- glm(Class~Cell.regular, train_data, family="binomial")
+
+varianceModel <- anova(glm1, glm_small, glm_regular) 
+print(varianceModel)
+
+# store a summary of the model created from the train data and print it
+glm_small_sm <- summary(glm_small)
+print(glm_small_sm)
+
+# store a summary of the model created from the train data and print it
+glm_regular_sm <- summary(glm_regular)
+print(glm_regular_sm)
+
+```
+
