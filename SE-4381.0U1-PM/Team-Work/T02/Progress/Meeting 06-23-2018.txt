@@ -1,0 +1,36 @@
+06-23-2018
+
+T02 Workload
+
+Template
+	6 min
+		Intro
+		(02:00)    Overview of meeting format
+		(00:30 ea) Allow each member to summarize what they did to prepare
+		(00:30 ea) Feedback from Alex(3 pos, 1 neg)
+		
+	18 min
+		Body
+		(00:30)    Task overview
+				   1.) Validate or trash each of the 4 references
+				   2.) Read intro and conclusion of Critical Chain 
+						write summary
+				   3.) Work on Report Outline
+						Write intro and conclusion
+						Make sure it applies to critical chain
+						Read assignment spec to make sure format is good
+				   4.) Tinker with WBS excel sheet
+						Break all work into packages (1-8 hours of work)
+						Provide estimations
+						Get an idea of how to complete the project
+		(02:00)	   Buffer for further explanation
+		(01:00)    Task assignment, pass the ball to a new leader
+		(14:30)	   Do work!
+		
+		
+		
+	6 min 
+	Conclusion
+		(00:30 ea) Allow each member to summarize what they completed
+		(00:30 ea) Allow each member to summarize what they will complete today
+		(00:30 ea) Allow each member to constructivly critize the meeting
