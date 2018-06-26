@@ -1,0 +1,35 @@
+06-Estimating
+	Top down
+		Based on experience
+		Strategic decision making
+		High Uncertainty
+		Internal Small Project
+		Unstable Scope
+	Bottom up
+		Task oriented
+		Cost and time focused
+		Fixed price contract
+		Customer wants details
+
+	Guidelines for Estimating Workpackages
+	1 Responsibility (estimates done by people with most framiliar with the work)
+	2 Use several people (Delphi to aggregate judgments)
+	3 Normal Conditions
+	4 Consistent Time units
+	5 Independence
+	6 Contingencies (don't add fluff, be accurate)
+	7 Risk assessment (avoid suprises to stakeholders)
+
+	Types of Costs
+		Direct costs
+			labor
+			materials
+			equipment
+			other
+		Direct project overhead costs
+			-project managers salary
+		General and administrative (G&A) 
+			-organizational costs not directly linked to project
+		
+	COCOMO – constructive cost model
+	SLIM
