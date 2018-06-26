@@ -31,5 +31,13 @@
 		General and administrative (G&A) 
 			-organizational costs not directly linked to project
 		
+	Zero Based Budgeting
+		Make a list of features
+		Prioritize
+		Write down cost and schedule of each
+		When you run out of resources, draw line under last feature
+	
+	
+	
 	COCOMO – constructive cost model
 	SLIM
