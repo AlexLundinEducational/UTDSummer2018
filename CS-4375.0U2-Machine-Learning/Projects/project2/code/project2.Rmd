@@ -1,0 +1,476 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+Name: Alex Lundin
+Assignment: Project 1
+# Header for project
+
+Data set 1 - heart disease
+Columns labeled on graph and in notes
+5 R functions (names, str,head, cor, summary)
+2 meaningful graphs 
+--(Scatterplot Chest Pain ~ Heart Disease)
+--(Densityplot Chest Pain Type)
+Algorithims
+--Linear Regression
+-- knn clustering
+Metrics
+--r squared for Linear Regression
+--predictions for knn clustering 
+Analysis
+--this dataset works well with regression since it assigns a numeric value of heart disease diagnosis
+
+Data set 2- Poker hand
+Columns labeled on graph and in notes
+5 R functions (names, str,head, cor, summary)
+2 meaningful graphs 
+-- (Scatterplot: Card 1 value ~ Hand Classfication)
+-- (pairs plot: all predictors)
+-- (Density Plot: Card 1 value)
+-- (Density Plot: Card 1 suit)
+Algorithims
+--Linear Regression
+--Logistic Regression
+Metrics
+--r squared for Linear Regression
+--accuracy for Logistic Regression
+Analysis
+--this data set works better with classification because it assigns each hand a class.
+--poker hands are still subject to alot of radomness that is not very predictable
+
+# Heart disease
+
+This data set is from the following URL:
+https://archive.ics.uci.edu/ml/datasets/Heart+Disease
+
+This study pulls various pieces of data from subjects to learn about factors related to heart disease.
+
+14 attributes of the original 76 attributes were used in the processed data sets.
+
+Complete attribute documentation:
+(These are renumbered from the original website to match the trimed data)
+1 age: age in years 
+2 sex: sex (1 = male; 0 = female) 
+3 cp: chest pain type 
+-- Value 1: typical angina 
+-- Value 2: atypical angina 
+-- Value 3: non-anginal pain 
+-- Value 4: asymptomatic 
+4 trestbps: resting blood pressure (in mm Hg on admission to the hospital) 
+5 chol: serum cholestoral in mg/dl 
+6 fbs: (fasting blood sugar > 120 mg/dl) (1 = true; 0 = false) 
+7 restecg: resting electrocardiographic results 
+8 thalach: maximum heart rate achieved 
+9 exang: exercise induced angina (1 = yes; 0 = no) 
+10 oldpeak = ST depression induced by exercise relative to rest 
+11 slope: the slope of the peak exercise ST segment 
+-- Value 1: upsloping 
+-- Value 2: flat 
+-- Value 3: downsloping 
+12 ca: number of major vessels (0-3) colored by flourosopy 
+13 thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
+14 num: diagnosis of heart disease (angiographic disease status) 
+-- Value 0: < 50% diameter narrowing 
+-- Value 1: > 50% diameter narrowing 
+(in any major vessel: attributes 59 through 68 are vessels) 
+
+# load the project data for first set heart disease
+
+```{r}
+# install and load packages
+if(!require('tinytex')){
+  install.packages('tinytex')  
+  library('tinytex')
+}
+
+# different file locations for the project
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.hungarian.data"
+
+dataPathSchoolComputer <- "H:\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.hungarian.data"
+
+# create the dataframe for heart disease
+df_hd <- read.table(dataPathHomeComputer)
+
+# sets the column names of the data frame with colnames function
+colnames(df_hd) <- c("age", "sex", "cp", "trestbps", "chol", "fbs", "restecg", "thalach", "exang", "oldpeak", "slope", "ca", "thal", "num")
+
+
+
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1958)
+
+
+# shuffle the df_hd and store into a new df_hd frame
+df_hd_numberOfRows <- nrow(df_hd)
+shuf_df_hd <- df_hd[sample(df_hd_numberOfRows), ]
+
+# set train_data df_hd with the train_data indices
+train_data_indices <- 1:round(0.75 * df_hd_numberOfRows)
+train_data <- shuf_df_hd[train_data_indices, ]
+# set test_data df_hd with the test_data indices
+test_data_indices <- (round(0.75 * df_hd_numberOfRows) + 1):df_hd_numberOfRows
+test_data <- shuf_df_hd[test_data_indices, ]
+
+```
+
+
+# investigate the data with names, str, head, summary and cor
+```{r}
+# look at the names of the data frame
+nameArray <- names(df_hd)
+printString <- "The names of the columns are:"
+
+# print a useful message with a compact version of the columns using str
+print(printString)
+str(nameArray)
+
+# show first 6 instances of the frame
+head(df_hd)
+
+```
+
+The 4 main columns that correlate highly with a diagonois of heart disease are:
+3   // cp        // chest pain
+9   // exang     // exercise induced angina
+10  // oldpeak   // ST depression induced by exercise relative to rest 
+11  // slope     // slope of the peak exercise ST segment
+all four of these have a correlation above .5 with the diagnois of heart disease in patients.
+```{r}
+# store a summary of the data frame
+sm <- summary(df_hd)
+
+# print the summary
+print(sm)
+
+# coerce all predictors and targets as numeric for correlation function
+
+xPredictor <- as.numeric(df_hd$cp)
+yTarget <- as.numeric(df_hd$num)
+
+print("Correlation of -- Chest pain and heart disease:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_hd$exang)
+print("Correlation of -- Exercise induced chest pain and heart disease:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_hd$oldpeak)
+print("Correlation of -- ST depression, aka irregular heart beat, due to exercise and heart disease:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_hd$slope)
+print("Correlation of -- Slope of ST depression during peak exercise and heart disease:")
+cor(xPredictor, yTarget)
+```
+
+# two informative graphs
+The scatter plot shows the likelyhood of heart disease for each type of chest pain (which ranges from 1-4)
+The scatter plot function in R complains when there is a fixed number of observance values (chest pain from 1-4)
+
+The density plots show the highest correlators do not have a normal distrubtion of occcurances in the data set.
+The predictors are very un normally distributed.
+```{r}
+# scatterplot for data view
+scatter.smooth(x=df_hd$cp, y=df_hd$num, main="Scatterplot Chest Pain ~ Heart Disease", xlab="Chest Pain (types 1 through 4)", ylab="Heart disease (< .5 positive diagnosis)")
+
+
+# # Density plot
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+
+plot(density(df_hd$cp), main="Density Plot: Chest Pain", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_hd$cp), 2)))
+polygon(density(df_hd$cp), col="red")
+
+plot(density(df_hd$exang), main="Density Plot: Exercise induced CP", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_hd$exang), 2)))
+polygon(density(df_hd$exang), col="red")
+
+
+```
+
+
+# first model for heart disease
+# This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
+The model has:
+Rsquared = .39
+low pvalues for the predictor and target
+low pvalue for the f-stastic
+
+The rsquared value should be closer to 1, but this dataset is attempting to predict something with alot of factors.
+So the nature of this data explains why the rsquared value is low, it's complex.
+
+When checking how the model does predicting on the test data.
+There is a .69 correlation between the predicted value on the test data and the training model.
+This model is a good represenation, not super duper, but pretty good.
+I think this model performed well because the data set is suited for linear regression.
+```{r}
+# create linear model on train_data
+train_lm1 <- lm(as.numeric(exang)~as.numeric(num), data=train_data)
+print(train_lm1 )
+plot(train_lm1)
+
+# store a summary of the model created from the train data and print it
+lm1_sm <- summary(train_lm1)
+print(lm1_sm)
+
+# attempt to predict the target y value of the test data with the train linear model
+pred <- predict(train_lm1, newdata=test_data)
+print("Correlation of -- Prediction of heart disease using training model with test data:")
+cor(pred, as.numeric(test_data$exang))
+```
+
+# second model for heart disease
+# this model uses knn clustering with columns 9 and 10
+# exang and oldpeak to attempt to predict heart disease diagnosis based on those two predictors
+correlation value of predictions vs actual: .66
+this model was slightly less accurate than the regression model.
+This data set is more suitable towards linear regression models, so I think that's why this model is less accurate since it uses classification when all of this data set is numeric type.
+```{r}
+# install and load packages
+if(!require('caret')){
+  install.packages('caret')  
+  library('caret')
+}
+if(!require('DMwR')){
+  install.packages('DMwR')  
+  library('DMwR')
+}
+
+# create the second linear model for heart disease data
+train_lm2 <- knnreg(train_data[,9:10], train_data[,14], k=3)
+
+# store a summary of the model created from the train data and print it
+lm2_sm <- summary(train_lm2)
+print(lm2_sm)
+
+# correlate how well the model did
+# do this by comparing the performace of the model using test data for columns 9 and 10
+# which are exang and oldpeak
+# the model used those to predict heart disease based on those factors
+predictions <- predict(train_lm2, test_data[,9:10])
+# now correlate the predictions against the actual values in the test data
+print("Correlation of -- Prediction of heart disease using training model with test data:")
+cor(predictions, test_data$num)
+
+```
+
+
+# Poker Hands
+
+
+This data set is from the following URL:
+https://archive.ics.uci.edu/ml/datasets/Heart+Disease
+
+1) S1 "Suit of card #1" 
+Ordinal (1-4) representing {Hearts, Spades, Diamonds, Clubs} 
+
+2) C1 "Rank of card #1" 
+Numerical (1-13) representing (Ace, 2, 3, ... , Queen, King) 
+
+3) S2 "Suit of card #2" 
+Ordinal (1-4) representing {Hearts, Spades, Diamonds, Clubs} 
+
+4) C2 "Rank of card #2" 
+Numerical (1-13) representing (Ace, 2, 3, ... , Queen, King) 
+
+5) S3 "Suit of card #3" 
+Ordinal (1-4) representing {Hearts, Spades, Diamonds, Clubs} 
+
+6) C3 "Rank of card #3" 
+Numerical (1-13) representing (Ace, 2, 3, ... , Queen, King) 
+
+7) S4 "Suit of card #4" 
+Ordinal (1-4) representing {Hearts, Spades, Diamonds, Clubs} 
+
+8) C4 "Rank of card #4" 
+Numerical (1-13) representing (Ace, 2, 3, ... , Queen, King) 
+
+9) S5 "Suit of card #5" 
+Ordinal (1-4) representing {Hearts, Spades, Diamonds, Clubs} 
+
+10) C5 "Rank of card 5" 
+Numerical (1-13) representing (Ace, 2, 3, ... , Queen, King) 
+
+11) CLASS "Poker Hand" 
+Ordinal (0-9) 
+
+0: Nothing in hand; not a recognized poker hand 
+1: One pair; one pair of equal ranks within five cards 
+2: Two pairs; two pairs of equal ranks within five cards 
+3: Three of a kind; three equal ranks within five cards 
+4: Straight; five cards, sequentially ranked with no gaps 
+5: Flush; five cards with the same suit 
+6: Full house; pair + different rank three of a kind 
+7: Four of a kind; four equal ranks within five cards 
+8: Straight flush; straight + flush 
+9: Royal flush; {Ace, King, Queen, Jack, Ten} + flush 
+
+
+
+# load the project data for second set, poker hand
+
+```{r}
+
+
+# different file locations for the project
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.pokerhand.data"
+
+dataPathSchoolComputer <- "H:\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project1\\data\\processed.pokerhand.data"
+
+# create the dataframe for heart disease
+df_ph <- read.table(dataPathHomeComputer)
+
+# sets the column names of the data frame with colnames function
+colnames(df_ph) <- c("S1","C1","S2","C2","S3","C3","S4","C4","S5","C5","CLASS")
+
+
+
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1958)
+
+
+# shuffle the df_ph and store into a new df_ph frame
+df_ph_numberOfRows <- nrow(df_ph)
+shuf_df_ph <- df_ph[sample(df_ph_numberOfRows), ]
+
+# set train_ph_data df_ph with the train_ph_data indices
+train_ph_data_indices <- 1:round(0.75 * df_ph_numberOfRows)
+train_ph_data <- shuf_df_ph[train_ph_data_indices, ]
+# set test_ph_data df_ph with the test_ph_data indices
+test_ph_data_indices <- (round(0.75 * df_ph_numberOfRows) + 1):df_ph_numberOfRows
+test_ph_data <- shuf_df_ph[test_ph_data_indices, ]
+
+```
+
+
+# investigate the data with names, str, head, summary and cor
+```{r}
+# look at the names of the data frame
+nameArray <- names(df_ph)
+printString <- "The names of the columns are:"
+
+# print a useful message with a compact version of the columns using str
+print(printString)
+str(nameArray)
+
+# show first 6 instances of the frame
+head(df_ph)
+
+```
+
+None of the indivudal columns correlated well with the Royal Flush hand classification:
+all were under .015
+```{r}
+# store a summary of the data frame
+sm <- summary(df_ph)
+
+# print the summary
+print(sm)
+
+# coerce all predictors and targets as numeric for correlation function
+
+xPredictor <- as.numeric(df_ph$C1)
+yTarget <- as.numeric(df_ph$CLASS)
+
+print("Correlation of -- Card 1 value and Hand Classfication:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_ph$S1)
+print("Correlation of -- Card 1 suit and Hand Classfication:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_ph$C3)
+print("Correlation of -- Card 3 and Hand Classfication:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_ph$S3)
+print("Correlation of --  Card 3 suit and Hand Classfication:")
+cor(xPredictor, yTarget)
+```
+
+# two informative graphs
+The scatter plot shows the likelyhood of hand classfication based on card 1 value
+The scatter plot shows that there is no correlation between the two
+
+The density plots show the distribution of certain predictors in the data set.
+In this case I chose card 1 value and card 1 suit.
+The predictors are very normally distributed.
+```{r}
+# scatterplot for data view
+scatter.smooth(x=df_ph$C1, y=df_ph$CLASS, main="Card 1 value ~ Hand Classfication", xlab="Card 1 value", ylab="Hand classification (0 nothing - 9 Royal Flush")
+
+#pairs plot
+pairs(df_ph)
+
+# # Density plot
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+
+plot(density(df_ph$C1), main="Density Plot: Card 1 value", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_ph$C1), 2)))
+polygon(density(df_ph$C1), col="red")
+
+plot(density(df_ph$S1), main="Density Plot: Card 1 suit", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_ph$S1), 2)))
+polygon(density(df_ph$S1), col="red")
+
+
+```
+
+
+# first model for poker hand
+# This model uses card 1 value to attempt to predict classification of entire hand
+The model has:
+Rsquared = .000
+low pvalues for the predictor 
+high pvalue for the target
+low pvalue for the f-stastic
+
+The rsquared value shows this regression technique explains none of the variance in the predictors.
+So the nature of this data explains why the rsquared value is low.
+This data set is not intended for regression
+
+```{r}
+# create linear model on train_ph_data
+train_lm1_ph <- lm(df_ph$C1~df_ph$CLASS, data=train_ph_data)
+print(train_lm1_ph)
+plot(train_lm1_ph)
+
+# store a summary of the model created from the train data and print it
+lm1_ph_sm <- summary(train_lm1_ph)
+print(lm1_ph_sm)
+
+```
+
+# second model for poker card hand
+# this model uses logistic regression to attempt to predict hand classification from card values and suits
+the accuracy is .5 which is alot higher than the regression used in the previous model
+
+this data set is more geared towards classification, so that explains why logistic regression did better.
+
+
+```{r}
+
+# scale the value which determines the hand classification so it ranges between .1 and .9
+# this allows glm to work on the y value
+train_ph_data[,11]<-train_ph_data[,11]*.1
+test_ph_data[,11]<-test_ph_data[,11]*.1
+
+train_lm2_ph <- glm(CLASS~., data=train_ph_data, family="binomial")
+
+# store a summary of the model created from the train data and print it
+lm2_ph_sm <- summary(train_lm2_ph)
+print(lm2_ph_sm)
+
+probs <- predict(train_lm2_ph, newdata=test_ph_data)
+pred <- ifelse(probs>0.0, 0.9, 0)
+acc <- mean(pred==test_ph_data$CLASS)
+print(paste("accuracy = ", acc))
+table(pred, test_ph_data$CLASS) 
+
+```
+
+
