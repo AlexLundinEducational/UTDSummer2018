@@ -1,16 +1,32 @@
 References
 
-1 Validate This Before Using.pdf
-https://csbweb01.uncw.edu/people/rosenl/classes/OPS100/A%20Critical%20Look%20at%20Critical%20Chain%20Project%20Management.pdf
+Good to go
+	Critical Chain Only:
+	A Critical Look at Critical Chain Project Management.pdf
+	https://csbweb01.uncw.edu/people/rosenl/classes/OPS100/A%20Critical%20Look%20at%20Critical%20Chain%20Project%20Management.pdf
 
-2 Validate This Before Using.pdf
-http://cap-able.nl/wp-content/uploads/2012/12/Overview-of-Critical-Chain.pdf
+	Buffers & Risk Critical Chain Project Management.pdf
+	https://www.techwell.com/sites/default/files/articles/XDD2473filelistfilename1_0.PDF
 
-3 Validate This Before Using.PDF
-https://www.techwell.com/sites/default/files/articles/XDD2473filelistfilename1_0.PDF
+	Critical Chain
+	https://utdallas-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=UTD_ALMA21137396770001421&context=L&vid=UTDALMA&lang=en_US&search_scope=EVERYTHING&adaptor=Local%20Search%20Engine&tab=everything&query=any,contains,critical%20chain&sortby=rank&mode=Basic
 
-4 Validate This Before Using.pdf
-http://www.scielo.br/pdf/gp/2016nahead/en_0104-530X-gp-0104-530X1953-15.pdf
+	Comparisions:
+	Traditional Critical Path Method versus Critical Chain Project Management: A Comparative View
+	https://www.omicsonline.org/open-access/traditional-critical-path-method-versus-critical-chain-projectmanagement-a-comparative-view-2162-6359-1000292.php?aid=64118
 
-Critical Chain
-https://utdallas-primo.hosted.exlibrisgroup.com/primo-explore/fulldisplay?docid=UTD_ALMA21137396770001421&context=L&vid=UTDALMA&lang=en_US&search_scope=EVERYTHING&adaptor=Local%20Search%20Engine&tab=everything&query=any,contains,critical%20chain&sortby=rank&mode=Basic
+	Critical Chain Project Management-A Critique
+	https://www.researchgate.net/publication/307174865_Critical_Chain_Project_Management-_A_Critique
+
+	Traditional Project Management Only (Critical Path):
+	Critical Path Method (CPM)
+	https://pdfs.semanticscholar.org/presentation/fb5d/96c2fd2e25fca5006ee49b7b4f13efa3a4a7.pdf
+
+Be cautious with these
+	2 Validate This Before Using.pdf
+	https://cap-able.nl/wp-content/uploads/2012/12/Overview-of-Critical-Chain.pdf
+
+
+	4 Validate This Before Using.pdf
+	https://www.scielo.br/pdf/gp/2016nahead/en_0104-530X-gp-0104-530X1953-15.pdf
+
