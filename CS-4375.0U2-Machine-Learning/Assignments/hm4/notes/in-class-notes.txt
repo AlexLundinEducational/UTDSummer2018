@@ -1,0 +1,2 @@
+Transform data into factor
+Leave out mpg
