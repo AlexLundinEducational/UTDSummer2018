@@ -1,0 +1,9 @@
+XX-XX-XXXX Tasks
+
+All
+	Tasks for Entire Team
+	Examples include research
+	
+Individual
+	Tasks assigned to memebers
+	Examples include pieces of the final deliverable
