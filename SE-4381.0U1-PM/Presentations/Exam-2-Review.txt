@@ -65,4 +65,18 @@
 	PERT
 			-Uses 3 estimates for each activity in project network
 			-Weighted average activity time = (optimistic estimate + 4 * most likely estimate + pessimistic estimate) / 6
-
+	
+07-Plan Activity Network
+	Critical Path - longest path through, no slack
+	Activity - an element that consumes time, built from WBS
+	Path - sequence of connected, dependent activities
+	Event - point in time when activity is started or completed
+	Merge activity - more than one preceding activity
+	Burst activity - one or more activity following
+	Parallel activity - can take place at any time
+	
+	Project Networks
+		-plan, schedule and monitor progress
+		-activities, logical sequences, interdependencies, time
+		-basis for scheduling labor and equipment
+	
