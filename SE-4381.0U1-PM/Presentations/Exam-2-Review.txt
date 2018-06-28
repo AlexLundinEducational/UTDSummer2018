@@ -58,4 +58,11 @@
 			+B is 0.91
 			+big pie Π is the product of factors, aka multiplicative sum
 			+weird e Σ is the sum of factors, aka add all them up
+			+Don't make 2nd and 3rd level assumptions based on facts given
+			+Just use what is stated, NO ASSUMPTIONS
+	TPS
+	
+	PERT
+			-Uses 3 estimates for each activity in project network
+			-Weighted average activity time = (optimistic estimate + 4 * most likely estimate + pessimistic estimate) / 6
 
