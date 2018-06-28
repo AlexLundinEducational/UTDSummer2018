@@ -37,7 +37,25 @@
 		Write down cost and schedule of each
 		When you run out of resources, draw line under last feature
 	
-	
-	
-	COCOMO – constructive cost model
 	SLIM
+		-Larry Putnam
+		-Critical Path, aka Traditional
+		-Sweet spot, of 130% of the minimum schedule will optomize the project
+			+E-effot
+			+B-constant
+			+Size-thousand lines of code
+		
+	
+	COCOMO 
+		–constructive cost model
+		-23 factors
+		-within 20% of estimations
+		-Factors
+			+PM is in terms of person months
+			+A is constant that can be modified on a company by company basis
+			+size is in thousands of lines of code
+			+E is calculate from B + 0.01 + sum of scaling factors
+			+B is 0.91
+			+big pie Π is the product of factors, aka multiplicative sum
+			+weird e Σ is the sum of factors, aka add all them up
+
