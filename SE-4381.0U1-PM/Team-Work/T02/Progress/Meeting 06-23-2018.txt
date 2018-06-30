@@ -7,7 +7,7 @@ Template
 		Intro
 		(02:00)    Overview of meeting format
 		(00:30 ea) Allow each member to summarize what they did to prepare
-		(00:30 ea) Feedback from Alex(3 pos, 1 neg)
+		(00:30 ea) Allow each member to summarize what else they can do next time to prepare
 		
 	18 min
 		Body
