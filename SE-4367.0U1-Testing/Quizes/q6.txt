@@ -1,0 +1,50 @@
+public Set intersection (Set s1, Set s2)
+
+      // Effects:   If s1 or s2 is null throw NullPointerException
+   //     else return a (non null) Set equal to the intersection
+  //     of Sets s1 and s2
+
+   Characteristic:  Validity of s1       
+       - s1 = null  
+       - s1 = {}        
+       - s1 has at least one element
+   
+   Characteristic:  Relation between s1 and s2       
+       - s1 and s2 represent the same set       
+       - s1 is a subset of s2       
+       - s2 is a subset of s1  
+       - s1 and s2 do not have any elements in common 
+
+My notes:
+	s1 == s2
+	s2 subsumes s1
+	s1 subsumes s2
+	s1 is disjoint from s2
+My Definitions:
+	disjoint - uncomplete partition
+
+(a)  Does the partition “Validity of s1” satisfy the completeness property? 
+If not, give a value for s1 that does not fit in any block.
+Yes, this covers the completeness property of the s1 argument.
+
+
+(b)  Does the partition “Validity of s1” satisfy the disjointness property? 
+If not, give a value for s1 that fits in more than one block.
+Yes, this covers the disjointness property. 
+A null object is disjoint from a empty list which is disjoint from a list with 1 or more elements.
+
+
+(c)  Does the partition “Relation between s1 and s2” satisfy the completeness property? 
+If not, give a pair of values for s1 and s2 that does not fit in any block.
+Yes, this satisfies completeness.
+
+
+(d)  Does the partition “Relation between s1 and s2” satisfy the disjointness property? 
+If not, give a pair of values for s1 and s2 that fits in more than one block.
+No, when s1 and s2 represent the same set then s1 is also a subset of s1 and vice versa.
+
+
+(e)  If the “Base Choice” criterion were applied to the two partitions 
+(exactly as written), how many test requirements would result?
+7 blocks, so 7 tests per characteristic
+49 tests
