@@ -1,0 +1,38 @@
+Any high level programming language
+	Must know how language handles arguemnts
+	Unix uses & to run batch in background
+	
+Must be able to run on unix systems
+
+Turn in
+TA compile and runs
+
+Requirement
+Read and write text files
+
+OSI
+	Implement
+		Transport
+		Network
+		Data Link
+
+	Layers
+		These are unix processes
+		Each represents a layer
+	
+	Neighbors
+		You know who your neighbor is through the invokation
+		Arguments tell this
+		Examples:
+		node _ _ _ _ &
+		
+		node A _ B C &
+		node B _ A C &
+		node C _ A B &
+		
+		these parameters determine who is allowed to open what text file
+		
+	Channels
+		Text files
+			Empty initially
+			Append messages, always store
