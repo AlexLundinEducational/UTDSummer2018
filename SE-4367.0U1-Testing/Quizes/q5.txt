@@ -36,8 +36,8 @@ A null object is disjoint from a empty list which is disjoint from a list with 1
 
 (c)  Does the partition “Relation between s1 and s2” satisfy the completeness property? 
 If not, give a pair of values for s1 and s2 that does not fit in any block.
-Yes, this satisfies completeness.
-
+***Yes, this satisfies completeness.
+***No, this characteristic doesn't account for stray element's that are shared between set's 
 
 (d)  Does the partition “Relation between s1 and s2” satisfy the disjointness property? 
 If not, give a pair of values for s1 and s2 that fits in more than one block.
