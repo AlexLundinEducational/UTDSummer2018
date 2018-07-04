@@ -74,9 +74,43 @@
 	Merge activity - more than one preceding activity
 	Burst activity - one or more activity following
 	Parallel activity - can take place at any time
+	Slack - the amount of time an activity can be delayed without delaying anything else
+	Lag - minimum amount of delay an activity can be delayed before starting
 	
 	Project Networks
-		-plan, schedule and monitor progress
-		-activities, logical sequences, interdependencies, time
-		-basis for scheduling labor and equipment
+		+plan, schedule and monitor progress
+		+activities, logical sequences, interdependencies, time
+		+basis for scheduling labor and equipment
 	
+	Laddering - breaking activity into overlapping segments
+		+continuous lengthly activities
+	
+	Types of Lags
+		-Finish-to-Start
+			+waiting for concrete to cure
+			+the delay separates tasks	
+		-Finish-to-finish
+			+testing can only be completed after the design is completed finished
+			+no way to complete testing before completing design
+			+the delay overlaps tasks
+		
+	Colburn
+		+paying for information with time?
+		
+	Concurrent Engineering
+		- crossfunctional teams cooperate
+		- better, cheaper, faster products
+		- increase manufactuing team's role in dev processes
+		- focus on customer during dev processes
+		- use lead time as source of competitive adv
+		
+	Planning fallacy
+		- inside view vs outside view
+		- reference class forcasting
+		
+08-Managing Risk
+	Risk exposure
+		-expected value
+		-probability of risk happeneing * the dollar impact of the risk
+		
+	Delphi
