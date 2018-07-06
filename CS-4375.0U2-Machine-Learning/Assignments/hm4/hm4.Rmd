@@ -1,0 +1,91 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+Name: Alex Lundin
+Assignment: HM4
+
+
+
+
+1.	Set up the Auto data:
+a.	Load the ISLR package and the Auto data
+b.	Determine the median value for mpg
+c.	Use the median to create a new column in the data set named mpglevel, which is 1 if mpg>median and otherwise is 0. 
+Make sure this variable is a factor. We will use mpglevel as the target (response) variable for the algorithms. 
+d.	Use the names() function to verify that your new column is in Auto
+e.	create a 75-25 train/test split, using seed 1234 but do not include columns 'name' or 'mpg' in either train or test
+```{r}
+# a
+if(!require('ISLR')){
+  install.packages('ISLR')  
+  library('ISLR')
+}
+
+# b
+names(Auto)
+summary(Auto)
+auto_linearModel = lm(horsepower~mpg, data=Auto)
+```
+
+
+
+
+2.	Plots 
+a.	 Set up a 2x2 graph grid and plot the following pairs of plots 
+b.	Plot pair 1: plot horsepower~mpg and weight~mpg, setting colors according to the factor mpglevel, ex: col=(Auto$mpglevel)
+c.	Plot pair 2:  plot horsepower~mpglevel and weight~mpglevel 
+
+
+
+
+
+3.	Build a Naïve Bayes model 
+a.	build the model on the train set
+b.	use the predict() function on the test set
+c.	create a table comparing predicted to actual values for mpglevel
+d.	calculate the mean accuracy
+
+
+
+
+
+4.	SVM linear kernel 
+a.	use the tune() function to perform cross-validation to determine the best value for cost
+b.	use the parameter(s) from the previous step to build an svm model with a linear kernel on the train set
+c.	use the predict() function on the test set
+d.	create a table comparing predicted to actual values for mpglevel
+e.	calculate the mean accuracy
+
+
+
+
+
+5.	SVM polynomial kernel 
+a.	use the tune() function to perform cross-validation to determine the best values for cost and degree
+b.	use the parameter(s) from the previous step to build an svm model with a polynomial kernel on the train set
+c.	use the predict() function on the test set
+d.	create a table comparing predicted to actual values for mpglevel
+e.	calculate the mean accuracy
+
+
+
+
+
+6.	SVM radial kernel 
+a.	use the tune() function to perform cross-validation to determine the best values for cost and gamma
+b.	use the parameter(s) from the previous step to build an svm model with a radial kernel on the train set
+c.	use the predict() function on the test set
+d.	create a table comparing predicted to actual values for mpglevel
+e.	calculate the mean accuracy
+
+
+
+
+
+7.	Questions. 
+a.	Compare the accuracy results for the 4 models
+b.	Discuss the advantages and disadvantages of Naïve Bayes versus svm
