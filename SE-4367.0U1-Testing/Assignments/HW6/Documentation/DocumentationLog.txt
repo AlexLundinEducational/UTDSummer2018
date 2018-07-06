@@ -1,0 +1,18 @@
+Documentation Log
+
+Reductions
+	FactsServlet.java
+		removed a few imports "Quotes.whatever" they caused errors for me
+		
+Refactors
+	StringConstants.java
+		pulled all paths out, into their own file for easy edits
+		makes building on different machines simpler
+		
+Modifications
+	FactsServlet.java
+		Added a new feild, serialID, so compiler won't complain
+		
+Additions
+
+

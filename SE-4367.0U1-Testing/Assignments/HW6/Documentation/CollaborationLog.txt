@@ -1,0 +1,38 @@
+Phase 1 Development
+	06-27-2018
+		Alex Lundin
+			Source folder and documents setup
+	06-28-2018
+		Alex Lundin
+			Double check files build correctly
+			https://autode.sk/2lFgjDx
+		Daniel Niel
+			Pulled github, tested files
+		Both
+			Brainstorm Base Choice
+			Reviewed slide material
+			
+Phase 2 Development
+	06-30-2018
+		Alex Lundin
+			Created IDM for Base choice
+			Documented all steps used to create model
+			Cited slide references
+			Documented reason for the Base Choice that will be used in the test setup
+			
+	07-02-2018
+		Daniel
+			Created test set for Fact
+	07-03-2018
+		Alex	
+			Created test set for Search Mode
+			
+Phase 3 Development
+	07-03-2018
+		Alex created simple test template
+
+Proof of Functional Build
+	07-05-2018
+		Turning in
+
+		
