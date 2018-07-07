@@ -26,22 +26,22 @@ if(!require('ISLR')){
 }
 
 # b
-df <- Auto
-medianMPG <- median(df$mpg)
+
+medianMPG <- median(Auto$mpg)
 paste("The median MPG is: ", medianMPG)
 
 # c
-df$mpglevel <- ifelse(df$mpg > medianMPG, 1, 0)
+Auto$mpglevel <- as.factor(ifelse(Auto$mpg > medianMPG, 1, 0))
+str(Auto$mpglevel)
 
 # d
-names(df)
+names(Auto)
 
 # e
 set.seed(1234)
-i <- sample(1:nrow(df), 0.75*nrow(df))
-train <- df[i,c(2,3,4,5,6,7,8,10)]
-test <- df[-i,c(2,3,4,5,6,7,8,10)]
-
+i <- sample(1:nrow(Auto), 0.75*nrow(Auto))
+train <- Auto[i,c(2,3,4,5,6,7,8,10)]
+test <- Auto[-i,c(2,3,4,5,6,7,8,10)]
 
 ```
 
@@ -52,6 +52,19 @@ test <- df[-i,c(2,3,4,5,6,7,8,10)]
 a.	 Set up a 2x2 graph grid and plot the following pairs of plots 
 b.	Plot pair 1: plot horsepower~mpg and weight~mpg, setting colors according to the factor mpglevel, ex: col=(Auto$mpglevel)
 c.	Plot pair 2:  plot horsepower~mpglevel and weight~mpglevel 
+```{r}
+# a
+par(mfrow=c(2, 1))  # divide graph area in 2 columns
+palette(c("red","black"))
+
+# b
+plot(Auto$horsepower~Auto$mpg, col=ifelse(Auto$mpglevel==1, "red", "black"))
+plot(Auto$weight~Auto$mpg, col=ifelse(Auto$mpglevel==1, "red", "black"))
+
+# c
+plot(Auto$horsepower~Auto$mpglevel)
+plot(Auto$weight~Auto$mpglevel)
+```
 
 
 
@@ -62,6 +75,25 @@ a.	build the model on the train set
 b.	use the predict() function on the test set
 c.	create a table comparing predicted to actual values for mpglevel
 d.	calculate the mean accuracy
+      0.928571428571429
+
+```{r}
+
+# a
+library(e1071)
+nb1 <- naiveBayes(mpglevel~., data=train)
+
+# b
+p1 <- predict(nb1, newdata=test, type="class")
+
+# c
+table(p1, test$mpglevel)
+
+# d
+paste("The mean accuracy is:", mean(p1==test$mpglevel))
+
+
+```
 
 
 
@@ -73,6 +105,32 @@ b.	use the parameter(s) from the previous step to build an svm model with a line
 c.	use the predict() function on the test set
 d.	create a table comparing predicted to actual values for mpglevel
 e.	calculate the mean accuracy
+      The mean accuracy is: 0.908163265306122
+      
+```{r}
+
+library(e1071)
+svm_fit1 <- svm(mpglevel~., data=train, kernel="linear", cost=10, scale=FALSE)
+
+# a
+tune_svm1 <- tune(svm, mpglevel~., data=train, kernel="linear",
+               ranges=list(cost=c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+summary(tune_svm1)
+
+# b
+best_mod1 <- tune_svm1$best.model
+summary(best_mod1)
+
+# c
+svm_pred <- predict(best_mod1, newdata=test)
+
+# d
+table(svm_pred, test$mpglevel)
+
+# e
+paste("The mean accuracy is:", mean(svm_pred==test$mpglevel))
+
+```
 
 
 
@@ -95,6 +153,32 @@ b.	use the parameter(s) from the previous step to build an svm model with a radi
 c.	use the predict() function on the test set
 d.	create a table comparing predicted to actual values for mpglevel
 e.	calculate the mean accuracy
+      The mean accuracy is: 0.928571428571429
+```{r}
+
+library(e1071)
+svm_fit3 <- svm(mpglevel~., data=train, kernel="radial", cost=1, gamma=1, scale=FALSE)
+
+# a
+tune_svm3 <- tune(svm, mpglevel~., data=train, kernel="radial",
+               ranges=list(cost=c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+summary(tune_svm3)
+
+# b
+best_mod3 <- tune_svm3$best.model
+summary(best_mod3)
+
+# c
+svm_pred3 <- predict(best_mod3, newdata=test)
+
+# d
+table(svm_pred3, test$mpglevel)
+
+# e
+paste("The mean accuracy is:", mean(svm_pred3==test$mpglevel))
+
+
+```
 
 
 
