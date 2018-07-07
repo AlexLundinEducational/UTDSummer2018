@@ -109,7 +109,6 @@ e.	calculate the mean accuracy
       
 ```{r}
 
-library(e1071)
 svm_fit1 <- svm(mpglevel~., data=train, kernel="linear", cost=10, scale=FALSE)
 
 # a
@@ -142,6 +141,31 @@ b.	use the parameter(s) from the previous step to build an svm model with a poly
 c.	use the predict() function on the test set
 d.	create a table comparing predicted to actual values for mpglevel
 e.	calculate the mean accuracy
+      The mean accuracy is: 0.918367346938776
+```{r}
+
+svm_fit2 <- svm(mpglevel~., data=train, kernel="polynomial", cost=1, degree=1, scale=FALSE)
+
+# a
+tune_svm2 <- tune(svm, mpglevel~., data=train, kernel="polynomial",
+                               ranges=list(cost=c(0.1,1,10,100,1000),
+                degree=c(1,2,3,4,5)))
+summary(tune_svm2)
+
+# b
+best_mod2 <- tune_svm2$best.model
+summary(best_mod2)
+
+# c
+svm_pred2 <- predict(best_mod2, newdata=test)
+
+# d
+table(svm_pred2, test$mpglevel)
+
+# e
+paste("The mean accuracy is:", mean(svm_pred2==test$mpglevel))
+
+```
 
 
 
@@ -156,12 +180,12 @@ e.	calculate the mean accuracy
       The mean accuracy is: 0.928571428571429
 ```{r}
 
-library(e1071)
 svm_fit3 <- svm(mpglevel~., data=train, kernel="radial", cost=1, gamma=1, scale=FALSE)
 
 # a
 tune_svm3 <- tune(svm, mpglevel~., data=train, kernel="radial",
-               ranges=list(cost=c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+                ranges=list(cost=c(0.1,1,10,100,1000),
+                gamma=c(0.5,1,2,3,4)))
 summary(tune_svm3)
 
 # b
@@ -186,4 +210,25 @@ paste("The mean accuracy is:", mean(svm_pred3==test$mpglevel))
 
 7.	Questions. 
 a.	Compare the accuracy results for the 4 models
+SVM radial kernel had the highest accuracy at .94
+Naïve Bayes model ad an accuracy of .92
+SVM polynomial kernel had an accuracy of .918
+SVM linear kernel had an accuracy of .908
+
 b.	Discuss the advantages and disadvantages of Naïve Bayes versus svm
+
+Naïve Bayes 
+   will assume all factors are independent of eachother
+   will have high variance and low bias
+   Adv
+      works well with small data.
+   Dis
+      this model will miss relations between factors
+ 
+SVM  
+   the low value for SVM linear kernel shows we do not have linearly seperable data, but rather radial grouped data
+   Adv
+      ability to tune hyperparameters to achieve a better fit
+      highly versatile, options for kernel type
+   Dis
+      the tuned model might not always be better
