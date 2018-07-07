@@ -26,9 +26,23 @@ if(!require('ISLR')){
 }
 
 # b
-names(Auto)
-summary(Auto)
-auto_linearModel = lm(horsepower~mpg, data=Auto)
+df <- Auto
+medianMPG <- median(df$mpg)
+paste("The median MPG is: ", medianMPG)
+
+# c
+df$mpglevel <- ifelse(df$mpg > medianMPG, 1, 0)
+
+# d
+names(df)
+
+# e
+set.seed(1234)
+i <- sample(1:nrow(df), 0.75*nrow(df))
+train <- df[i,c(2,3,4,5,6,7,8,10)]
+test <- df[-i,c(2,3,4,5,6,7,8,10)]
+
+
 ```
 
 

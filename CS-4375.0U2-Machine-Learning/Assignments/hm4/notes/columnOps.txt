@@ -1,0 +1,49 @@
+
+
+
+Step 1
+# Install the necessary package then load the library
+```{r}
+library(knitr)
+# load library
+if(!require('mlbench')){
+  install.packages('mlbench')  
+  library('mlbench')
+}
+
+df <- BreastCancer
+
+
+
+# extract class column
+classColumn <- df[,11]
+summary(classColumn)
+
+# create table from classColumn
+myTable <- table(classColumn)
+
+# extract counts from table
+countMalignant <- myTable[names(myTable) == "malignant"]
+countBenign <- myTable[names(myTable) == "benign"]
+
+#calculate percentage
+percentMalignant <- countMalignant / (countMalignant + countBenign)
+
+#print to screen
+paste("The percent of malignant observations is: ", percentMalignant)
+
+set.seed(1234)
+i <- sample(1:nrow(df), 0.75*nrow(df))
+train <- df[i,]
+test <- df[-i,]
+
+df$Cell.small <- ifelse(df$Cell.size == 1, 1, 0)
+df$Cell.regular <- ifelse(df$Cell.shape == 1, 1, 0)
+
+print("New Columns:")
+
+table(df$Cell.small)
+table(df$Cell.regular)
+
+
+```
