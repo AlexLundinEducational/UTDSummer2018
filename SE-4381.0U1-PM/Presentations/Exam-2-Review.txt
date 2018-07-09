@@ -114,3 +114,24 @@
 		-probability of risk happeneing * the dollar impact of the risk
 		
 	Delphi
+	
+	Top Ten Management Problems
+		-unreal expectations
+		-impossible schedules
+		-inadequate budgets
+		-staffing issues
+		-poor planning
+		-gold plating
+		-lack of focus
+		-inadequate risk managment
+		-process mismatch
+		-cultural and organizational issues
+		
+	Risk Exposure
+		-risk exposure = impact * probability
+		-risk value = impact * prob * dectections
+		-dectection ranges from 1 to 5
+		
+	Risk Matrix
+	
+	Avoiding Risk
