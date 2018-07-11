@@ -46,5 +46,7 @@ No, when s1 and s2 represent the same set then s1 is also a subset of s1 and vic
 
 (e)  If the “Base Choice” criterion were applied to the two partitions 
 (exactly as written), how many test requirements would result?
-7 blocks, so 7 tests per characteristic
-49 tests
+Characteristic 2:
+A (3 tests)
+B (4 tests)
+bcc = 1 + (3-1) + (4-1) = 6
