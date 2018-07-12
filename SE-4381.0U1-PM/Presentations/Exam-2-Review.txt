@@ -133,5 +133,19 @@
 		-dectection ranges from 1 to 5
 		
 	Risk Matrix
-	
 	Avoiding Risk
+	
+09-progess
+	Quality attributes
+		-Functionality
+		-Usability
+		-Reliability
+		-Performance
+		-Supportability
+		
+	Putnam and Myers 5 core
+		-Size
+		-Productivity
+		-Time
+		-Effort
+		-Reliability
