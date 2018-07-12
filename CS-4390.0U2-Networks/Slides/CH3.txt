@@ -1,0 +1,39 @@
+Ch3 Reading (168-216)
+	Switching
+		function of network layer
+		
+	Datagram
+		connectionless
+		forwaring table
+		each message contains full dest address
+		Pros
+			packets sent independently (might take different routes)
+			link death might not effect delivery
+			host can send a message anywhere anytime
+		Cons
+			difficult to maintain routing table
+			not sure if path is possible
+			
+	Virtual Circuit
+		Each entry in the VC table
+			VCI which uniquley ID's the connection at the switch
+				this is carrried in packet headers which belong to this connection
+			incomming interface for packets entering
+			outgoing interface for packets leaving
+			potentially different VCI for outgoing
+		
+		PVC
+			permanenet, requires admin
+			admin chooses VCI and interface values for all nodes in the table
+			
+		SVC
+			signal, does not require admin
+			
+		Pros
+			reduced packet overhead
+			firm acknowledgement of possible path
+		Cons	
+			requires setup phase (at lteast one RRT)
+			link failures require tear down
+			
+	Source routing(179)
