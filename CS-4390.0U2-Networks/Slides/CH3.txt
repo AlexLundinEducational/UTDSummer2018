@@ -37,3 +37,44 @@ Ch3 Reading (168-216)
 			link failures require tear down
 			
 	Source routing(179)
+		Packet contains header with output port for each switch
+		The switch reads header, and sends packets to output port
+		Switch rotates header for next switch
+		Strict - specificy path
+		Loose - specify nodes only 
+		
+		Pros
+			Message can find it's way back
+
+		Cons
+			Same problem as maintaining a fwding table
+			No consistent packet header size, since paths are diff lengths
+	
+	Bridges and LAN switches
+		Bridge 
+			- node that connects two ethernet networks (called extended LANS after bridging happens)
+			- promiscuous mode, forwards all messages
+			
+		Learning Bridges
+			Each bridge stores it's own forwarding table
+			check source of all messages arriving on a port
+				now bridge knows not to fwd messages from that source to that port
+		Spanning tree
+			Each bridge has unique ID
+				elect bridge with smallest ID as root
+				
+			Root always fwd all frames
+			
+			Each bridge 
+				computes shortest path to root
+				notes what ports are used on the path
+				marks its perfered port
+				
+			Each LAN	
+				elects a bridge to forward msg to root
+					closest to root
+					then lowest ID
+					
+		Broadcast and multicast
+		
+		Limitations (193)
