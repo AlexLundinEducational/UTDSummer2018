@@ -1,0 +1,54 @@
+ML 4375 
+Intro to Machine Learning 
+Summer 2018
+Mazidi 
+Exam 2 Review 
+Test format: 
+
+20 multiple-choice  or T/F questions (3 points each)
+
+Naïve Bayes 
+	supervised learning
+	classification
+	often a baseline
+	works well with small data
+	simple algorithm
+	high bias, low variance
+
+	assumes all predictors are INDEPENDENT
+	
+	Theorem	
+		posterior = (likelihood X prior) / marginal
+	
+	Learns probablity distributions P(Y|X)
+	
+emphasis on these algorithms: 
+	Naïve Bayes 
+	SVM
+	Decision Trees
+	Neural Networks
+	Know how they work; 
+		special characteristics; 
+		bias/variance; 
+		regression/classification
+
+
+		
+		
+		
+10 multiple-choice or T/F calculation questions (4 points each)
+
+Terminology and Concepts:
+-	bias and variance
+-	discriminative v. generative classifier
+-	regression, classification
+-	entropy, information gain, entropy and how to calculate them (formulas provided)
+Formulas Provided on Exam:
+
+Bayes’ Theorem:
+
+Entropy:
+
+Information Gain:
+
+Gini Index: 
