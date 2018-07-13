@@ -76,5 +76,11 @@ Ch3 Reading (168-216)
 					then lowest ID
 					
 		Broadcast and multicast
-		
+			multicast	
+				each bridge decides to accept message or not
 		Limitations (193)
+		
+		ATM(196)
+			Asynchronous Transfer Mode
+				connection oriented
+				signalling with virtual circuit
