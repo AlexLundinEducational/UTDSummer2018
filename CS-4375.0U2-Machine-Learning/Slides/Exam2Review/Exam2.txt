@@ -22,6 +22,25 @@ Naïve Bayes
 	
 	Learns probablity distributions P(Y|X)
 	
+SVM
+	most commonly used for binary classfication
+	wide variety of uses though
+	when classes are separated, SVM does better than regression
+	
+	goal: separate predections with ideal margin
+		not too wide
+		not too narrow
+		
+	Instances ON THE MARGIN are support vectors
+	
+	classification or regression
+		kernels
+	binary classification
+	multiclass classification
+
+Decision Trees
+Neural Networks
+	
 emphasis on these algorithms: 
 	Naïve Bayes 
 	SVM
