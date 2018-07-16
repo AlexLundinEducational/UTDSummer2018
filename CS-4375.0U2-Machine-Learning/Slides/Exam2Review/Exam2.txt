@@ -39,8 +39,106 @@ SVM
 	multiclass classification
 
 Decision Trees
-Neural Networks
+	can be used for classification or regression
+	not as accurate as other algorithms
+	but highly interpretable
+
+	tend towards high variance, low bias
+
+	Cons
+		Cannot make diagonal splits
+	Goal
+		Minimize RSS within each region
 	
+	Instead of minimizing RSS within each region, which is infeasable
+		count classes of regions
+		splits made with metrics of node purity
+			entropy, measure of uncertainty in data
+			gini index
+			
+	Entropy
+	
+		subtractive sum of probablity * log2(probablity)
+		red 60% and white 40%
+		-0.6 * log2(0.6) - 0.4 * log2(0.4)	
+			
+	information gain - reduction of uncertainty given a split
+		we want max IG
+		formulas
+			IG = 1 – (obsInSplit1/totalObs)(entropy of the split1) - (obsInSplit2/totalObs)(entropy of the split2) ... - (obsInSplitN/totalObs)(entropy of the splitN)
+
+		requires more infromation to describe nodes that are impure
+		
+
+		
+	Gini
+		we want min Gini
+		ranges from 0 to .5
+		formulas
+			Gini = 1 – (obsInSplit1/totalObs)^2 - (obsInSplit2/totalObs)^2 ... - (obsInSplitN/totalObs)^2
+	
+	Large trees
+		overfit
+		so we prune
+		cross validation
+		
+	Summary
+		linear or logistic often outperforms
+		complex relationship, tree better
+		radomn forrest and bagging are less interpretable
+		DT are non parametric
+		
+Neural Networks
+	Perceptron
+		supervised learning
+		binary classification
+		linear function based on features and weights
+			steps:
+			represent the features and weights as vectors
+			calculate the dot product
+			convert real output to a binary output
+			
+		Limited to OR
+		Need elispe to do AND
+		
+	Multilayer Perceptron
+		Multiclass classfication
+		Predicting multidimensional output for regression
+		Training
+			Backpropogration
+				applies gradient descent to casecade the weights
+			observe errors in the outputs
+			Steps:
+				output of Feed-forward NN is compared against desired output
+					using loss function
+				an error is calculated for each neurons
+				error is propogated back to the neurons at the previous level
+				
+			after, neurons can regonize "noise" in inputs and ingore them
+	Too few hidden nodes underfits
+	Too many hidden overfits
+		Node choices
+		• between 1 and the number of predictors
+		• two-thirds of the input layer size plus the size of the output layer
+		• < twice the input layer size
+		
+	Performs better on scaled predictors and untouched target
+	
+	Neural networks are defined by these properties:
+	• the network architecture or topology 
+		- the number of neurons in the model
+		- number of layers
+	• the activation function which transforms the inputs to an output 
+		-the sigmoid function is commonly used
+	• the training algorithm
+
+	
+	• backpropagation
+	• epoch
+	• neuron or node
+	• perceptron
+	• activation function
+
 emphasis on these algorithms: 
 	Naïve Bayes 
 	SVM
