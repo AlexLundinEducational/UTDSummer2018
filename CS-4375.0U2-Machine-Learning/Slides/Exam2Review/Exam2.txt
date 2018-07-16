@@ -10,6 +10,7 @@ Test format:
 Naïve Bayes 
 	supervised learning
 	classification
+	
 	often a baseline
 	works well with small data
 	simple algorithm
@@ -23,7 +24,13 @@ Naïve Bayes
 	Learns probablity distributions P(Y|X)
 	
 SVM
+
 	most commonly used for binary classfication
+	classification or regression
+		kernels = radial or polynomial or linear
+	binary classification
+	multiclass classification	
+	
 	wide variety of uses though
 	when classes are separated, SVM does better than regression
 	
@@ -33,13 +40,11 @@ SVM
 		
 	Instances ON THE MARGIN are support vectors
 	
-	classification or regression
-		kernels
-	binary classification
-	multiclass classification
+
 
 Decision Trees
 	can be used for classification or regression
+	
 	not as accurate as other algorithms
 	but highly interpretable
 
@@ -65,7 +70,7 @@ Decision Trees
 	information gain - reduction of uncertainty given a split
 		we want max IG
 		formulas
-			IG = 1 – (obsInSplit1/totalObs)(entropy of the split1) - (obsInSplit2/totalObs)(entropy of the split2) ... - (obsInSplitN/totalObs)(entropy of the splitN)
+			IG = starting entropy – (obsInSplit1/totalObs)(entropy of the split1) - (obsInSplit2/totalObs)(entropy of the split2) ... - (obsInSplitN/totalObs)(entropy of the splitN)
 
 		requires more infromation to describe nodes that are impure
 		
@@ -92,6 +97,7 @@ Neural Networks
 	Perceptron
 		supervised learning
 		binary classification
+		
 		linear function based on features and weights
 			steps:
 			represent the features and weights as vectors
@@ -104,6 +110,7 @@ Neural Networks
 	Multilayer Perceptron
 		Multiclass classfication
 		Predicting multidimensional output for regression
+		
 		Training
 			Backpropogration
 				applies gradient descent to casecade the weights
@@ -115,14 +122,15 @@ Neural Networks
 				error is propogated back to the neurons at the previous level
 				
 			after, neurons can regonize "noise" in inputs and ingore them
-	Too few hidden nodes underfits
-	Too many hidden overfits
-		Node choices
-		• between 1 and the number of predictors
-		• two-thirds of the input layer size plus the size of the output layer
-		• < twice the input layer size
-		
-	Performs better on scaled predictors and untouched target
+			
+		Too few hidden nodes underfits
+		Too many hidden overfits
+			Node choices
+			• between 1 and the number of predictors
+			• two-thirds of the input layer size plus the size of the output layer
+			• < twice the input layer size
+			
+		Performs better on scaled predictors and untouched target
 	
 	Neural networks are defined by these properties:
 	• the network architecture or topology 
@@ -154,12 +162,25 @@ emphasis on these algorithms:
 		
 		
 10 multiple-choice or T/F calculation questions (4 points each)
+discriminative
+	classification tasks
+	logistic regression
+	qualitative
+	classification
+	does not care about how the data was generated, it simply categorizes a given signal.
 
+generative
+	models how the data was generated in order to categorize a signal. 
+	It asks the question: based on my generation assumptions, which category is most likely to generate this signal?
+	quantitative
+	regression
+	
 Terminology and Concepts:
 -	bias and variance
 -	discriminative v. generative classifier
 -	regression, classification
 -	entropy, information gain, entropy and how to calculate them (formulas provided)
+
 Formulas Provided on Exam:
 
 Bayes’ Theorem:
