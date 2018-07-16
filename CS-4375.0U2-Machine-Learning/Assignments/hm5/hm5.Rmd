@@ -6,8 +6,186 @@ output:
 ---
 
 Name: Alex Lundin
-Assignment: HM4
+Assignment: HM5
 
+Problem 1: Default data 
+
+1.	Set up the data. (5 points)
+	a.	Load the ISLR library and attach the Default data set.
+	b.	Run the dim() and names() functions on Default
+	c.	Use function set.seed(2017) so your results are reproducible.
+	d.	Divide the data into 80% for training and the rest for a test set.
+```{r}
+# a
+if(!require('ISLR')){
+  install.packages('ISLR')  
+  library('ISLR')
+}
+df_default <- Default
+attach(Default)
+# b
+dim(df_default)
+names(df_default)
+
+#c
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(2017)
+
+
+# shuffle the df_default and store into a new df_default frame
+df_default_numberOfRows <- nrow(df_default)
+shuf_df_default <- df_default[sample(df_default_numberOfRows), ]
+
+# set train_data df_default with the train_data indices
+train_data_indices <- 1:round(0.8 * df_default_numberOfRows)
+train_data <- shuf_df_default[train_data_indices, ]
+# set test_data df_default with the test_data indices
+test_data_indices <- (round(0.8 * df_default_numberOfRows) + 1):df_default_numberOfRows
+test_data <- shuf_df_default[test_data_indices, ]
+
+```
+		
+
+2.	Logistic regression model (5 points)
+	a.	create a logistic regression model on the training data where default is predicted by all other variables
+	b.	run a summary of the model
+	c.	predict Yes/No on the test data
+	d.	compute the accuracy
+```{r}
+# a
+glm0 <- glm(default~., data=train_data, family=binomial)
+summary(glm0)
+
+# b
+train_glm_sum <- summary(glm0)
+
+# c
+probs <- predict(glm0, newdata=test_data, type="response")
+pred <- ifelse(probs>0.5, 1, 0)
+
+# d
+acc <- mean(pred==test_data$default)
+print(paste("accuracy = ", acc))
+table(pred, test_data$default) 
+```
+	
+	
+3.	Decision tree model (10 points)
+	a.	create a decision tree model on the training data
+	b.	run a summary of the model
+	c.	make predictions for the test set
+	d.	compute the accuracy
+	e.	print the tree with labels
+	f.	display the tree in nested decision form by just using the tree name 
+4.	Try Random Forest or Boosting (5 points) and compare your results.
+
+Problem 2: Heart data 
+
+1.	Set up the data. (5 points)
+	a.	Download the heart data to your machine from Piazza.
+	b.	Load the data into R and attach it
+	c.	Remove the “X” column
+	d.	Set up train and test sets with 80% for training again using seed 2017
+	
+```{r}
+
+# a
+# store path string for loading csv file
+dataPathHomeComputer <- "C:\\Users\\alundi1a\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Assignments\\hm5\\Heart.csv"
+
+# b
+# create the dataframe for heart disease
+df_default <- read.table(dataPathHomeComputer)
+
+#c
+str(df_default)
+names(df_default)
+#d
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(2017)
+
+
+# shuffle the df_default and store into a new df_default frame
+df_default_numberOfRows <- nrow(df_default)
+shuf_df_default <- df_default[sample(df_default_numberOfRows), ]
+
+# set train_data df_default with the train_data indices
+train_data_indices <- 1:round(0.8 * df_default_numberOfRows)
+train_data <- shuf_df_default[train_data_indices, ]
+# set test_data df_default with the test_data indices
+test_data_indices <- (round(0.8 * df_default_numberOfRows) + 1):df_default_numberOfRows
+test_data <- shuf_df_default[test_data_indices, ]
+
+```
+	
+	
+	
+2.	Logistic regression model (5 points)
+	a.	create a logistic regression model on the training data where AHD is predicted by all other variables
+	b.	run a summary of the model
+	c.	predict Yes/No on the test data
+	d.	compute the accuracy
+	
+	
+	
+3.	Decision Tree Model (5 points)
+	a.	create a decision tree model on the training data
+	b.	run a summary of the model
+	c.	make predictions for the test set
+	d.	compute the accuracy
+	
+	
+	
+4.	Display the tree (5 points)
+	a.	print the tree with labels
+	b.	display the tree in nested decision form by just using the tree name 
+	
+	
+	
+5.	Cross validation (10 points)
+	a.	create a new tree from the cv.tree() function
+	b.	look at the $dev and $size variables by displaying the tree using its name
+	c.	plot in a 1x2 format:
+		i.	$size and $dev
+		ii.	$k and $dev
+		
+		
+		
+6.	Prune the tree (10 points)
+
+
+
+	a.	create a new pruned tree using best=n where n is the optimal size indicated in step 5
+	b.	plot the new pruned tree with labels
+	c.	Using the pruned tree, make predictions on the test set
+	d.	Compute the accuracy
+	
+	
+	
+7.	Try Random Forest or Boosting (5 points) and compare your results
+
+
+Answer the questions at the bottom of your Rmd file. Upload the Rmd file to TurnItIn. 
+Questions: (30 points)
+Problem 1
+	1. In the logistic regression model, which variables were important and which were not?
+	2. What was the accuracy of the logistic regression  model and the decision tree model?
+	3. In the tree, why might you have a branch where both branches are No?
+	4. Write a simple if/else statement that summarizes the Yes/No values in the decision tree.
+	5. Is it a good idea to prune this tree? Why or why not?
+Problem 2
+	1. Which variables were important (2 or 3 **) in the logistic regression model?
+	2. Which variables were used to create the decision tree?
+	3. Compare the accuracy of the logistic regression model and the decision tree.
+	4. What was the accuracy on the pruned tree?
+	5. Which model (logistic regression, decision tree) might be more meaningful to a doctor, and why.
+	
+	
+	
 
 
 
