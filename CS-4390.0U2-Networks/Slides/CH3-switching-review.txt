@@ -1,9 +1,0 @@
-CH3-switching-review.txt
-	Store and Forward
-	
-		Datagram Switching
-			Connectionless, meaning no setup phase
-			Each switch stores a forwarding table
-		Virtual Circuit Switching
-		
-		Source Routing Switching

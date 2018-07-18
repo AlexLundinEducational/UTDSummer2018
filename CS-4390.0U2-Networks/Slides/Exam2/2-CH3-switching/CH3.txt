@@ -1,0 +1,86 @@
+Ch3 Reading (168-216)
+	Switching
+		function of network layer
+		
+	Datagram
+		connectionless
+		forwaring table
+		each message contains full dest address
+		Pros
+			packets sent independently (might take different routes)
+			link death might not effect delivery
+			host can send a message anywhere anytime
+		Cons
+			difficult to maintain routing table
+			not sure if path is possible
+			
+	Virtual Circuit
+		Each entry in the VC table
+			VCI which uniquley ID's the connection at the switch
+				this is carrried in packet headers which belong to this connection
+			incomming interface for packets entering
+			outgoing interface for packets leaving
+			potentially different VCI for outgoing
+		
+		PVC
+			permanenet, requires admin
+			admin chooses VCI and interface values for all nodes in the table
+			
+		SVC
+			signal, does not require admin
+			
+		Pros
+			reduced packet overhead
+			firm acknowledgement of possible path
+		Cons	
+			requires setup phase (at lteast one RRT)
+			link failures require tear down
+			
+	Source routing(179)
+		Packet contains header with output port for each switch
+		The switch reads header, and sends packets to output port
+		Switch rotates header for next switch
+		Strict - specificy path
+		Loose - specify nodes only 
+		
+		Pros
+			Message can find it's way back
+
+		Cons
+			Same problem as maintaining a fwding table
+			No consistent packet header size, since paths are diff lengths
+	
+	Bridges and LAN switches
+		Bridge 
+			- node that connects two ethernet networks (called extended LANS after bridging happens)
+			- promiscuous mode, forwards all messages
+			
+		Learning Bridges
+			Each bridge stores it's own forwarding table
+			check source of all messages arriving on a port
+				now bridge knows not to fwd messages from that source to that port
+		Spanning tree
+			Each bridge has unique ID
+				elect bridge with smallest ID as root
+				
+			Root always fwd all frames
+			
+			Each bridge 
+				computes shortest path to root
+				notes what ports are used on the path
+				marks its perfered port
+				
+			Each LAN	
+				elects a bridge to forward msg to root
+					closest to root
+					then lowest ID
+					
+		Broadcast and multicast
+			multicast	
+				each bridge decides to accept message or not
+		Limitations (193)
+		
+		ATM(196)
+			Asynchronous Transfer Mode
+				connection oriented
+				signalling with virtual circuit
