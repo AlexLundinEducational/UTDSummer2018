@@ -1,0 +1,23 @@
+Code example slide 34
+
+sender side
+1)
+r = 10
+lar = 2
+sws = 9
+lfs = 4
+
+2 + 9 * 11 mod 9 = 1
+1+1 = 2 mod 10 = 2
+
+
+reciever side
+i = 3
+array[3] = true
+while acckd[lar = 1 mod r] = i
+	then
+		ackd[lar + 2 mod 3]
+		
+Slide 37
+next frame expected = NFE
+sender window size = sws
