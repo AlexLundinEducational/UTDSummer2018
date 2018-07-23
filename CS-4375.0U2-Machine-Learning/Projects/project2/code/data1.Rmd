@@ -1,0 +1,225 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+Name: Alex Lundin
+Assignment: Project 2
+# Header for project
+
+Data URL:
+https://www.kaggle.com/new-york-state/nys-traffic-tickets-issued-four-year-window
+
+Data Overview:
+
+Data Label 			Data Type 					Data Description
+
+
+VIOL_CHRGD 			Text						Law code of the violation for which the ticket was issued.
+        												Mostly comports with NYS Vehicle & Traffic Law, but can include codes
+        												from NYC Traffic Regulations, Thruway Regulations, Parkway
+        												Regulations, Penal law, Transportation Law and Tax Law.
+        												May also include administrative codes attached to the end of the law
+        												code that allow courts to differentiate between various actions covered
+        												by a single section of law (for instance 1180D1A, where the "A" refers
+        												to a speed in zone violation between 11-30 MPH over the posted speed
+        												limit).
+												
+VIOL_DESC 			Text 						Description of the violation for which the ticket was issued.
+
+VIOL_YR 			  Integer 			  Calendar year in which the ticket was issued.
+
+VIOL_MO 			  Integer 				Month in which the ticket was issued.
+
+VIOL_DAY 			  Text 						Day of the week on which the ticket was issued.
+
+AGE_AT_VIOL 		Integer 			  Age, in years, of the person to whom the ticket was issued on the date
+												        of ticket issuance.
+
+STATE_OF_LIC 		Text						Name of the state, district, territory, province or country that issued the
+												        driver license presented by the motorist at the time of ticket issuance.
+
+GENDER 				  Text						Gender of person to whom ticket was issued.
+												        M = Male ; F = Female; C = Organization; U = Unknown
+
+POLICE_AGENCY 	Text 					  The name of the law enforcement agency that issued the ticket.
+
+COURT 				  Text 						Court where the ticket was answerable.
+
+SOURCE 				  Text						Processing system used by the courts to record and track tickets from
+												        issuance to disposition:
+
+												        TSLED = "Traffic Safety Law Enforcement & Disposition Program" used
+												        by local courts throughout most of NYS.
+
+												        TVB = used by NYSDMV Traffic Violation Bureaus in NYC, western
+												        Suffolk County, Rochester and Buffalo (Suffolk County and Buffalo TVB
+												        offices closed on 4/1/2013 and 7/1/2015, respectively).
+												        
+```{r}
+# store path string for loading csv file
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project2\\data\\traffic-tickets-issued-four-year-window.csv"
+
+df_tt <- read.csv(dataPathHomeComputer)
+```
+	
+```{r}
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1958)
+
+
+# shuffle the df_tt and store into a new df_tt frame
+df_tt_numberOfRows <- nrow(df_tt)
+shuf_df_tt <- df_tt[sample(df_tt_numberOfRows), ]
+
+# set train_data df_tt with the train_data indices
+train_data_indices <- 1:round(0.75 * df_tt_numberOfRows)
+train_data <- shuf_df_tt[train_data_indices, ]
+# set test_data df_tt with the test_data indices
+test_data_indices <- (round(0.75 * df_tt_numberOfRows) + 1):df_tt_numberOfRows
+test_data <- shuf_df_tt[test_data_indices, ]
+```
+
+
+
+# investigate the data with names, str, head, summary and cor
+```{r}
+# show how many rows
+paste("There are over 500,000 observances, also known as rows.")
+str(df_tt)
+
+# look at the names of the data frame
+nameArray <- names(df_tt)
+
+# print a useful message with a compact version of the columns
+paste("The names of the columns are:")
+paste("Column:", nameArray)
+
+# show first 6 instances of the frame
+head(df_tt)
+
+```
+
+The 4 main columns that correlate highly with type of violation are:
+
+all four of these have a correlation above .5 with the diagnois of heart disease in patients.
+```{r}
+# store a summary of the data frame
+sm <- summary(df_tt)
+
+# print the summary
+print(sm)
+
+# coerce all predictors and targets as numeric for correlation function
+
+xPredictor <- as.numeric(df_tt$Age.at.Violation)
+yTarget <- as.numeric(df_tt$Violation.Charged.Code)
+
+print("Correlation of -- Age and violation code:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_tt$Police.Agency)
+print("Correlation of -- Police Agency and violation code:")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_tt$State.of.License)
+print("Correlation of -- State of License and violation code::")
+cor(xPredictor, yTarget)
+
+xPredictor <- as.numeric(df_tt$Violation.Year)
+print("Correlation of -- Violation Year and violation code:")
+cor(xPredictor, yTarget)
+```
+
+# two informative graphs
+The scatter plot shows the likelyhood of heart disease for each type of chest pain (which ranges from 1-4)
+The scatter plot function in R complains when there is a fixed number of observance values (chest pain from 1-4)
+
+The density plots show the highest correlators do not have a normal distrubtion of occcurances in the data set.
+The predictors are very un normally distributed.
+```{r}
+# scatterplot for data view
+scatter.smooth(x=df_tt$cp, y=df_tt$num, main="Scatterplot Chest Pain ~ Heart Disease", xlab="Chest Pain (types 1 through 4)", ylab="Heart disease (< .5 positive diagnosis)")
+
+
+# # Density plot
+par(mfrow=c(1, 2))  # divide graph area in 2 columns
+
+plot(density(df_tt$cp), main="Density Plot: Chest Pain", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_tt$cp), 2)))
+polygon(density(df_tt$cp), col="red")
+
+plot(density(df_tt$exang), main="Density Plot: Exercise induced CP", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_tt$exang), 2)))
+polygon(density(df_tt$exang), col="red")
+
+
+```
+
+
+# first model for heart disease
+# This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
+The model has:
+Rsquared = .39
+low pvalues for the predictor and target
+low pvalue for the f-stastic
+
+The rsquared value should be closer to 1, but this dataset is attempting to predict something with alot of factors.
+So the nature of this data explains why the rsquared value is low, it's complex.
+
+When checking how the model does predicting on the test data.
+There is a .69 correlation between the predicted value on the test data and the training model.
+This model is a good represenation, not super duper, but pretty good.
+I think this model performed well because the data set is suited for linear regression.
+```{r}
+# create linear model on train_data
+train_lm1 <- lm(as.numeric(exang)~as.numeric(num), data=train_data)
+print(train_lm1 )
+plot(train_lm1)
+
+# store a summary of the model created from the train data and print it
+lm1_sm <- summary(train_lm1)
+print(lm1_sm)
+
+# attempt to predict the target y value of the test data with the train linear model
+pred <- predict(train_lm1, newdata=test_data)
+print("Correlation of -- Prediction of heart disease using training model with test data:")
+cor(pred, as.numeric(test_data$exang))
+```
+
+# second model for heart disease
+# this model uses knn clustering with columns 9 and 10
+# exang and oldpeak to attempt to predict heart disease diagnosis based on those two predictors
+correlation value of predictions vs actual: .66
+this model was slightly less accurate than the regression model.
+This data set is more suitable towards linear regression models, so I think that's why this model is less accurate since it uses classification when all of this data set is numeric type.
+```{r}
+# install and load packages
+if(!require('caret')){
+  install.packages('caret')  
+  library('caret')
+}
+if(!require('DMwR')){
+  install.packages('DMwR')  
+  library('DMwR')
+}
+
+# create the second linear model for heart disease data
+train_lm2 <- knnreg(train_data[,9:10], train_data[,14], k=3)
+
+# store a summary of the model created from the train data and print it
+lm2_sm <- summary(train_lm2)
+print(lm2_sm)
+
+# correlate how well the model did
+# do this by comparing the performace of the model using test data for columns 9 and 10
+# which are exang and oldpeak
+# the model used those to predict heart disease based on those factors
+predictions <- predict(train_lm2, test_data[,9:10])
+# now correlate the predictions against the actual values in the test data
+print("Correlation of -- Prediction of heart disease using training model with test data:")
+cor(predictions, test_data$num)
+
+```
