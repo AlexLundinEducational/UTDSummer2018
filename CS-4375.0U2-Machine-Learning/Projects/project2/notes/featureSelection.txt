@@ -1,0 +1,2 @@
+corMatrix <- (cor(df[,1:7]))
+findCorrelation(corMatrix, cutoff=0.5, verbose=TRUE)

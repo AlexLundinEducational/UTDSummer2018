@@ -60,7 +60,7 @@ SOURCE 				  Text						Processing system used by the courts to record and track 
 												        
 ```{r}
 # store path string for loading csv file
-dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\Screen-Cleaner\\GitHub\\UTDSummer2018\\CS-4375.0U2-Machine-Learning\\Projects\\project2\\data\\traffic-tickets-issued-four-year-window.csv"
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\data\\traffic-tickets-issued-four-year-window.csv"
 
 df_tt <- read.csv(dataPathHomeComputer)
 ```
@@ -72,16 +72,13 @@ df_tt <- read.csv(dataPathHomeComputer)
 set.seed(1958)
 
 
-# shuffle the df_tt and store into a new df_tt frame
-df_tt_numberOfRows <- nrow(df_tt)
-shuf_df_tt <- df_tt[sample(df_tt_numberOfRows), ]
+ 
+# Split data in half, exactly
+train_data = df_tt[1:(0.001*nrow(df_tt)),]
+dim(train_data)  # 6 11
+test_data = df_tt[((0.001*nrow(df_tt))+1):((0.001*nrow(df_tt)*2)),]
+dim(test_data) # 26 11
 
-# set train_data df_tt with the train_data indices
-train_data_indices <- 1:round(0.5 * df_tt_numberOfRows)
-train_data <- shuf_df_tt[train_data_indices, ]
-# set test_data df_tt with the test_data indices
-test_data_indices <- (round(0.5 * df_tt_numberOfRows) + 1):df_tt_numberOfRows
-test_data <- shuf_df_tt[test_data_indices, ]
 ```
 
 
@@ -106,7 +103,6 @@ head(df_tt)
 
 The 4 main columns that correlate highly with type of violation are:
 
-all four of these have a correlation above .5 with the diagnois of heart disease in patients.
 ```{r}
 # store a summary of the data frame
 sm <- summary(df_tt)
@@ -133,6 +129,10 @@ cor(xPredictor, yTarget)
 xPredictor <- as.numeric(df_tt$Violation.Year)
 print("Correlation of -- Violation Year and violation code:")
 cor(xPredictor, yTarget)
+
+corMatrix <- (cor(df_tt[,2:3]))
+findCorrelation(corMatrix, cutoff=0.5, verbose=TRUE)
+
 ```
 
 # two informative graphs
@@ -162,35 +162,27 @@ cor(xPredictor, yTarget)
 # first model for traffic ticket data
 # This model uses state of drivers liscense as the predictor for the target of violation charged code
 The model has:
-Rsquared = .39
+Rsquared = .012
 low pvalues for the predictor and target
 low pvalue for the f-stastic
 
-The rsquared value should be closer to 1, but this dataset is attempting to predict something with alot of factors.
-So the nature of this data explains why the rsquared value is low, it's complex.
+The rsquared value shows that this type of model performs bad on the data
 
-When checking how the model does predicting on the test data.
-There is a .11 correlation between the predicted value on the test data and the training model.
-This model does not predict well at all, but looking back at the original correlations, state of drivers lisense correlates at .1104
-with violation charged.
-So the model represents the data extremly well, going back to our original correlations explains why the prediction is horrible.
-
-I think this model performed well because the data set is suited for linear regression.
 I think the prediction is bad because individually, none of the predictors correlate with the target
 ```{r}
 # create linear model on train_data
 train_lm1 <- lm(as.numeric(train_data$State.of.License)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
-print(train_lm1 )
-plot(train_lm1)
+# print(train_lm1 )
+# plot(train_lm1)
 
 # store a summary of the model created from the train data and print it
 lm1_sm <- summary(train_lm1)
 print(lm1_sm)
 
 # attempt to predict the target y value with the train linear model
-pred <- predict(train_lm1, train_data)
+pred <- predict(train_lm1, test_data)
 print("Correlation of -- Prediction of violation code:")
-cor(pred, as.numeric(train_data$State.of.License),use='complete.obs')
+cor(pred, as.numeric(test_data$State.of.License),use='complete.obs')
 ```
 
 # second model for traffic ticket data
@@ -200,16 +192,16 @@ cor(pred, as.numeric(train_data$State.of.License),use='complete.obs')
 
 # a
 library(e1071)
-nb1 <- naiveBayes(train_data$Violation.Charged.Code~train_data$Age.at.Violation, data=train_data)
-
-# b
+nb1 <- naiveBayes(as.numeric(train_data$Age.at.Violation)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
+# 
+# # b
 p1 <- predict(nb1, newdata=test_data)
 
 # c
-table(p1, test_data$Violation.Charged.Code)
+table(p1, test_data$Violation.Charged.Code, type="class")
 
 # d
-paste("The mean accuracy is:", mean(p1==test$Violation.Charged.Code))
+paste("The mean accuracy is:", mean(p1==test_data$Violation.Charged.Code))
 
 
 ```
