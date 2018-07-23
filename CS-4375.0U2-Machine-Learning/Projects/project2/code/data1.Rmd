@@ -77,10 +77,10 @@ df_tt_numberOfRows <- nrow(df_tt)
 shuf_df_tt <- df_tt[sample(df_tt_numberOfRows), ]
 
 # set train_data df_tt with the train_data indices
-train_data_indices <- 1:round(0.75 * df_tt_numberOfRows)
+train_data_indices <- 1:round(0.5 * df_tt_numberOfRows)
 train_data <- shuf_df_tt[train_data_indices, ]
 # set test_data df_tt with the test_data indices
-test_data_indices <- (round(0.75 * df_tt_numberOfRows) + 1):df_tt_numberOfRows
+test_data_indices <- (round(0.5 * df_tt_numberOfRows) + 1):df_tt_numberOfRows
 test_data <- shuf_df_tt[test_data_indices, ]
 ```
 
@@ -136,31 +136,31 @@ cor(xPredictor, yTarget)
 ```
 
 # two informative graphs
-The scatter plot shows the likelyhood of heart disease for each type of chest pain (which ranges from 1-4)
-The scatter plot function in R complains when there is a fixed number of observance values (chest pain from 1-4)
+<!-- The scatter plot shows the likelyhood of heart disease for each type of chest pain (which ranges from 1-4) -->
+<!-- The scatter plot function in R complains when there is a fixed number of observance values (chest pain from 1-4) -->
 
-The density plots show the highest correlators do not have a normal distrubtion of occcurances in the data set.
-The predictors are very un normally distributed.
-```{r}
-# scatterplot for data view
-scatter.smooth(x=df_tt$cp, y=df_tt$num, main="Scatterplot Chest Pain ~ Heart Disease", xlab="Chest Pain (types 1 through 4)", ylab="Heart disease (< .5 positive diagnosis)")
-
-
-# # Density plot
-par(mfrow=c(1, 2))  # divide graph area in 2 columns
-
-plot(density(df_tt$cp), main="Density Plot: Chest Pain", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_tt$cp), 2)))
-polygon(density(df_tt$cp), col="red")
-
-plot(density(df_tt$exang), main="Density Plot: Exercise induced CP", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_tt$exang), 2)))
-polygon(density(df_tt$exang), col="red")
+<!-- The density plots show the highest correlators do not have a normal distrubtion of occcurances in the data set. -->
+<!-- The predictors are very un normally distributed. -->
+<!-- ```{r} -->
+<!-- # scatterplot for data view -->
+<!-- scatter.smooth(x=df_tt$cp, y=df_tt$num, main="Scatterplot Chest Pain ~ Heart Disease", xlab="Chest Pain (types 1 through 4)", ylab="Heart disease (< .5 positive diagnosis)") -->
 
 
-```
+<!-- # # Density plot -->
+<!-- par(mfrow=c(1, 2))  # divide graph area in 2 columns -->
+
+<!-- plot(density(df_tt$cp), main="Density Plot: Chest Pain", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_tt$cp), 2))) -->
+<!-- polygon(density(df_tt$cp), col="red") -->
+
+<!-- plot(density(df_tt$exang), main="Density Plot: Exercise induced CP", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_tt$exang), 2))) -->
+<!-- polygon(density(df_tt$exang), col="red") -->
 
 
-# first model for heart disease
-# This model uses exercise induced angina as the predictor for the target of a heart disease diagnosis
+<!-- ``` -->
+
+
+# first model for traffic ticket data
+# This model uses state of drivers liscense as the predictor for the target of violation charged code
 The model has:
 Rsquared = .39
 low pvalues for the predictor and target
@@ -170,12 +170,16 @@ The rsquared value should be closer to 1, but this dataset is attempting to pred
 So the nature of this data explains why the rsquared value is low, it's complex.
 
 When checking how the model does predicting on the test data.
-There is a .69 correlation between the predicted value on the test data and the training model.
-This model is a good represenation, not super duper, but pretty good.
+There is a .11 correlation between the predicted value on the test data and the training model.
+This model does not predict well at all, but looking back at the original correlations, state of drivers lisense correlates at .1104
+with violation charged.
+So the model represents the data extremly well, going back to our original correlations explains why the prediction is horrible.
+
 I think this model performed well because the data set is suited for linear regression.
+I think the prediction is bad because individually, none of the predictors correlate with the target
 ```{r}
 # create linear model on train_data
-train_lm1 <- lm(as.numeric(exang)~as.numeric(num), data=train_data)
+train_lm1 <- lm(as.numeric(train_data$State.of.License)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
 print(train_lm1 )
 plot(train_lm1)
 
@@ -183,43 +187,58 @@ plot(train_lm1)
 lm1_sm <- summary(train_lm1)
 print(lm1_sm)
 
-# attempt to predict the target y value of the test data with the train linear model
-pred <- predict(train_lm1, newdata=test_data)
-print("Correlation of -- Prediction of heart disease using training model with test data:")
-cor(pred, as.numeric(test_data$exang))
+# attempt to predict the target y value with the train linear model
+pred <- predict(train_lm1, train_data)
+print("Correlation of -- Prediction of violation code:")
+cor(pred, as.numeric(train_data$State.of.License),use='complete.obs')
 ```
 
-# second model for heart disease
-# this model uses knn clustering with columns 9 and 10
-# exang and oldpeak to attempt to predict heart disease diagnosis based on those two predictors
-correlation value of predictions vs actual: .66
-this model was slightly less accurate than the regression model.
-This data set is more suitable towards linear regression models, so I think that's why this model is less accurate since it uses classification when all of this data set is numeric type.
+# second model for traffic ticket data
+# naiveBayes
+
 ```{r}
-# install and load packages
-if(!require('caret')){
-  install.packages('caret')  
-  library('caret')
-}
-if(!require('DMwR')){
-  install.packages('DMwR')  
-  library('DMwR')
-}
 
-# create the second linear model for heart disease data
-train_lm2 <- knnreg(train_data[,9:10], train_data[,14], k=3)
+# a
+library(e1071)
+nb1 <- naiveBayes(train_data$Violation.Charged.Code~train_data$Age.at.Violation, data=train_data)
 
-# store a summary of the model created from the train data and print it
-lm2_sm <- summary(train_lm2)
-print(lm2_sm)
+# b
+p1 <- predict(nb1, newdata=test_data)
 
-# correlate how well the model did
-# do this by comparing the performace of the model using test data for columns 9 and 10
-# which are exang and oldpeak
-# the model used those to predict heart disease based on those factors
-predictions <- predict(train_lm2, test_data[,9:10])
-# now correlate the predictions against the actual values in the test data
-print("Correlation of -- Prediction of heart disease using training model with test data:")
-cor(predictions, test_data$num)
+# c
+table(p1, test_data$Violation.Charged.Code)
+
+# d
+paste("The mean accuracy is:", mean(p1==test$Violation.Charged.Code))
+
 
 ```
+
+# third model for traffic ticket data
+# SVM radial kernel 
+```{r}
+
+svm_fit3 <- svm(train_data$Violation.Charged.Code~train_data$Age.at.Violation, data=train_data, kernel="radial", cost=1, gamma=1, scale=FALSE)
+
+# a
+tune_svm3 <- tune(svm, train_data$Violation.Charged.Code~., data=train_data, kernel="radial",
+                ranges=list(cost=c(0.1,1,10,100,1000),
+                gamma=c(0.5,1,2,3,4)))
+summary(tune_svm3)
+
+# b
+best_mod3 <- tune_svm3$best.model
+summary(best_mod3)
+
+# c
+svm_pred3 <- predict(best_mod3, newdata=test_data)
+
+# d
+table(svm_pred3, test_data$Violation.Charged.Codel)
+
+# e
+paste("The mean accuracy is:", mean(svm_pred3==test_data$Violation.Charged.Code))
+
+
+```
+
