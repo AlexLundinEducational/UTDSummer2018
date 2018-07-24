@@ -1,0 +1,19 @@
+MeetID	          Int
+Name	            Factor
+Sex	              Factor
+Equipment	        Factor
+Age	              Double
+Division	        Factor
+BodyweightKg	    Double
+WeightClassKg	    Factor
+Squat4Kg	        Double
+BestSquatKg	      Double
+Bench4Kg	        Double
+BestBenchKg	      Double
+Deadlift4Kg	      Double
+BestDeadliftKg	  Double
+TotalKg	          Double
+Place	            Factor
+Wilks             Double
+
+(5,7,9,10,11,12,13,14,15)

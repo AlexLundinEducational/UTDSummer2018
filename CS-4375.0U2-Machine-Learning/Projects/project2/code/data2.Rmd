@@ -81,9 +81,10 @@ print(sm)
 # Train and Test	
 ```{r}
 
-# I have to omit NA's to get ML algorithims to work
-df_pl <- na.omit(df_pl)
-
+for(i in 1:ncol(df_pl)){
+  df_pl[is.na(df_pl[,i]), i] <- mean(df_pl[,i], na.rm = TRUE)
+  
+}
 
 # Set random seed to ensure reproducibility of the shuffle.
 set.seed(1958)
@@ -100,8 +101,7 @@ dim(test_data)
 
 Show correlations to view data
 
-Bench press is highly correlated with wining the entire competition
-.30
+
 
 ```{r}
 if(!require("corrplot")){
@@ -116,6 +116,9 @@ corrplot(x, type="upper", order="hclust")
 ```
 
 Feature selection with rcorr matrix
+
+Bench press is highly correlated with wining the entire competition
+.11
 
 ```{r}
 if(!require("Hmisc")){
@@ -155,11 +158,14 @@ Logistic regression model
    Predictor: bench press
    
    Evaluation:
-      accuracy =  0.80952380952381
+      AIC: 264795
+      accuracy =  .554617586319336
   
       this model achieved the highest accuracy, I think this model did the best because of the size       of the data set.
 # first model for power lifting      
 ```{r}
+
+
 # logistic regression
 glm0 <- glm(train_data$Win~train_data$Bench4Kg, data=train_data, family=binomial)
 summary(glm0)
@@ -183,7 +189,7 @@ Decision Tree Model
    Predictors: bench press
    
    Evaluation:
-      accuracy    =  0.43
+      accuracy    =  0.51
       
 # second model for powerlifting
 ```{r}
@@ -196,11 +202,14 @@ if(!require('tree')){
 tree_1 <- tree(train_data$Win~train_data$Bench4Kg, data=train_data)
 
 # create predictions
+
 pred <- predict(tree_1, newdata=test_data)
+
 
 # evaluate model
 rmse <- sqrt(mean((pred-test_data$Win)^2))
 paste("Accuracy is:", rmse)
+
 ```
 
 
@@ -213,6 +222,8 @@ Knn regression model
       best k      =  13
       accuracy    =  0.19047619047619
       
+      Since I had to replace NA's this made the data very similar,
+      KNN ended up with too many ties when I only used one or two predictors
 # third model for powerlifting
 ```{r}
 
@@ -226,8 +237,8 @@ if(!require("DMwR")){
   library("DMwR")
 }
 
-fit <- knnreg(train_data[,c(11,12)],train_data[,18],k=3)
-predictions <- predict(fit, test_data[,c(11,12)])
+fit <- knnreg(train_data[,c(17,5)],train_data[,18],k=2)
+predictions <- predict(fit, test_data[,c(17,5)])
 cor(predictions, test_data[,18])
 mse <- mean((predictions - test_data$Win)^2)
 paste("Accuracy is:", mse)
@@ -241,8 +252,8 @@ cor_k <- rep(0, 20)
 mse_k <- rep(0, 20)
 i <- 1
 for (k in seq(1, 39, 2)){
-  fit_k <- knnreg(train_data[,c(11,12)],train_data[,18],k=k)
-  pred_k <- predict(fit_k, test_data[,c(11,12)])
+  fit_k <- knnreg(train_data[,c(5,11)],train_data[,18],k=k)
+  pred_k <- predict(fit_k, test_data[,c(5,11)])
   cor_k[i] <- cor(pred_k, test_data[,18])
   mse_k[i] <- mean((pred_k - test_data[,18])^2)
   print(paste("k=", k, cor_k[i], mse_k[i]))
