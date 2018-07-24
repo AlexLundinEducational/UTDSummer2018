@@ -1,0 +1,186 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+Name: Alex Lundin
+Assignment: Project 2
+# Header for project
+
+Data URL:
+
+https://www.kaggle.com/open-powerlifting/powerlifting-database
+
+Data Overview:
+
+Data Label 			Data Type 					Data Description
+
+
+												        
+```{r}
+# store path string for loading csv file
+dataPathHomeComputer <- "C:\\Users\\Kim\\Desktop\\data\\openpowerlifting.csv"
+
+df_pl <- read.csv(dataPathHomeComputer)
+```
+	
+```{r}
+na.omit(df_pl)
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1958)
+ 
+# Split data in half
+# I'm only using a fraction of the entire data set
+train_data = df_pl[1:(0.5*nrow(df_pl)),]
+dim(train_data)  # 6 11
+test_data = df_pl[((0.5*nrow(df_pl))+1):((0.5*nrow(df_pl)*2)),]
+dim(test_data) # 26 11
+
+```
+
+
+
+# investigate the data with names, str, head, summary and cor
+```{r}
+# show how many rows
+paste("There are over 500,000 observances, also known as rows.")
+str(df_pl)
+
+# look at the names of the data frame
+nameArray <- names(df_pl)
+
+# print a useful message with a compact version of the columns
+paste("The names of the columns are:")
+paste("Column:", nameArray)
+
+# show first 6 instances of the frame
+head(df_pl)
+
+```
+
+The 4 main columns that correlate highly with type of violation are:
+
+```{r}
+# store a summary of the data frame
+# sm <- summary(df_pl)
+# 
+# # print the summary
+# print(sm)
+
+# coerce all predictors and targets as numeric for correlation function
+
+# xPredictor <- as.numeric(df_pl$Age.at.Violation)
+# yTarget <- as.numeric(df_pl$Violation.Charged.Code)
+# 
+# print("Correlation of -- Age and violation code:")
+# cor(xPredictor, yTarget)
+library(caret)
+library(mlbench)
+corMatrix <- (cor(df_pl[,14:15]))
+findCorrelation(corMatrix, cutoff=0.5, verbose=TRUE)
+
+```
+
+# two informative graphs
+<!-- The scatter plot shows the likelyhood of heart disease for each type of chest pain (which ranges from 1-4) -->
+<!-- The scatter plot function in R complains when there is a fixed number of observance values (chest pain from 1-4) -->
+
+<!-- The density plots show the highest correlators do not have a normal distrubtion of occcurances in the data set. -->
+<!-- The predictors are very un normally distributed. -->
+<!-- ```{r} -->
+<!-- # scatterplot for data view -->
+<!-- scatter.smooth(x=df_pl$cp, y=df_pl$num, main="Scatterplot Chest Pain ~ Heart Disease", xlab="Chest Pain (types 1 through 4)", ylab="Heart disease (< .5 positive diagnosis)") -->
+
+
+<!-- # # Density plot -->
+<!-- par(mfrow=c(1, 2))  # divide graph area in 2 columns -->
+
+<!-- plot(density(df_pl$cp), main="Density Plot: Chest Pain", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_pl$cp), 2))) -->
+<!-- polygon(density(df_pl$cp), col="red") -->
+
+<!-- plot(density(df_pl$exang), main="Density Plot: Exercise induced CP", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_pl$exang), 2))) -->
+<!-- polygon(density(df_pl$exang), col="red") -->
+
+
+<!-- ``` -->
+
+
+# first model for traffic ticket data
+# This model uses state of drivers liscense as the predictor for the target of violation charged code
+The model has:
+Rsquared = .012
+low pvalues for the predictor and target
+low pvalue for the f-stastic
+
+The rsquared value shows that this type of model performs bad on the data
+
+I think the prediction is bad because individually, none of the predictors correlate with the target
+```{r}
+# create linear model on train_data
+train_lm1 <- lm(as.numeric(train_data$State.of.License)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
+# print(train_lm1 )
+# plot(train_lm1)
+
+# store a summary of the model created from the train data and print it
+lm1_sm <- summary(train_lm1)
+print(lm1_sm)
+
+# attempt to predict the target y value with the train linear model
+pred <- predict(train_lm1, test_data)
+print("Correlation of -- Prediction of violation code:")
+cor(pred, as.numeric(test_data$State.of.License),use='complete.obs')
+```
+
+# second model for traffic ticket data
+# naiveBayes
+
+```{r}
+
+# a
+library(e1071)
+nb1 <- naiveBayes(as.numeric(train_data$Age.at.Violation)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
+# 
+# # b
+p1 <- predict(nb1, newdata=test_data)
+
+# c
+# table(p1, test_data$Age.at.Violation)
+
+# d
+paste("The mean accuracy is:", mean(p1==as.numeric(test_data$Age.at.Violation)))
+
+
+```
+
+# third model for traffic ticket data
+# SVM radial kernel 
+```{r}
+
+svm_fit3 <- svm(train_data$Violation.Charged.Code~train_data$Age.at.Violation, data=train_data, kernel="radial", cost=1, gamma=1, scale=FALSE)
+
+# a
+tune_svm3 <- tune(svm, train_data$Violation.Charged.Code~., data=train_data, kernel="radial",
+                ranges=list(cost=c(0.1,1,10,100,1000),
+                gamma=c(0.5,1,2,3,4)))
+summary(tune_svm3)
+
+# b
+best_mod3 <- tune_svm3$best.model
+summary(best_mod3)
+
+# c
+svm_pred3 <- predict(best_mod3, newdata=test_data)
+
+# d
+table(svm_pred3, test_data$Violation.Charged.Codel)
+
+# e
+paste("The mean accuracy is:", mean(svm_pred3==test_data$Violation.Charged.Code))
+
+
+```
+
