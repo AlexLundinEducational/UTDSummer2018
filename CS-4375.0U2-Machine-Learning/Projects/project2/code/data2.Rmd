@@ -15,39 +15,38 @@ https://www.kaggle.com/open-powerlifting/powerlifting-database
 
 Data Overview:
 
-Data Label 			Data Type 					Data Description
+Data Label 			  Data Type 					Data Description
+MeetID	          Int
+Name	            Factor
+Sex	              Factor
+Equipment	        Factor
+Age	              Double
+Division	        Factor
+BodyweightKg	    Double
+WeightClassKg	    Factor
+Squat4Kg	        Double
+BestSquatKg	      Double
+Bench4Kg	        Double
+BestBenchKg	      Double
+Deadlift4Kg	      Double
+BestDeadliftKg	  Double
+TotalKg	          Double
+Place	            Factor
+Wilks             Double
 
-
-												        
+# Load data												        
 ```{r}
 # store path string for loading csv file
 dataPathHomeComputer <- "C:\\Users\\Kim\\Desktop\\data\\openpowerlifting.csv"
 
 df_pl <- read.csv(dataPathHomeComputer)
 ```
-	
-```{r}
-na.omit(df_pl)
-# separate out the train and test dataframes following a similar naming convention of original frame
-
-# Set random seed to ensure reproducibility of the shuffle.
-set.seed(1958)
- 
-# Split data in half
-# I'm only using a fraction of the entire data set
-train_data = df_pl[1:(0.5*nrow(df_pl)),]
-dim(train_data)  # 6 11
-test_data = df_pl[((0.5*nrow(df_pl))+1):((0.5*nrow(df_pl)*2)),]
-dim(test_data) # 26 11
-
-```
-
 
 
 # investigate the data with names, str, head, summary and cor
 ```{r}
 # show how many rows
-paste("There are over 500,000 observances, also known as rows.")
+paste("There are 386414 observances, also known as rows.")
 str(df_pl)
 
 # look at the names of the data frame
@@ -60,127 +59,205 @@ paste("Column:", nameArray)
 # show first 6 instances of the frame
 head(df_pl)
 
-```
+# add a new column called win
+df_pl$Win <- ifelse(df_pl$Place == 1, 1, 0)
 
-The 4 main columns that correlate highly with type of violation are:
+print("New Column:")
 
-```{r}
-# store a summary of the data frame
-# sm <- summary(df_pl)
-# 
-# # print the summary
-# print(sm)
-
-# coerce all predictors and targets as numeric for correlation function
-
-# xPredictor <- as.numeric(df_pl$Age.at.Violation)
-# yTarget <- as.numeric(df_pl$Violation.Charged.Code)
-# 
-# print("Correlation of -- Age and violation code:")
-# cor(xPredictor, yTarget)
-library(caret)
-library(mlbench)
-corMatrix <- (cor(df_pl[,14:15]))
-findCorrelation(corMatrix, cutoff=0.5, verbose=TRUE)
-
-```
-
-# two informative graphs
-<!-- The scatter plot shows the likelyhood of heart disease for each type of chest pain (which ranges from 1-4) -->
-<!-- The scatter plot function in R complains when there is a fixed number of observance values (chest pain from 1-4) -->
-
-<!-- The density plots show the highest correlators do not have a normal distrubtion of occcurances in the data set. -->
-<!-- The predictors are very un normally distributed. -->
-<!-- ```{r} -->
-<!-- # scatterplot for data view -->
-<!-- scatter.smooth(x=df_pl$cp, y=df_pl$num, main="Scatterplot Chest Pain ~ Heart Disease", xlab="Chest Pain (types 1 through 4)", ylab="Heart disease (< .5 positive diagnosis)") -->
-
-
-<!-- # # Density plot -->
-<!-- par(mfrow=c(1, 2))  # divide graph area in 2 columns -->
-
-<!-- plot(density(df_pl$cp), main="Density Plot: Chest Pain", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_pl$cp), 2))) -->
-<!-- polygon(density(df_pl$cp), col="red") -->
-
-<!-- plot(density(df_pl$exang), main="Density Plot: Exercise induced CP", ylab="Frequency", sub=paste("Skewness:", round(e1071::skewness(df_pl$exang), 2))) -->
-<!-- polygon(density(df_pl$exang), col="red") -->
-
-
-<!-- ``` -->
-
-
-# first model for traffic ticket data
-# This model uses state of drivers liscense as the predictor for the target of violation charged code
-The model has:
-Rsquared = .012
-low pvalues for the predictor and target
-low pvalue for the f-stastic
-
-The rsquared value shows that this type of model performs bad on the data
-
-I think the prediction is bad because individually, none of the predictors correlate with the target
-```{r}
-# create linear model on train_data
-train_lm1 <- lm(as.numeric(train_data$State.of.License)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
-# print(train_lm1 )
-# plot(train_lm1)
-
-# store a summary of the model created from the train data and print it
-lm1_sm <- summary(train_lm1)
-print(lm1_sm)
-
-# attempt to predict the target y value with the train linear model
-pred <- predict(train_lm1, test_data)
-print("Correlation of -- Prediction of violation code:")
-cor(pred, as.numeric(test_data$State.of.License),use='complete.obs')
-```
-
-# second model for traffic ticket data
-# naiveBayes
-
-```{r}
-
-# a
-library(e1071)
-nb1 <- naiveBayes(as.numeric(train_data$Age.at.Violation)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
-# 
-# # b
-p1 <- predict(nb1, newdata=test_data)
-
-# c
-# table(p1, test_data$Age.at.Violation)
-
-# d
-paste("The mean accuracy is:", mean(p1==as.numeric(test_data$Age.at.Violation)))
+table(df_pl$Win)
 
 
 ```
 
-# third model for traffic ticket data
-# SVM radial kernel 
+# Summary
+```{r}
+# store a summary of the data frame, after addition of new column
+sm <- summary(df_pl)
+
+# print the summary
+print(sm)
+```
+
+# Train and Test	
 ```{r}
 
-svm_fit3 <- svm(train_data$Violation.Charged.Code~train_data$Age.at.Violation, data=train_data, kernel="radial", cost=1, gamma=1, scale=FALSE)
+# I have to omit NA's to get ML algorithims to work
+df_pl <- na.omit(df_pl)
 
-# a
-tune_svm3 <- tune(svm, train_data$Violation.Charged.Code~., data=train_data, kernel="radial",
-                ranges=list(cost=c(0.1,1,10,100,1000),
-                gamma=c(0.5,1,2,3,4)))
-summary(tune_svm3)
 
-# b
-best_mod3 <- tune_svm3$best.model
-summary(best_mod3)
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1958)
 
-# c
-svm_pred3 <- predict(best_mod3, newdata=test_data)
+# separate out the train and test dataframes following a similar naming convention of original frame
+# I have to Split data exactly in half for some algorithims
+# I'm only using a small fraction of the entire data set due to the NA ommisions
+train_data = df_pl[1:(0.5*nrow(df_pl)),]
+dim(train_data)
+test_data = df_pl[((0.5*nrow(df_pl))+1):((0.5*nrow(df_pl)*2)),]
+dim(test_data)
 
-# d
-table(svm_pred3, test_data$Violation.Charged.Codel)
+```
 
-# e
-paste("The mean accuracy is:", mean(svm_pred3==test_data$Violation.Charged.Code))
+Show correlations to view data
 
+Bench press is highly correlated with wining the entire competition
+.30
+
+```{r}
+if(!require("corrplot")){
+  install.packages("corrplot")  
+  library("corrplot")
+}
+library(corrplot)
+x <- cor((df_pl[,c(5,7,9,10,11,12,13,14,15,18)]))
+corrplot(x, type="upper", order="hclust")
+
+
+```
+
+Feature selection with rcorr matrix
+
+```{r}
+if(!require("Hmisc")){
+  install.packages("Hmisc")  
+  library("Hmisc")
+}
+
+correlationMatrix <- rcorr(as.matrix(df_pl[,c(5,7,9,10,11,12,13,14,15,18)]))
+
+# access the correlation efficients only, using $r
+# column 10 is how every column correlates with winning the meet
+correlationWithWin <- correlationMatrix$r[,c(10)]
+
+# sets the column names of the data frame with colnames function
+columnNames <- c("Age", "Weight", "Squat", "B.Squat", "Bench", "B.Bench", "Dead", "B.Dead", "TotalKg", "Win")
+correlationCoefficients <- correlationMatrix$r[1,c(10)]
+
+for (i in 1:10) {
+  name <- columnNames[i]
+  value <- correlationWithWin[i]
+  print(paste("Current column is:", name))
+  print(paste("Current value is:", value))
+
+}
+paste("Vector print loop done.")
+
+correlation_df <- data.frame(columnNames, correlationWithWin)
+
+plot(correlation_df)
+
+
+```
+
+
+Logistic regression model
+   Target: Win
+   Predictor: bench press
+   
+   Evaluation:
+      accuracy =  0.80952380952381
+  
+      this model achieved the highest accuracy, I think this model did the best because of the size       of the data set.
+# first model for power lifting      
+```{r}
+# logistic regression
+glm0 <- glm(train_data$Win~train_data$Bench4Kg, data=train_data, family=binomial)
+summary(glm0)
+
+# summarize the model
+train_glm_sum <- summary(glm0)
+
+# create prediction off model
+probs <- predict(glm0, newdata=test_data)
+pred <- ifelse(probs>0.5, 1, 0)
+
+# use accuracy to evaluate
+acc <- mean(pred==test_data$Win)
+print(paste("accuracy = ", acc))
+table(pred, test_data$Win) 
+
+```
+
+Decision Tree Model
+   Target: Win
+   Predictors: bench press
+   
+   Evaluation:
+      accuracy    =  0.43
+      
+# second model for powerlifting
+```{r}
+if(!require('tree')){
+  install.packages('tree')  
+  library('tree')
+}
+
+# create model
+tree_1 <- tree(train_data$Win~train_data$Bench4Kg, data=train_data)
+
+# create predictions
+pred <- predict(tree_1, newdata=test_data)
+
+# evaluate model
+rmse <- sqrt(mean((pred-test_data$Win)^2))
+paste("Accuracy is:", rmse)
+```
+
+
+
+Knn regression model
+   Target: Win
+   Predictors: bench press and best bench press
+   
+   Evaluation:
+      best k      =  13
+      accuracy    =  0.19047619047619
+      
+# third model for powerlifting
+```{r}
+
+if(!require("caret")){
+  install.packages("caret")  
+  library("caret")
+}
+
+if(!require("DMwR")){
+  install.packages("DMwR")  
+  library("DMwR")
+}
+
+fit <- knnreg(train_data[,c(11,12)],train_data[,18],k=3)
+predictions <- predict(fit, test_data[,c(11,12)])
+cor(predictions, test_data[,18])
+mse <- mean((predictions - test_data$Win)^2)
+paste("Accuracy is:", mse)
+
+```
+
+
+# find best k
+```{r}
+cor_k <- rep(0, 20)
+mse_k <- rep(0, 20)
+i <- 1
+for (k in seq(1, 39, 2)){
+  fit_k <- knnreg(train_data[,c(11,12)],train_data[,18],k=k)
+  pred_k <- predict(fit_k, test_data[,c(11,12)])
+  cor_k[i] <- cor(pred_k, test_data[,18])
+  mse_k[i] <- mean((pred_k - test_data[,18])^2)
+  print(paste("k=", k, cor_k[i], mse_k[i]))
+  i <- i + 1
+}
+
+```
+
+# print data for best K
+```{r}
+fit_13 <- knnreg(train_data[,c(11,12)],train_data[,18],k=13)
+predictions <- predict(fit_13, test_data[,c(11,12)])
+mse <- mean((predictions - test_data[,18])^2)
+
+paste("Accuracy is:", mse)
 
 ```
 
