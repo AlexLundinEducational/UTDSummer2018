@@ -1,0 +1,24 @@
+Q7
+
+Are predicates only made from IF statements?
+	False
+	
+Internal Variables are used in predicates but are not inputs to the program under test
+	True
+	
+How many clauses does a for statement have?
+	
+Correlated active coverage and predicate coverage are the same for one predicate?
+	T
+How many predicates does the thermostat example have?
+	2
+	
+Does finding input values that get predicate under test solve reachability?
+	No, it's solves controllability
+	
+Q6
+	Graph problem
+		Know how to draw for, while and nested loops on graph
+		Know how to use line numbers in the node circle to make the flow clear
+		Know how to create edge list
+		Know how to create edge pair coverage (node tuples) aka lists of three (are these prime paths?)
