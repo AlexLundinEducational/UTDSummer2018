@@ -7,6 +7,8 @@ Internal Variables are used in predicates but are not inputs to the program unde
 	True
 	
 How many clauses does a for statement have?
+	can have more than 1, if it's coded that way
+	for statements have 1 predicate
 	
 Correlated active coverage and predicate coverage are the same for one predicate?
 	T
