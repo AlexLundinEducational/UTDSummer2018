@@ -37,13 +37,14 @@ Wilks             Double
 # Load data												        
 ```{r}
 # store path string for loading csv file
-dataPathHomeComputer <- "C:\\Users\\Kim\\Desktop\\data\\openpowerlifting.csv"
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\data\\openpowerlifting.csv"
 
 df_pl <- read.csv(dataPathHomeComputer)
 ```
 
 
 # investigate the data with names, str, head, summary and cor
+# add a new column called Win, which is 1 if the contender placed first in the event, 0 otherwise
 ```{r}
 # show how many rows
 paste("There are 386414 observances, also known as rows.")
@@ -81,8 +82,11 @@ print(sm)
 # Train and Test	
 ```{r}
 
+# replace all NA's with the mean of the column
+# then scale the mean, randomnly, by a number between 0 and 1
+
 for(i in 1:ncol(df_pl)){
-  df_pl[is.na(df_pl[,i]), i] <- mean(df_pl[,i], na.rm = TRUE)
+  df_pl[is.na(df_pl[,i]), i] <- mean(df_pl[,i], na.rm = TRUE)*runif(1)
   
 }
 
@@ -97,11 +101,14 @@ dim(train_data)
 test_data = df_pl[((0.5*nrow(df_pl))+1):((0.5*nrow(df_pl)*2)),]
 dim(test_data)
 
+
+train_data_small = df_pl[1:(0.001*nrow(df_pl)),]
+test_data_small = df_pl[((0.001*nrow(df_pl))+1):((0.001*nrow(df_pl)*2)),]
+dim(train_data_small)
+dim(test_data_small)
 ```
 
 Show correlations to view data
-
-
 
 ```{r}
 if(!require("corrplot")){
@@ -216,14 +223,18 @@ paste("Accuracy is:", rmse)
 
 Knn regression model
    Target: Win
-   Predictors: bench press and best bench press
+   Predictors: age and bench press
    
    Evaluation:
-      best k      =  13
-      accuracy    =  0.19047619047619
+      best k      =  3
+      accuracy    =  0.17
       
       Since I had to replace NA's this made the data very similar,
       KNN ended up with too many ties when I only used one or two predictors
+      
+      Also, my computer took too long to use Knn on the full dataset
+      So I subsetted the test and train into smaller sets
+      
 # third model for powerlifting
 ```{r}
 
@@ -237,10 +248,10 @@ if(!require("DMwR")){
   library("DMwR")
 }
 
-fit <- knnreg(train_data[,c(17,5)],train_data[,18],k=2)
-predictions <- predict(fit, test_data[,c(17,5)])
-cor(predictions, test_data[,18])
-mse <- mean((predictions - test_data$Win)^2)
+fit <- knnreg(train_data_small[,c(5,11)],train_data_small[,18],k=1)
+predictions <- predict(fit, test_data_small[,c(5,11)])
+cor(predictions, test_data_small[,18])
+mse <- mean((predictions - test_data_small$Win)^2)
 paste("Accuracy is:", mse)
 
 ```
@@ -252,10 +263,10 @@ cor_k <- rep(0, 20)
 mse_k <- rep(0, 20)
 i <- 1
 for (k in seq(1, 39, 2)){
-  fit_k <- knnreg(train_data[,c(5,11)],train_data[,18],k=k)
-  pred_k <- predict(fit_k, test_data[,c(5,11)])
-  cor_k[i] <- cor(pred_k, test_data[,18])
-  mse_k[i] <- mean((pred_k - test_data[,18])^2)
+  fit_k <- knnreg(train_data_small[,c(5,11)],train_data_small[,18],k=k)
+  pred_k <- predict(fit_k, test_data_small[,c(5,11)])
+  cor_k[i] <- cor(pred_k, test_data_small[,18])
+  mse_k[i] <- mean((pred_k - test_data_small[,18])^2)
   print(paste("k=", k, cor_k[i], mse_k[i]))
   i <- i + 1
 }
@@ -264,9 +275,9 @@ for (k in seq(1, 39, 2)){
 
 # print data for best K
 ```{r}
-fit_13 <- knnreg(train_data[,c(11,12)],train_data[,18],k=13)
-predictions <- predict(fit_13, test_data[,c(11,12)])
-mse <- mean((predictions - test_data[,18])^2)
+fit_3 <- knnreg(train_data_small[,c(5,11)],train_data_small[,18],k=3)
+predictions <- predict(fit_3, test_data_small[,c(5,11)])
+mse <- mean((predictions - test_data_small[,18])^2)
 
 paste("Accuracy is:", mse)
 
