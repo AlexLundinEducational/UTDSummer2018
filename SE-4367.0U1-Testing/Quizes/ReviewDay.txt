@@ -22,3 +22,83 @@ Q6
 		Know how to use line numbers in the node circle to make the flow clear
 		Know how to create edge list
 		Know how to create edge pair coverage (node tuples) aka lists of three (are these prime paths?)
+		
+		Test paths, always start on first and end on last
+		
+		Immediatly reachable are directly reachable
+		Reachable nodes are any node downstream
+		
+Q5
+
+	Set quiz
+		Completeness
+		Disjointness
+		
+		Partitions and base choice
+		
+		
+		Characteristc: Validity of S1
+			s1 = null
+			s1 = {}
+			s1 has 1 element
+			
+		Charactersitic: Relations between s1 and s2
+			s1 and s2 same
+			s1 is subset of s2
+			s2 is subset of s1
+			s1 and s2 do not have elements in common
+			
+		a.) does the validity of s1 cover completness?
+			yes
+			
+		b.) does the validity of s1 cover disjointness?
+			yes
+			
+		c.) does relation of s1 and s2 cover completness?
+			no, s1 and s2 might share elements that are not subsets
+			
+		d.) does relation of s1 and s2 cover disjointness?
+			no, because if s1 and s2 are the same set then they are also subsets of eachother
+			
+		e.) if the base choice criterion were applied to the two paritions, how many test requirements would result?
+			A (3 tests)
+			B (4 tests)
+			bcc = 1 + (3-1) + (4-1) = 6		
+		
+Q4
+	Will a test C2 that subsumes C1 always find more faults?
+		False
+		
+		
+	Suppose a restraunt sells
+		tacos		hamburgers		fried chicken
+		soft		w cheese		
+		crunchy 	wout chese
+		
+		this is a controllability problem, because we are editing input values
+		
+		
+	Same problem, coverage criterion says taste each type of food. Boss says to try new hot sauce before each test
+	
+		redundancy
+		
+	Test criteria usually result in more test than human based test?
+		not true, criteria is more systematic so there is a stop and edit point
+		human won't see stop and end point
+		
+Q2
+	XML takes more space than traditional files
+		true
+		
+	when coding for change use every optomization possible
+		false, optomized code is harder to maintain
+		write nice clean code that is easy to understand
+		
+Q1
+	my program printed the wrong test because and if test used an "and" instead of an "or"
+	suppose a test tested for if(A || B). What test values we need for A, B to see failure of program?
+
+		consider the common things between and and or in the test
+		
+	most programmers assign their best developers to maintenence
+		true
