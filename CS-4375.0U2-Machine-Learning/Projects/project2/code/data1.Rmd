@@ -15,56 +15,52 @@ https://www.kaggle.com/new-york-state/nys-traffic-tickets-issued-four-year-windo
 Data Overview:
 
 Data Label 			Data Type 					Data Description
+	index         int
+	name	        factor
+	category	    factor
+	review.point	int
+	price	        factor
+	currency	    factor
+	description   factor
+	myCost        int                 custom column I added
 
-
-VIOL_CHRGD 			Text						Law code of the violation for which the ticket was issued.
-        												Mostly comports with NYS Vehicle & Traffic Law, but can include codes
-        												from NYC Traffic Regulations, Thruway Regulations, Parkway
-        												Regulations, Penal law, Transportation Law and Tax Law.
-        												May also include administrative codes attached to the end of the law
-        												code that allow courts to differentiate between various actions covered
-        												by a single section of law (for instance 1180D1A, where the "A" refers
-        												to a speed in zone violation between 11-30 MPH over the posted speed
-        												limit).
-												
-VIOL_DESC 			Text 						Description of the violation for which the ticket was issued.
-
-VIOL_YR 			  Integer 			  Calendar year in which the ticket was issued.
-
-VIOL_MO 			  Integer 				Month in which the ticket was issued.
-
-VIOL_DAY 			  Text 						Day of the week on which the ticket was issued.
-
-AGE_AT_VIOL 		Integer 			  Age, in years, of the person to whom the ticket was issued on the date
-												        of ticket issuance.
-
-STATE_OF_LIC 		Text						Name of the state, district, territory, province or country that issued the
-												        driver license presented by the motorist at the time of ticket issuance.
-
-GENDER 				  Text						Gender of person to whom ticket was issued.
-												        M = Male ; F = Female; C = Organization; U = Unknown
-
-POLICE_AGENCY 	Text 					  The name of the law enforcement agency that issued the ticket.
-
-COURT 				  Text 						Court where the ticket was answerable.
-
-SOURCE 				  Text						Processing system used by the courts to record and track tickets from
-												        issuance to disposition:
-
-												        TSLED = "Traffic Safety Law Enforcement & Disposition Program" used
-												        by local courts throughout most of NYS.
-
-												        TVB = used by NYSDMV Traffic Violation Bureaus in NYC, western
-												        Suffolk County, Rochester and Buffalo (Suffolk County and Buffalo TVB
-												        offices closed on 4/1/2013 and 7/1/2015, respectively).
 												        
 ```{r}
 # store path string for loading csv file
-dataPathHomeComputer <- "C:\\Users\\Kim\\Desktop\\data\\traffic-tickets-issued-four-year-window.csv"
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\data\\scotch_review.csv"
 
-df_tt <- read.csv(dataPathHomeComputer)
+df_s <- read.csv(dataPathHomeComputer)
 ```
-	
+
+# investigate the data with names, str, head, summary and cor
+# add new column, which is price as a numeric, called cost
+```{r}
+# show how many rows
+paste("There are over 2247 observances, also known as rows.")
+str(df_s)
+
+# look at the names of the data frame
+nameArray <- names(df_s)
+
+# print a useful message with a compact version of the columns
+paste("The names of the columns are:")
+paste("Column:", nameArray)
+
+# show first 6 instances of the frame
+head(df_s)
+
+# add a new column called win
+df_s$myCost <- as.numeric(df_s$price)
+
+print("New Column:")
+
+table(df_s$myCost)
+
+df_s <- df_s[,c(4,8)]
+
+```
+
+# Train and Test	
 ```{r}
 # separate out the train and test dataframes following a similar naming convention of original frame
 
@@ -74,82 +70,64 @@ set.seed(1958)
 
  
 # Split data in half, exactly
-train_data = df_tt[1:(0.001*nrow(df_tt)),]
+train_data = df_s[1:(0.5*nrow(df_s)),]
 dim(train_data)  # 6 11
-test_data = df_tt[((0.001*nrow(df_tt))+1):((0.001*nrow(df_tt)*2)),]
+test_data = df_s[((0.5*nrow(df_s))+1):((0.5*nrow(df_s)*2)),]
 dim(test_data) # 26 11
 
 ```
 
 
 
-# investigate the data with names, str, head, summary and cor
-```{r}
-# show how many rows
-paste("There are over 500,000 observances, also known as rows.")
-str(df_tt)
 
-# look at the names of the data frame
-nameArray <- names(df_tt)
-
-# print a useful message with a compact version of the columns
-paste("The names of the columns are:")
-paste("Column:", nameArray)
-
-# show first 6 instances of the frame
-head(df_tt)
-
-```
-
-The 4 main columns that correlate highly with type of violation are:
+# Summarize the frame
 
 ```{r}
 # store a summary of the data frame
-sm <- summary(df_tt)
+sm <- summary(df_s)
 
 # print the summary
 print(sm)
 
-# coerce all predictors and targets as numeric for correlation function
+```
+Show correlations between review point and cost to view data
 
-xPredictor <- as.numeric(df_tt$Age.at.Violation)
-yTarget <- as.numeric(df_tt$Violation.Charged.Code)
+```{r}
+if(!require("corrplot")){
+  install.packages("corrplot")  
+  library("corrplot")
+}
+library(corrplot)
+x <- cor((df_s[,c(1,2)]))
+corrplot(x, type="upper", order="hclust")
 
-print("Correlation of -- Age and violation code:")
-cor(xPredictor, yTarget)
-
-xPredictor <- as.numeric(df_tt$Police.Agency)
-print("Correlation of -- Police Agency and violation code:")
-cor(xPredictor, yTarget)
-
-xPredictor <- as.numeric(df_tt$State.of.License)
-print("Correlation of -- State of License and violation code::")
-cor(xPredictor, yTarget)
-
-xPredictor <- as.numeric(df_tt$Violation.Year)
-print("Correlation of -- Violation Year and violation code:")
-cor(xPredictor, yTarget)
-
-corMatrix <- (cor(df_tt[,2:3]))
-findCorrelation(corMatrix, cutoff=0.5, verbose=TRUE)
 
 ```
 
-# first model for traffic ticket data
-# This model uses state of drivers liscense as the predictor for the target of violation charged code
-The model has:
-Rsquared = .012
-low pvalues for the predictor and target
-low pvalue for the f-stastic
 
-The rsquared value shows that this type of model performs bad on the data
 
-I think the prediction is bad because individually, none of the predictors correlate with the target
+
+Linear regression model
+   Target: myCost
+   Predictor: review.point
+   
+   Evaluation:
+      Rsquared = 0.005609
+          this means the model itself does not explain variance
+      low pvalues for the predictor and target
+      low pvalue for the f-stastic
+      correlation = -0.8511619
+
+      The data is small, and slightly linear. So Linear regression did the best
+
+# Linear Regression Model
+# first model for scotch reviews
 ```{r}
 # create linear model on train_data
-train_lm1 <- lm(as.numeric(train_data$State.of.License)~as.numeric(train_data$Violation.Charged.Code), data=train_data)
-# print(train_lm1 )
-# plot(train_lm1)
+train_lm1 <- lm(train_data$myCost~train_data$review.point, data=train_data)
+
+print(train_lm1 )
+plot(train_lm1)
 
 # store a summary of the model created from the train data and print it
 lm1_sm <- summary(train_lm1)
@@ -157,57 +135,105 @@ print(lm1_sm)
 
 # attempt to predict the target y value with the train linear model
 pred <- predict(train_lm1, test_data)
-print("Correlation of -- Prediction of violation code:")
-cor(pred, as.numeric(test_data$State.of.License),use='complete.obs')
+print("Correlation of -- Prediction of cost:")
+cor(pred, test_data$review.point)
 ```
 
-# second model for traffic ticket data
-# naiveBayes
 
+
+
+
+Decision Tree Model
+   Target: myCost
+   Predictors: review.point
+   
+   Evaluation:
+      accuracy    =  0.018
+      
+# second model for scotch review
+# Decision Tree Model
 ```{r}
+if(!require('tree')){
+  install.packages('tree')  
+  library('tree')
+}
 
-# a
-library(e1071)
-nb1 <- naiveBayes(train_data[,-1], train_data[,1], data=train_data)
+# create model
+tree_1 <- tree(train_data$myCost~train_data$review.point, data=train_data)
 
-# 
-# # b
-p1 <- predict(nb1, newdata=test_data)
+# create predictions
+pred <- predict(tree_1, newdata=test_data)
 
-# c
-table(p1, test_data[,-1], type="class")
-
-# d
-paste("The mean accuracy is:", mean(p1==test_data[,-1]))
-
+# evaluate model using confusion matrix
+confMat <- table(test_data$myCost,pred)
+accuracy <- sum(diag(confMat))/sum(confMat)
+paste("Accuracy is:", accuracy)
 
 ```
 
-# third model for traffic ticket data
-# SVM radial kernel 
+
+
+
+
+
+SVM linear kernel model
+   Target: myCost
+   Predictors: all
+   
+   Evaluation:
+      accuracy = 0
+      Tunning barley helped the RSME
+      I think this data set is poorly suited for SVM
+      
+# third model for scotch review
+# SVM linear kernel 
+
 ```{r}
+rmse <- function(error)
+{
+  sqrt(mean(error^2))
+}
 
-svm_fit3 <- svm(train_data$Violation.Charged.Code~train_data$Age.at.Violation, data=train_data, kernel="radial", cost=1, gamma=1, scale=FALSE)
+# create the first linear svm
+svm_fit1 <- svm(myCost~., data=train_data, kernel="linear", cost=10, scale=FALSE)
 
-# a
-tune_svm3 <- tune(svm, train_data$Violation.Charged.Code~., data=train_data, kernel="radial",
-                ranges=list(cost=c(0.1,1,10,100,1000),
-                gamma=c(0.5,1,2,3,4)))
-summary(tune_svm3)
 
-# b
-best_mod3 <- tune_svm3$best.model
-summary(best_mod3)
+# tuned the model
+tune_svm1 <- tune(svm, myCost~., data=train_data, kernel="linear",
+               ranges=list(cost=c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+summary(tune_svm1)
 
-# c
-svm_pred3 <- predict(best_mod3, newdata=test_data)
+# save the best model
+best_mod1 <- tune_svm1$best.model
+summary(best_mod1)
 
-# d
-table(svm_pred3, test_data$Violation.Charged.Codel)
+# tuned predictions
+svm_pred <- predict(best_mod1, newdata=test_data)
 
-# e
-paste("The mean accuracy is:", mean(svm_pred3==test_data$Violation.Charged.Code))
 
+# table(svm_pred, test_data$myCost)
+
+paste("The mean tuned accuracy is:", mean(svm_pred==test_data$myCost))
+
+
+# For comparing original to tuned
+originalPredicted <- predict(svm_fit1 , test_data)
+error <- svm_fit1$residuals  # same as data$Y - predictedY
+predictionRMSE <- rmse(error)   # 5.70377
+paste("The original RMSE is:", predictionRMSE)
+
+# For comparing original to tuned
+tunedPredicted <- predict(best_mod1 , test_data)
+error <- best_mod1$residuals  # same as data$Y - predictedY
+tunedRMSE <- rmse(error)   # 5.70377
+paste("The tuned RMSE is:", tunedRMSE)
+
+
+
+
+
+
+ 
 
 ```
 

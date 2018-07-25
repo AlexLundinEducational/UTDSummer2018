@@ -10,6 +10,240 @@ Assignment: Project 2
 # Header for project
 
 Data URL:
+https://www.kaggle.com/koki25ando/22000-scotch-whisky-reviews
+
+Data Overview:
+
+Data Label 			Data Type 					Data Description
+	index         int
+	name	        factor
+	category	    factor
+	review.point	int
+	price	        factor
+	currency	    factor
+	description   factor
+	myCost        int                 custom column I added
+
+												        
+```{r}
+# store path string for loading csv file
+dataPathHomeComputer <- "C:\\Users\\Alex\\Desktop\\data\\scotch_review.csv"
+
+df_s <- read.csv(dataPathHomeComputer)
+```
+
+# investigate the data with names, str, head, summary and cor
+# add new column, which is price as a numeric, called cost
+```{r}
+# show how many rows
+paste("There are over 2247 observances, also known as rows.")
+str(df_s)
+
+# look at the names of the data frame
+nameArray <- names(df_s)
+
+# print a useful message with a compact version of the columns
+paste("The names of the columns are:")
+paste("Column:", nameArray)
+
+# show first 6 instances of the frame
+head(df_s)
+
+# add a new column called win
+df_s$myCost <- as.numeric(df_s$price)
+
+print("New Column:")
+
+table(df_s$myCost)
+
+df_s <- df_s[,c(4,8)]
+
+```
+
+# Train and Test	
+```{r}
+# separate out the train and test dataframes following a similar naming convention of original frame
+
+# Set random seed to ensure reproducibility of the shuffle.
+set.seed(1958)
+
+
+ 
+# Split data in half, exactly
+train_data = df_s[1:(0.5*nrow(df_s)),]
+dim(train_data)  # 6 11
+test_data = df_s[((0.5*nrow(df_s))+1):((0.5*nrow(df_s)*2)),]
+dim(test_data) # 26 11
+
+```
+
+
+
+
+# Summarize the frame
+
+```{r}
+# store a summary of the data frame
+sm <- summary(df_s)
+
+# print the summary
+print(sm)
+
+```
+Show correlations between review point and cost to view data
+
+```{r}
+if(!require("corrplot")){
+  install.packages("corrplot")  
+  library("corrplot")
+}
+library(corrplot)
+x <- cor((df_s[,c(1,2)]))
+corrplot(x, type="upper", order="hclust")
+
+
+```
+
+
+
+
+Linear regression model
+   Target: myCost
+   Predictor: review.point
+   
+   Evaluation:
+      Rsquared = 0.005609
+          this means the model itself does not explain variance
+      low pvalues for the predictor and target
+      low pvalue for the f-stastic
+      correlation = -0.8511619
+
+      The data is small, and slightly linear. So Linear regression did the best
+
+# Linear Regression Model
+# first model for scotch reviews
+```{r}
+# create linear model on train_data
+train_lm1 <- lm(train_data$myCost~train_data$review.point, data=train_data)
+
+print(train_lm1 )
+plot(train_lm1)
+
+# store a summary of the model created from the train data and print it
+lm1_sm <- summary(train_lm1)
+print(lm1_sm)
+
+# attempt to predict the target y value with the train linear model
+pred <- predict(train_lm1, test_data)
+print("Correlation of -- Prediction of cost:")
+cor(pred, test_data$review.point)
+```
+
+
+
+
+
+Decision Tree Model
+   Target: myCost
+   Predictors: review.point
+   
+   Evaluation:
+      accuracy    =  0.018
+      
+# second model for scotch review
+# Decision Tree Model
+```{r}
+if(!require('tree')){
+  install.packages('tree')  
+  library('tree')
+}
+
+# create model
+tree_1 <- tree(train_data$myCost~train_data$review.point, data=train_data)
+
+# create predictions
+pred <- predict(tree_1, newdata=test_data)
+
+# evaluate model using confusion matrix
+confMat <- table(test_data$myCost,pred)
+accuracy <- sum(diag(confMat))/sum(confMat)
+paste("Accuracy is:", accuracy)
+
+```
+
+
+
+
+
+
+SVM linear kernel model
+   Target: myCost
+   Predictors: all
+   
+   Evaluation:
+      accuracy = 0
+      Tunning barley helped the RSME
+      I think this data set is poorly suited for SVM
+      
+# third model for scotch review
+# SVM linear kernel 
+
+```{r}
+rmse <- function(error)
+{
+  sqrt(mean(error^2))
+}
+
+# create the first linear svm
+svm_fit1 <- svm(myCost~., data=train_data, kernel="linear", cost=10, scale=FALSE)
+
+
+# tuned the model
+tune_svm1 <- tune(svm, myCost~., data=train_data, kernel="linear",
+               ranges=list(cost=c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+summary(tune_svm1)
+
+# save the best model
+best_mod1 <- tune_svm1$best.model
+summary(best_mod1)
+
+# tuned predictions
+svm_pred <- predict(best_mod1, newdata=test_data)
+
+
+# table(svm_pred, test_data$myCost)
+
+paste("The mean tuned accuracy is:", mean(svm_pred==test_data$myCost))
+
+
+# For comparing original to tuned
+originalPredicted <- predict(svm_fit1 , test_data)
+error <- svm_fit1$residuals  # same as data$Y - predictedY
+predictionRMSE <- rmse(error)   # 5.70377
+paste("The original RMSE is:", predictionRMSE)
+
+# For comparing original to tuned
+tunedPredicted <- predict(best_mod1 , test_data)
+error <- best_mod1$residuals  # same as data$Y - predictedY
+tunedRMSE <- rmse(error)   # 5.70377
+paste("The tuned RMSE is:", tunedRMSE)
+
+
+
+
+
+
+ 
+
+```
+
+PART 2
+
+Name: Alex Lundin
+Assignment: Project 2
+# Header for project
+
+Data URL:
 
 https://www.kaggle.com/open-powerlifting/powerlifting-database
 
